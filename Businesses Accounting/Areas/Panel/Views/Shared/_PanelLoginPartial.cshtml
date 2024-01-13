@@ -1,0 +1,21 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser<Guid>> SignInManager
+@inject UserManager<IdentityUser<Guid>> UserManager
+
+
+    @if (SignInManager.IsSignedIn(User))
+    {
+       
+            <form class="form-inline" action="@(Url.Page("/Account/Logout", new { area = "Identity" ,returnUrl=Url.Action("Index", "Home", new { area = "" })}))" method="post">
+                <button type="submit" class="nav-link btn btn-link text-dark">Logout</button>
+                @Html.AntiForgeryToken()
+            </form>
+    }
+    else
+    {
+
+                    <a class='k-link app-bar-link aboutPage' href="@(Url.Page("/Account/Register", new { area = "Identity" ,returnUrl=Url.Action("Index", "Dashbord", new { area = "Panel" })}))">Register</a>
+    <span class="k-appbar-spacer k-appbar-spacer-sized" style="width: 26px;"></span>
+                    <a class='k-link app-bar-link aboutPage' href="@(Url.Page("/Account/Login", new { area = "Identity" ,returnUrl=Url.Action("Index", "Dashbord", new { area = "Panel" })}))">Login</a>
+    }
+

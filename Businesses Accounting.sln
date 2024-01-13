@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34322.80
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Businesses Accounting", "Businesses Accounting\Businesses Accounting.csproj", "{8D2F5483-4C9E-4E40-8173-07FFB2D93F1E}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "DatabaseBusinessesAccounting", "DatabaseBusinessesAccounting\DatabaseBusinessesAccounting.sqlproj", "{9BAA93CD-A5FA-406E-92C1-039D46DA8365}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8D2F5483-4C9E-4E40-8173-07FFB2D93F1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D2F5483-4C9E-4E40-8173-07FFB2D93F1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D2F5483-4C9E-4E40-8173-07FFB2D93F1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D2F5483-4C9E-4E40-8173-07FFB2D93F1E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9BAA93CD-A5FA-406E-92C1-039D46DA8365}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9BAA93CD-A5FA-406E-92C1-039D46DA8365}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9BAA93CD-A5FA-406E-92C1-039D46DA8365}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{9BAA93CD-A5FA-406E-92C1-039D46DA8365}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9BAA93CD-A5FA-406E-92C1-039D46DA8365}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9BAA93CD-A5FA-406E-92C1-039D46DA8365}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C713B0B7-32BC-4AF9-8C65-2FEE8CBC0091}
+	EndGlobalSection
+EndGlobal

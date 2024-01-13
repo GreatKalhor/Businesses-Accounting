@@ -1,0 +1,193 @@
+﻿{
+   "CodeGenerationMode": 4,
+   "ContextClassName": "BA_dbContext",
+   "ContextNamespace": null,
+   "DefaultDacpacSchema": null,
+   "FilterSchemas": false,
+   "IncludeConnectionString": true,
+   "ModelNamespace": null,
+   "OutputContextPath": null,
+   "OutputPath": "Models",
+   "PreserveCasingWithRegex": true,
+   "ProjectRootNamespace": "Businesses_Accounting",
+   "Schemas": null,
+   "SelectedHandlebarsLanguage": 2,
+   "SelectedToBeGenerated": 0,
+   "T4TemplatePath": null,
+   "Tables": [
+      {
+         "Name": "[dbo].[AccountingJournals]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Accounts]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[AspNetRoleClaims]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[AspNetRoles]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[AspNetUserClaims]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[AspNetUserLogins]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[AspNetUserRoles]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[AspNetUsers]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[AspNetUserTokens]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[BankingTypes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[BusinessBanking]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[BusinessBankingInfo]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[BusinessCategories]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[BusinessCurrencies]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[BusinessCurrencyConversion]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Businesses]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[BusinessFinancialInfo]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[BusinessFiscalYear]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[BusinessProducts]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[BusinessProjects]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[BusinessServices]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[BusinessTypes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[BusinessUsers]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ContactAddressInfos]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ContactBankAccountInfos]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ContactGeneralInfos]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ContactPhoneInfos]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Contacts]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Currencies]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Documents]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Language]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ProductPriceList]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Salesmen]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[SalesmenPercentCategories]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[SalesmenPercentProducts]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ServicePriceList]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Stockholders]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[SubAccounts]",
+         "ObjectType": 0
+      }
+   ],
+   "UiHint": "desktop-8ffuo5k.BusinessesAccounting_db.dbo",
+   "UncountableWords": null,
+   "UseBoolPropertiesWithoutDefaultSql": false,
+   "UseDatabaseNames": false,
+   "UseDateOnlyTimeOnly": true,
+   "UseDbContextSplitting": false,
+   "UseDecimalDataAnnotationForSprocResult": true,
+   "UseFluentApiOnly": true,
+   "UseHandleBars": false,
+   "UseHierarchyId": false,
+   "UseInflector": true,
+   "UseLegacyPluralizer": false,
+   "UseManyToManyEntity": false,
+   "UseNoDefaultConstructor": false,
+   "UseNoNavigations": false,
+   "UseNoObjectFilter": false,
+   "UseNodaTime": false,
+   "UseNullableReferences": false,
+   "UseSchemaFolders": false,
+   "UseSchemaNamespaces": false,
+   "UseSpatial": false,
+   "UseT4": false
+}
