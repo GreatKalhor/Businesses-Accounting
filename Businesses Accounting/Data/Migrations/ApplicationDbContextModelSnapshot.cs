@@ -121,7 +121,9 @@ namespace Businesses_Accounting.Data.Migrations
                 b.Property<string>("UserName")
                     .HasColumnType("nvarchar(256)")
                     .HasMaxLength(256);
-
+                b.Property<string>("FullName")
+                     .HasColumnType("nvarchar(256)")
+                     .HasMaxLength(256);
                 b.Property<string>("ImageUrl")
                     .HasColumnType("nvarchar(256)")
                     .HasMaxLength(256);

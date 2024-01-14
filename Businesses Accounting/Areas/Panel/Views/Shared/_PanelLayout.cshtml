@@ -20,7 +20,7 @@
     <script id="notification-body" type="text/x-kendo-template">
         <div class="notification-item" style="padding: 18px 16px 13px 16px; border-bottom: 1px solid rgba(0,0,0,.08);">
             <span class="badge-missed"></span>
-            <div class="user-photo" style="background-image: url(Content/Employees-images/9.jpg); margin:0px 16px 0px 8px;"></div>
+            <div class="user-photo" style="background-image: url(https://demos.telerik.com/Content/Employees-images/9.jpg); margin:0px 16px 0px 8px;"></div>
             <div class="customer-name">
                 <div style="font-size: 18px">Rudolf joined the Team</div>
                 <div style="font-size: 14px; color: \#8F8F8F">Congratulate her</div>
@@ -28,14 +28,14 @@
         </div>
         <div class="notification-item" style="padding: 13px 16px 13px 16px; border-bottom: 1px solid rgba(0,0,0,.08);">
             <span class="badge-missed"></span>
-            <div class="user-photo" style="background-image: url(Content/Employees-images/4.jpg); margin:0px 16px 0px 8px;"></div>
+            <div class="user-photo" style="background-image: url(https://demos.telerik.com/Content/Employees-images/4.jpg); margin:0px 16px 0px 8px;"></div>
             <div class="customer-name">
                 <div style="font-size: 18px">Joy invited you to the class</div>
                 <div style="font-size: 14px; color: \#8F8F8F">You have 3 more messages from Joy</div>
             </div>
         </div>
         <div class="notification-item" style="padding: 13px 16px 13px 16px; background-color: rgba(66, 66, 66, 0.04); border-bottom: 1px solid rgba(0,0,0,.08);">
-            <div class="user-photo" style="background-image: url(Content/images/initials.jpg); margin:0px 16px 0px 8px;"></div>
+            <div class="user-photo" style="background-image: url(https://demos.telerik.com/Content/images/initials.jpg); margin:0px 16px 0px 8px;"></div>
             <div class="customer-name">
                 <div style="font-size: 18px">Your order has been shipped</div>
                 <div style="font-size: 14px; color: \#8F8F8F">MD Inc. order update</div>
@@ -93,9 +93,7 @@
                 swipeToOpen: true
             }).getKendoDrawer();
 
-            var userContentTemplate = kendo.template(`<div class="user-container" style="text-align: center;">
-                    <img id="avatar" src="Content/Avatar/avatar.png"><h1 style="font-size: 14px;">@(User.Identity?.Name)</h1>
-            </div>`);
+            var userContentTemplate = kendo.template(`@(Html.Action("UserInfo", "Dashbord", new { area = "Panel" }))`);
             drawer.drawerWrapper.prepend(userContentTemplate);
 
             document.title = $("div.appTitle").text(); + " - AdminDashboard";

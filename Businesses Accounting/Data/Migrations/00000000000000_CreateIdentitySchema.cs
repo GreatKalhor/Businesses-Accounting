@@ -28,6 +28,7 @@ namespace Businesses_Accounting.Data.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     UserName = table.Column<string>(maxLength: 256, nullable: true),
+                    FullName = table.Column<string>(maxLength: 256, nullable: true),
                     ImageUrl = table.Column<string>(maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(maxLength: 256, nullable: true),
                     Email = table.Column<string>(maxLength: 256, nullable: true),

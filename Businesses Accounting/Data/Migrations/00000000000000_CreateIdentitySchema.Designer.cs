@@ -124,10 +124,13 @@ namespace Businesses_Accounting.Data.Migrations
                     .HasColumnType("nvarchar(256)")
                     .HasMaxLength(256);
 
+                b.Property<string>("FullName")
+                    .HasColumnType("nvarchar(256)")
+                    .HasMaxLength(256);
+
                 b.Property<string>("ImageUrl")
                 .HasColumnType("nvarchar(256)")
                 .HasMaxLength(256);
-
                 b.HasKey("Id");
 
                 b.HasIndex("NormalizedEmail")

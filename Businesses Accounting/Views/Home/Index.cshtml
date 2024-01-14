@@ -1,15 +1,19 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser<Guid>> SignInManager
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-    <p>
-        <a href='@Url.Action("Index", "Dashbord", new { area = "Panel" })'>
-            Products/Manage/About
-        </a>
-        <a class="nav-link text-dark" asp-area="Panel" asp-controller="Dashbord" asp-action="Index">panel</a>
-    </p>
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <p>
+            <a href='@Url.Action("Index", "Dashbord", new { area = "Panel" })'>
+                Panel
+            </a>
+        </p>
+    }
 </div>
 
