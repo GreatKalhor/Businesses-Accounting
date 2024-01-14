@@ -165,6 +165,8 @@ namespace Businesses_Accounting.Data
                 entity.Property(e => e.NormalizedEmail).HasMaxLength(256);
                 entity.Property(e => e.NormalizedUserName).HasMaxLength(256);
                 entity.Property(e => e.UserName).HasMaxLength(256);
+                entity.Property(e => e.ImageUrl).HasMaxLength(256);
+                entity.Property(e => e.FullName).HasMaxLength(256);
 
                 entity.HasMany(d => d.Roles).WithMany(p => p.Users)
                     .UsingEntity<Dictionary<string, object>>(
