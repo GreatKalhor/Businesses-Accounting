@@ -7,6 +7,7 @@ using System.Security.Claims;
 using System.Security.Principal;
 using Businesses_Accounting.Data;
 using Businesses_Accounting.Models;
+using Businesses_Accounting.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace Businesses_Accounting.Data
@@ -725,15 +726,15 @@ namespace Businesses_Accounting
             {
                 users = new Dictionary<Guid, AspNetUser>();
             }
-
-            if (User.Identity is not null && User.Identity.IsAuthenticated)
+            var _userId = GetUserId(User);
+            if (_userId is not null)
             {
-                var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                var userId = _userId.Value;
                 if (!users.Any(x => x.Key == userId))
                 {
-                    using (BA_dbContext db = new BA_dbContext())
+                    using (UserService us = new UserService())
                     {
-                        var user = db.AspNetUsers.Find(userId);
+                        var user = us.GetUser(userId);
                         users.Add(userId, user);
                     }
                 }
