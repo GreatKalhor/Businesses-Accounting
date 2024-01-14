@@ -402,7 +402,7 @@
   function findHandler(events, handler, delegationSelector = null) {
     const uidEventList = Object.keys(events);
 
-    for (let i = 0, len = uidEventList.length; i <len; i++) {
+    for (let i = 0, len = uidEventList.length; i < len; i++) {
       const event = events[uidEventList[i]];
 
       if (event.originalHandler === handler && event.delegationSelector === delegationSelector) {
@@ -1223,7 +1223,7 @@
 
       const activeIndex = this._getItemIndex(this._activeElement);
 
-      if (index > this._items.length - 1 || index <0) {
+      if (index > this._items.length - 1 || index < 0) {
         return;
       }
 
@@ -1384,7 +1384,7 @@
         activeIndicator.removeAttribute('aria-current');
         const indicators = SelectorEngine.find(SELECTOR_INDICATOR, this._indicatorsElement);
 
-        for (let i = 0; i <indicators.length; i++) {
+        for (let i = 0; i < indicators.length; i++) {
           if (Number.parseInt(indicators[i].getAttribute('data-bs-slide-to'), 10) === this._getItemIndex(element)) {
             indicators[i].classList.add(CLASS_NAME_ACTIVE$2);
             indicators[i].setAttribute('aria-current', 'true');
@@ -1591,7 +1591,7 @@
   EventHandler.on(window, EVENT_LOAD_DATA_API$2, () => {
     const carousels = SelectorEngine.find(SELECTOR_DATA_RIDE);
 
-    for (let i = 0, len = carousels.length; i <len; i++) {
+    for (let i = 0, len = carousels.length; i < len; i++) {
       Carousel.carouselInterface(carousels[i], Carousel.getInstance(carousels[i]));
     }
   });
@@ -1656,7 +1656,7 @@
       this._triggerArray = [];
       const toggleList = SelectorEngine.find(SELECTOR_DATA_TOGGLE$4);
 
-      for (let i = 0, len = toggleList.length; i <len; i++) {
+      for (let i = 0, len = toggleList.length; i < len; i++) {
         const elem = toggleList[i];
         const selector = getSelectorFromElement(elem);
         const filterElement = SelectorEngine.find(selector).filter(foundElem => foundElem === this._element);
@@ -1792,7 +1792,7 @@
 
       const triggerArrayLength = this._triggerArray.length;
 
-      for (let i = 0; i <triggerArrayLength; i++) {
+      for (let i = 0; i < triggerArrayLength; i++) {
         const trigger = this._triggerArray[i];
         const elem = getElementFromSelector(trigger);
 
@@ -2211,7 +2211,7 @@
 
     var currentNode = getParentNode(element);
 
-    while (isHTMLElement(currentNode) && ['html', 'body'].indexOf(getNodeName(currentNode)) <0) {
+    while (isHTMLElement(currentNode) && ['html', 'body'].indexOf(getNodeName(currentNode)) < 0) {
       var css = getComputedStyle$1(currentNode); // This is non-exhaustive but covers the most common CSS properties that
       // create a containing block.
       // https://developer.mozilla.org/en-US/docs/Web/CSS/Containing_block#identifying_the_containing_block
@@ -2440,7 +2440,7 @@
     if (gpuAcceleration) {
       var _Object$assign;
 
-      return Object.assign({}, commonStyles, (_Object$assign = {}, _Object$assign[sideY] = hasY ? '0' : '', _Object$assign[sideX] = hasX ? '0' : '', _Object$assign.transform = (win.devicePixelRatio || 1) <2 ? "translate(" + x + "px, " + y + "px)" : "translate3d(" + x + "px, " + y + "px, 0)", _Object$assign));
+      return Object.assign({}, commonStyles, (_Object$assign = {}, _Object$assign[sideY] = hasY ? '0' : '', _Object$assign[sideX] = hasX ? '0' : '', _Object$assign.transform = (win.devicePixelRatio || 1) < 2 ? "translate(" + x + "px, " + y + "px)" : "translate3d(" + x + "px, " + y + "px, 0)", _Object$assign));
     }
 
     return Object.assign({}, commonStyles, (_Object$assign2 = {}, _Object$assign2[sideY] = hasY ? y + "px" : '', _Object$assign2[sideX] = hasX ? x + "px" : '', _Object$assign2.transform = '', _Object$assign2));
@@ -2604,7 +2604,7 @@
       height = visualViewport.height; // Uses Layout Viewport (like Chrome; Safari does not currently)
       // In Chrome, it returns a value very close to 0 (+/-) but contains rounding
       // errors due to floating point numbers, so we need to check precision.
-      // Safari returns a number <= 0, usually <-1 when pinch-zoomed
+      // Safari returns a number <= 0, usually < -1 when pinch-zoomed
       // Feature detection fails in mobile emulation mode in Chrome.
       // Math.abs(win.innerWidth / visualViewport.scale - visualViewport.width) <
       // 0.001
@@ -2974,7 +2974,7 @@
     var makeFallbackChecks = true;
     var firstFittingPlacement = placements[0];
 
-    for (var i = 0; i <placements.length; i++) {
+    for (var i = 0; i < placements.length; i++) {
       var placement = placements[i];
 
       var _basePlacement = getBasePlacement(placement);
@@ -3461,7 +3461,7 @@
   };
 
   function areValidElements() {
-    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key <_len; _key++) {
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
       args[_key] = arguments[_key];
     }
 
@@ -3559,7 +3559,7 @@
             return state.modifiersData[modifier.name] = Object.assign({}, modifier.data);
           });
 
-          for (var index = 0; index <state.orderedModifiers.length; index++) {
+          for (var index = 0; index < state.orderedModifiers.length; index++) {
 
             if (state.reset === true) {
               state.reset = false;
@@ -4046,7 +4046,7 @@
 
       const toggles = SelectorEngine.find(SELECTOR_DATA_TOGGLE$3);
 
-      for (let i = 0, len = toggles.length; i <len; i++) {
+      for (let i = 0, len = toggles.length; i < len; i++) {
         const context = Dropdown.getInstance(toggles[i]);
 
         if (!context || context._config.autoClose === false) {
@@ -5204,7 +5204,7 @@
 
     const regExp = allowedAttributeList.filter(attrRegex => attrRegex instanceof RegExp); // Check if a regular expression validates the attribute.
 
-    for (let i = 0, len = regExp.length; i <len; i++) {
+    for (let i = 0, len = regExp.length; i < len; i++) {
       if (regExp[i].test(attrName)) {
         return true;
       }
@@ -5260,7 +5260,7 @@
     const allowlistKeys = Object.keys(allowList);
     const elements = [].concat(...createdDocument.body.querySelectorAll('*'));
 
-    for (let i = 0, len = elements.length; i <len; i++) {
+    for (let i = 0, len = elements.length; i < len; i++) {
       const el = elements[i];
       const elName = el.nodeName.toLowerCase();
 
@@ -6239,7 +6239,7 @@
         return;
       }
 
-      if (this._activeTarget && scrollTop <this._offsets[0] && this._offsets[0] > 0) {
+      if (this._activeTarget && scrollTop < this._offsets[0] && this._offsets[0] > 0) {
         this._activeTarget = null;
 
         this._clear();
@@ -6248,7 +6248,7 @@
       }
 
       for (let i = this._offsets.length; i--;) {
-        const isActiveTarget = this._activeTarget !== this._targets[i] && scrollTop >= this._offsets[i] && (typeof this._offsets[i + 1] === 'undefined' || scrollTop <this._offsets[i + 1]);
+        const isActiveTarget = this._activeTarget !== this._targets[i] && scrollTop >= this._offsets[i] && (typeof this._offsets[i + 1] === 'undefined' || scrollTop < this._offsets[i + 1]);
 
         if (isActiveTarget) {
           this._activate(this._targets[i]);

@@ -1,6 +1,0 @@
-﻿CREATE USER [DESKTOP-8FFUO5K\Developer 2] FOR LOGIN [DESKTOP-8FFUO5K\Developer 2];
-
-
-
-
-

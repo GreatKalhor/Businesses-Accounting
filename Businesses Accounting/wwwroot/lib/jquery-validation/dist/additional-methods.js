@@ -61,7 +61,7 @@ $.validator.addMethod( "abaRoutingNumber", function( value ) {
 
 	// Calc the checksum
 	// https://en.wikipedia.org/wiki/ABA_routing_transit_number
-	for ( var i = 0; i <length; i += 3 ) {
+	for ( var i = 0; i < length; i += 3 ) {
 		checksum +=	parseInt( tokens[ i ], 10 )     * 3 +
 					parseInt( tokens[ i + 1 ], 10 ) * 7 +
 					parseInt( tokens[ i + 2 ], 10 );
@@ -101,7 +101,7 @@ $.validator.addMethod( "accept", function( value, element, param ) {
 		// Check if the element has a FileList before checking each file
 		if ( element.files && element.files.length ) {
 			regex = new RegExp( ".?(" + typeParam + ")$", "i" );
-			for ( i = 0; i <element.files.length; i++ ) {
+			for ( i = 0; i < element.files.length; i++ ) {
 				file = element.files[ i ];
 
 				// Grab the mimetype from the loaded file, verify it matches
@@ -140,7 +140,7 @@ $.validator.addMethod( "bankaccountNL", function( value, element ) {
 		sum = 0,
 		len = account.length,
 		pos, factor, digit;
-	for ( pos = 0; pos <len; pos++ ) {
+	for ( pos = 0; pos < len; pos++ ) {
 		factor = len - pos;
 		digit = account.substring( pos, pos + 1 );
 		sum = sum + factor * digit;
@@ -250,7 +250,7 @@ $.validator.addMethod( "cifES", function( value, element ) {
 		return false;
 	}
 
-	for ( i = 0; i <number.length; i++ ) {
+	for ( i = 0; i < number.length; i++ ) {
 		n = parseInt( number[ i ], 10 );
 
 		// Odd positions
@@ -260,7 +260,7 @@ $.validator.addMethod( "cifES", function( value, element ) {
 			n *= 2;
 
 			// If the multiplication is bigger than 10 we need to adjust
-			odd_sum += n <10 ? n : n - 9;
+			odd_sum += n < 10 ? n : n - 9;
 
 		// Even positions
 		// Just sum them
@@ -312,7 +312,7 @@ $.validator.addMethod( "cnhBR", function( value ) {
   }
 
   // Step 1 - using first Check Number:
-  for ( i = 0, j = 9, v = 0; i <9; ++i, --j ) {
+  for ( i = 0, j = 9, v = 0; i < 9; ++i, --j ) {
     sum += +( value.charAt( i ) * j );
   }
 
@@ -323,7 +323,7 @@ $.validator.addMethod( "cnhBR", function( value ) {
   }
 
   sum = 0;
-  for ( i = 0, j = 1, v = 0; i <9; ++i, ++j ) {
+  for ( i = 0, j = 1, v = 0; i < 9; ++i, ++j ) {
     sum += +( value.charAt( i ) * j );
   }
 
@@ -380,12 +380,12 @@ $.validator.addMethod( "cnpjBR", function( value, element ) {
 
 	for ( var i = tamanho; i >= 1; i-- ) {
 		soma += numeros.charAt( tamanho - i ) * pos--;
-		if ( pos <2 ) {
+		if ( pos < 2 ) {
 			pos = 9;
 		}
 	}
 
-	var resultado = soma % 11 <2 ? 0 : 11 - soma % 11;
+	var resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
 
 	if ( resultado !== parseInt( digitos.charAt( 0 ), 10 ) ) {
 		return false;
@@ -398,12 +398,12 @@ $.validator.addMethod( "cnpjBR", function( value, element ) {
 
 	for ( var il = tamanho; il >= 1; il-- ) {
 		soma += numeros.charAt( tamanho - il ) * pos--;
-		if ( pos <2 ) {
+		if ( pos < 2 ) {
 			pos = 9;
 		}
 	}
 
-	resultado = soma % 11 <2 ? 0 : 11 - soma % 11;
+	resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
 
 	if ( resultado !== parseInt( digitos.charAt( 1 ), 10 ) ) {
 		return false;
@@ -500,7 +500,7 @@ $.validator.addMethod( "creditcard", function( value, element ) {
 
 	// Basing min and max length on
 	// https://dev.ean.com/general-info/valid-card-types/
-	if ( value.length <13 || value.length > 19 ) {
+	if ( value.length < 13 || value.length > 19 ) {
 		return false;
 	}
 
@@ -744,7 +744,7 @@ $.validator.addMethod( "iban", function( value, element ) {
 	// two check digits,
 	// Basic Bank Account Number (BBAN) - up to 30 chars
 	var minimalIBANlength = 5;
-	if ( iban.length <minimalIBANlength ) {
+	if ( iban.length < minimalIBANlength ) {
 		return false;
 	}
 
@@ -835,7 +835,7 @@ $.validator.addMethod( "iban", function( value, element ) {
 
 	// Now check the checksum, first convert to digits
 	ibancheck = iban.substring( 4, iban.length ) + iban.substring( 0, 4 );
-	for ( i = 0; i <ibancheck.length; i++ ) {
+	for ( i = 0; i < ibancheck.length; i++ ) {
 		charAt = ibancheck.charAt( i );
 		if ( charAt !== "0" ) {
 			leadingZeroes = false;
@@ -846,7 +846,7 @@ $.validator.addMethod( "iban", function( value, element ) {
 	}
 
 	// Calculate the result of: ibancheckdigits % 97
-	for ( p = 0; p <ibancheckdigits.length; p++ ) {
+	for ( p = 0; p < ibancheckdigits.length; p++ ) {
 		cChar = ibancheckdigits.charAt( p );
 		cOperator = "" + cRest + "" + cChar;
 		cRest = cOperator % 97;
@@ -875,7 +875,7 @@ $.validator.addMethod( "lessThan", function( value, element, param ) {
         } );
     }
 
-    return value <target.val();
+    return value < target.val();
 }, "Please enter a lesser value." );
 
 $.validator.addMethod( "lessThanEqual", function( value, element, param ) {
@@ -921,7 +921,7 @@ $.validator.addMethod( "maxsize", function( value, element, param ) {
 
 	if ( $( element ).attr( "type" ) === "file" ) {
 		if ( element.files && element.files.length ) {
-			for ( var i = 0; i <element.files.length; i++ ) {
+			for ( var i = 0; i < element.files.length; i++ ) {
 				if ( element.files[ i ].size > param ) {
 					return false;
 				}
@@ -942,7 +942,7 @@ $.validator.addMethod( "maxsizetotal", function( value, element, param ) {
 		if ( element.files && element.files.length ) {
 			var totalSize = 0;
 
-			for ( var i = 0; i <element.files.length; i++ ) {
+			for ( var i = 0; i < element.files.length; i++ ) {
 				totalSize += element.files[ i ].size;
 				if ( totalSize > param ) {
 					return false;
@@ -1005,7 +1005,7 @@ $.validator.addMethod( "nieES", function( value, element ) {
 	value = value.toString().toUpperCase();
 
 	// Quick format test
-	if ( value.length > 10 || value.length <9 || !nieRegEx.test( value ) ) {
+	if ( value.length > 10 || value.length < 9 || !nieRegEx.test( value ) ) {
 		return false;
 	}
 
@@ -1067,7 +1067,7 @@ $.validator.addMethod( "nipPL", function( value ) {
 
 	var arrSteps = [ 6, 5, 7, 2, 3, 4, 5, 6, 7 ];
 	var intSum = 0;
-	for ( var i = 0; i <9; i++ ) {
+	for ( var i = 0; i < 9; i++ ) {
 		intSum += arrSteps[ i ] * value[ i ];
 	}
 	var int2 = intSum % 11;
@@ -1108,7 +1108,7 @@ $.validator.addMethod( "nisBR", function( value ) {
 	//Get number with 10 digits of the value
 	number = parseInt( value.substring( 0, 10 ), 10 );
 
-	for ( count = 2; count <12; count++ ) {
+	for ( count = 2; count < 12; count++ ) {
 		multiplier = count;
 		if ( count === 10 ) {
 			multiplier = 2;
@@ -1469,7 +1469,7 @@ $.validator.addMethod( "vinUS", function( v ) {
 		rs = 0,
 		i, n, d, f, cd, cdv;
 
-	for ( i = 0; i <17; i++ ) {
+	for ( i = 0; i < 17; i++ ) {
 		f = FL[ i ];
 		d = v.slice( i, i + 1 );
 		if ( i === 8 ) {
@@ -1478,7 +1478,7 @@ $.validator.addMethod( "vinUS", function( v ) {
 		if ( !isNaN( d ) ) {
 			d *= f;
 		} else {
-			for ( n = 0; n <LL.length; n++ ) {
+			for ( n = 0; n < LL.length; n++ ) {
 				if ( d.toUpperCase() === LL[ n ] ) {
 					d = VL[ n ];
 					d *= f;

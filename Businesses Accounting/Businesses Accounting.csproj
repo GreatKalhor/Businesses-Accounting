@@ -1,22 +1,48 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>aspnet-Businesses_Accounting-a0a11ab9-68c5-4f33-aa24-f6e1e4211974</UserSecretsId>
     <RootNamespace>Businesses_Accounting</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid.EntityFrameworkAdapter" Version="8.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.0" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.0" />
+    <Compile Remove="Data\Migrations\**" />
+    <Content Remove="Data\Migrations\**" />
+    <EmbeddedResource Remove="Data\Migrations\**" />
+    <None Remove="Data\Migrations\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Data\ApplicationDbContext.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Areas\Panel\Views\Businesses\Create.cshtml" />
+    <None Include="Areas\Panel\Views\Businesses\Delete.cshtml" />
+    <None Include="Areas\Panel\Views\Businesses\Details.cshtml" />
+    <None Include="Areas\Panel\Views\Businesses\Edit.cshtml" />
+    <None Include="Areas\Panel\Views\Businesses\Index.cshtml" />
+    <None Include="Areas\Panel\Views\Dashbord\Index.cshtml" />
+    <None Include="Areas\Panel\Views\Dashbord\SideBar.cshtml" />
+    <None Include="Areas\Panel\Views\Dashbord\UserInfo.cshtml" />
+    <None Include="Areas\Panel\Views\Shared\_PanelLayout.cshtml" />
+    <None Include="Areas\Panel\Views\Shared\_PanelLoginPartial.cshtml" />
+    <None Include="Areas\Panel\Views\_ViewImports.cshtml" />
+    <None Include="Areas\Panel\Views\_ViewStart.cshtml" />
+    <None Include="wwwroot\img\Avatar.svg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.12" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="7.0.12" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.15" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.12">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.11" />
   </ItemGroup>
 
   <ItemGroup>
