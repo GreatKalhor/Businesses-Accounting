@@ -398,7 +398,7 @@ function bootstrapDelegationHandler(element, selector, fn) {
 function findHandler(events, handler, delegationSelector = null) {
   const uidEventList = Object.keys(events);
 
-  for (let i = 0, len = uidEventList.length; i < len; i++) {
+  for (let i = 0, len = uidEventList.length; i <len; i++) {
     const event = events[uidEventList[i]];
 
     if (event.originalHandler === handler && event.delegationSelector === delegationSelector) {
@@ -1219,7 +1219,7 @@ class Carousel extends BaseComponent {
 
     const activeIndex = this._getItemIndex(this._activeElement);
 
-    if (index > this._items.length - 1 || index < 0) {
+    if (index > this._items.length - 1 || index <0) {
       return;
     }
 
@@ -1380,7 +1380,7 @@ class Carousel extends BaseComponent {
       activeIndicator.removeAttribute('aria-current');
       const indicators = SelectorEngine.find(SELECTOR_INDICATOR, this._indicatorsElement);
 
-      for (let i = 0; i < indicators.length; i++) {
+      for (let i = 0; i <indicators.length; i++) {
         if (Number.parseInt(indicators[i].getAttribute('data-bs-slide-to'), 10) === this._getItemIndex(element)) {
           indicators[i].classList.add(CLASS_NAME_ACTIVE$2);
           indicators[i].setAttribute('aria-current', 'true');
@@ -1587,7 +1587,7 @@ EventHandler.on(document, EVENT_CLICK_DATA_API$5, SELECTOR_DATA_SLIDE, Carousel.
 EventHandler.on(window, EVENT_LOAD_DATA_API$2, () => {
   const carousels = SelectorEngine.find(SELECTOR_DATA_RIDE);
 
-  for (let i = 0, len = carousels.length; i < len; i++) {
+  for (let i = 0, len = carousels.length; i <len; i++) {
     Carousel.carouselInterface(carousels[i], Carousel.getInstance(carousels[i]));
   }
 });
@@ -1652,7 +1652,7 @@ class Collapse extends BaseComponent {
     this._triggerArray = [];
     const toggleList = SelectorEngine.find(SELECTOR_DATA_TOGGLE$4);
 
-    for (let i = 0, len = toggleList.length; i < len; i++) {
+    for (let i = 0, len = toggleList.length; i <len; i++) {
       const elem = toggleList[i];
       const selector = getSelectorFromElement(elem);
       const filterElement = SelectorEngine.find(selector).filter(foundElem => foundElem === this._element);
@@ -1788,7 +1788,7 @@ class Collapse extends BaseComponent {
 
     const triggerArrayLength = this._triggerArray.length;
 
-    for (let i = 0; i < triggerArrayLength; i++) {
+    for (let i = 0; i <triggerArrayLength; i++) {
       const trigger = this._triggerArray[i];
       const elem = getElementFromSelector(trigger);
 
@@ -2266,7 +2266,7 @@ class Dropdown extends BaseComponent {
 
     const toggles = SelectorEngine.find(SELECTOR_DATA_TOGGLE$3);
 
-    for (let i = 0, len = toggles.length; i < len; i++) {
+    for (let i = 0, len = toggles.length; i <len; i++) {
       const context = Dropdown.getInstance(toggles[i]);
 
       if (!context || context._config.autoClose === false) {
@@ -3424,7 +3424,7 @@ const allowedAttribute = (attr, allowedAttributeList) => {
 
   const regExp = allowedAttributeList.filter(attrRegex => attrRegex instanceof RegExp); // Check if a regular expression validates the attribute.
 
-  for (let i = 0, len = regExp.length; i < len; i++) {
+  for (let i = 0, len = regExp.length; i <len; i++) {
     if (regExp[i].test(attrName)) {
       return true;
     }
@@ -3480,7 +3480,7 @@ function sanitizeHtml(unsafeHtml, allowList, sanitizeFn) {
   const allowlistKeys = Object.keys(allowList);
   const elements = [].concat(...createdDocument.body.querySelectorAll('*'));
 
-  for (let i = 0, len = elements.length; i < len; i++) {
+  for (let i = 0, len = elements.length; i <len; i++) {
     const el = elements[i];
     const elName = el.nodeName.toLowerCase();
 
@@ -4459,7 +4459,7 @@ class ScrollSpy extends BaseComponent {
       return;
     }
 
-    if (this._activeTarget && scrollTop < this._offsets[0] && this._offsets[0] > 0) {
+    if (this._activeTarget && scrollTop <this._offsets[0] && this._offsets[0] > 0) {
       this._activeTarget = null;
 
       this._clear();
@@ -4468,7 +4468,7 @@ class ScrollSpy extends BaseComponent {
     }
 
     for (let i = this._offsets.length; i--;) {
-      const isActiveTarget = this._activeTarget !== this._targets[i] && scrollTop >= this._offsets[i] && (typeof this._offsets[i + 1] === 'undefined' || scrollTop < this._offsets[i + 1]);
+      const isActiveTarget = this._activeTarget !== this._targets[i] && scrollTop >= this._offsets[i] && (typeof this._offsets[i + 1] === 'undefined' || scrollTop <this._offsets[i + 1]);
 
       if (isActiveTarget) {
         this._activate(this._targets[i]);

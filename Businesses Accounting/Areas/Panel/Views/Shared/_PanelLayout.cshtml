@@ -16,7 +16,7 @@
 </head>
 
 <body dir="rtl">
-    
+
     <script id="notification-body" type="text/x-kendo-template">
         <div class="notification-item" style="padding: 18px 16px 13px 16px; border-bottom: 1px solid rgba(0,0,0,.08);">
             <span class="badge-missed"></span>
@@ -42,7 +42,7 @@
             </div>
         </div>
         <button id="mark-as-read" style="margin: 15px 15px 0px 0px; background-color: \#FFFFFF; border-color: \#FF6358; color:\#FF6358; width: 165px; float: right;">Mark all as read</button>
-      </script>
+    </script>
 
     <script id="notification-header" type="text/x-kendo-template">
         <div class="k-hstack">
@@ -50,19 +50,23 @@
             <div class="k-spacer"></div>
             <div id="new-count">2 New</div>
         </div>
-      </script>
-
+    </script>
     <div id="drawer">
         <div id="drawer-content">
             <div id="appbar"></div>
             <main>
-                @RenderBody()
+                <div class="k-d-flex-col k-justify-content-center">
+
+                    <div id="dashboard-tilelayout" name="dashboard-tilelayout" data-role="tilelayout" class="k-widget k-tilelayout" role="list" style="grid-template-columns: repeat(4, minmax(0px, 25%)); grid-auto-rows: minmax(0px, 230px); gap: 16px; padding: 16px;">
+                        @RenderBody()
+                    </div>
+                </div>
             </main>
         </div>
     </div>
-    <partial name="_PanelLoginPartial" />
+
     <script>
-        
+
         $(document).ready(function () {
             $("#appbar").kendoAppBar({
                 themeColor: "inherit",
@@ -70,8 +74,8 @@
                     { template: '<a id="toggleDrawer" class="k-button k-button-md k-button-rectangle k-rounded-md k-button-solid k-button-solid-base" style="border:0px; background:\\#FFFFFF;" href="\\#"><span class="k-icon k-i-menu"></span></a>', type: "contentItem" },
                     { template: '<div class="appTitle" style="color:\\#2D73F5; font-size:18px;">Overview</div>', type: "contentItem" },
                     { width: 0, type: "spacer" },
-                   // { template: "<a class='k-link app-bar-link'><span class='k-icon k-i-notification'><span data-role='badge' class='k-badge k-badge-solid k-badge-error k-badge-md k-badge-dot k-badge-outside k-top-end'></span></span></a>", type: "contentItem" },
-                   // { width: 26, type: "spacer" },
+                    // { template: "<a class='k-link app-bar-link'><span class='k-icon k-i-notification'><span data-role='badge' class='k-badge k-badge-solid k-badge-error k-badge-md k-badge-dot k-badge-outside k-top-end'></span></span></a>", type: "contentItem" },
+                    // { width: 26, type: "spacer" },
                     { template: `@(Html.Partial("_PanelLoginPartial"))` }
                 ]
             }).on("click", ".aboutPage", function (e) {
@@ -85,7 +89,7 @@
 
             var drawer = $("#drawer").kendoDrawer({
                 template: `@(Html.Action("SideBar", "Dashbord", new { area = "Panel" }))`,
-        mode: "push",
+                mode: "push",
                 autoCollapse: false,
                 mini: false,
                 position: 'left',
@@ -226,43 +230,3 @@
 </body>
 
 </html>
-@* <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Businesses_Accounting</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                    <partial name="_LoginPartial" />
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
-
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2024 - Businesses_Accounting - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
-</body>
-</html> *@
