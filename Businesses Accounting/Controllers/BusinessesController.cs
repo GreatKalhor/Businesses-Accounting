@@ -11,6 +11,7 @@ using Kendo.Mvc.UI;
 using Kendo.Mvc.Extensions;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Authorization;
+using Businesses_Accounting.Services;
 
 namespace Businesses_Accounting.Controllers
 {
@@ -27,8 +28,10 @@ namespace Businesses_Accounting.Controllers
         // GET: Businesses
         public async Task<IActionResult> Index()
         {
-            var bA_dbContext = _context.Businesses.Include(b => b.Language).Include(b => b.Type);
-            return View(await bA_dbContext.ToListAsync());
+            using (BusinessServices bs = new BusinessServices(_context))
+            {
+                return View(await bs.GetBusinessWithUser(CurrentUser.GetUserId(User)));
+            }
         }
         public IActionResult DetailProducts_Read([DataSourceRequest] DataSourceRequest request)
         {
@@ -38,10 +41,12 @@ namespace Businesses_Accounting.Controllers
         [AcceptVerbs("Post")]
         public ActionResult BusinessesList(DataSourceRequest request)
         {
-            var result = _context.Businesses.ToList();
-
-            var dsResult = result.ToDataSourceResult(request);
-            return Json(dsResult);
+            using (BusinessServices bs = new BusinessServices(_context))
+            {
+                var result = bs.GetBusinessWithUser(CurrentUser.GetUserId(User)).Result;
+                var dsResult = result.ToDataSourceResult(request);
+                return Json(dsResult);
+            }
         }
 
         // GET: Businesses/Details/5
@@ -100,16 +105,18 @@ namespace Businesses_Accounting.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create( Business business)
+        public async Task<IActionResult> Create(Business business)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(business);
-                await _context.SaveChangesAsync();
+                using (BusinessServices bs = new BusinessServices(_context))
+                {
+                    await bs.InsertBusiness(business, CurrentUser.GetUserId(User));
+                }
+                //_context.Add(business);
+                //await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["LanguageId"] = new SelectList(_context.Languages, "Id", "Flag", business.LanguageId);
-            ViewData["TypeId"] = new SelectList(_context.BusinessTypes, "Id", "Name", business.TypeId);
             return View(business);
         }
 

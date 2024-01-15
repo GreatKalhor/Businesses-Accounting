@@ -748,5 +748,26 @@ namespace Businesses_Accounting
                 return null;
             }
         }
+   
+        public static void Logout(ClaimsPrincipal User)
+        {
+            if (users == null)
+            {
+                users = new Dictionary<Guid, AspNetUser>();
+            }
+            else
+            {
+                var _userId = GetUserId(User);
+                if (_userId is not null)
+                {
+                    var userId = _userId.Value;
+                    if (users.Any(x => x.Key == userId))
+                    {
+                            users.Remove(userId);
+                    }
+
+                }
+            }
+        }
     }
 }

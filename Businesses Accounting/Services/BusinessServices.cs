@@ -1,37 +1,58 @@
 ﻿using Businesses_Accounting.Data;
 using Businesses_Accounting.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Businesses_Accounting.Services
 {
-    public class UserService : IDisposable
+    public class BusinessServices : IDisposable
     {
         private bool disposedValue;
         private bool ignorDisposeddb { get; set; }
         BA_dbContext db { get; }
-        public UserService()
+        public BusinessServices()
         {
             db = new BA_dbContext();
         }
-        public UserService(BA_dbContext dbContext)
+        public BusinessServices(BA_dbContext dbContext)
         {
             ignorDisposeddb = true;
             db = dbContext;
         }
-        public AspNetUser GetUser(string username)
+
+
+        public async Task InsertBusiness(Business business, Guid? userId)
         {
-            if (!string.IsNullOrWhiteSpace(username))
+            if (userId is not null)
             {
-                return db.AspNetUsers.FirstOrDefault(x => x.UserName == username);
+                db.Add(business);
+                await db.SaveChangesAsync();
+                if (business.Id > 0)
+                {
+                    db.Add(new BusinessUser() { BusinessId = business.Id, UserId = userId.Value, AccessTypeId = 1 });
+                    await db.SaveChangesAsync();
+                }
+            }
+        }
+        public async Task<List<Business>> GetBusinessWithUser(Guid? userId)
+        {
+            if (userId is not null)
+            {
+                var bA_dbContext = db.BusinessUsers.Where(x => x.UserId == userId.Value).Include(b => b.Business)
+                    //.Include(b => b.Business.Language).Include(b => b.Business.Type)
+                    .Select(f => f.Business);
+                   var ans= await bA_dbContext.ToListAsync();
+                return ans;
             }
             else
             {
-                return null;
+                return new List<Business>();
             }
         }
-        public AspNetUser GetUser(Guid userid)
-        {
-            return db.AspNetUsers.FirstOrDefault(x => x.Id == userid);
-        }
+
+
+
+
+
 
         protected virtual void Dispose(bool disposing)
         {
@@ -53,13 +74,13 @@ namespace Businesses_Accounting.Services
         }
 
         // // TODO: override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
-        // ~UserService()
+        // ~BusinessServices()
         // {
         //     // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
         //     Dispose(disposing: false);
         // }
 
-        public void Dispose()
+        void IDisposable.Dispose()
         {
             // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
             Dispose(disposing: true);
