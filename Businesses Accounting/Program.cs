@@ -8,6 +8,12 @@ using Businesses_Accounting.Areas.Identity.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add framework services.
+builder.Services
+	.AddRazorPages().AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = null);
+// Add Kendo UI services to the services container
+builder.Services.AddKendo();
+
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -17,25 +23,29 @@ builder.Services.AddDbContext<BA_dbContext>(options =>
 
 builder.Services.AddDefaultIdentity<Businesses_AccountingUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
-//builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+
+
+
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
-{
-    //app.UseMigrationsEndPoint();
-}
-else
 {
     app.UseExceptionHandler("/Home/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
+app.UseAuthentication();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 

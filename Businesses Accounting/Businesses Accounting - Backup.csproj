@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>Businesses_Accounting</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="Data\Migrations\**" />
+    <Content Remove="Data\Migrations\**" />
+    <EmbeddedResource Remove="Data\Migrations\**" />
+    <None Remove="Data\Migrations\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Data\ApplicationDbContext.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Areas\Panel\Views\Businesses\Create.cshtml" />
+    <None Include="Areas\Panel\Views\Businesses\Delete.cshtml" />
+    <None Include="Areas\Panel\Views\Businesses\Details.cshtml" />
+    <None Include="Areas\Panel\Views\Businesses\Edit.cshtml" />
+    <None Include="Areas\Panel\Views\Businesses\Index.cshtml" />
+    <None Include="Areas\Panel\Views\Dashbord\Index.cshtml" />
+    <None Include="Areas\Panel\Views\Dashbord\SideBar.cshtml" />
+    <None Include="Areas\Panel\Views\Dashbord\UserInfo.cshtml" />
+    <None Include="Areas\Panel\Views\Shared\_PanelLayout.cshtml" />
+    <None Include="Areas\Panel\Views\Shared\_PanelLoginPartial.cshtml" />
+    <None Include="Areas\Panel\Views\_ViewImports.cshtml" />
+    <None Include="Areas\Panel\Views\_ViewStart.cshtml" />
+    <None Include="wwwroot\img\Avatar.svg" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.12" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="7.0.12" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.15" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.12">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.16" />
+    <PackageReference Include="Telerik.UI.for.AspNet.Core" Version="2023.1.117" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Areas\Panel\Data\" />
+    <Folder Include="Areas\Panel\Models\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Telerik.UI.for.AspNet.Core" Version="2023.1.117" />
+  </ItemGroup>
+</Project>

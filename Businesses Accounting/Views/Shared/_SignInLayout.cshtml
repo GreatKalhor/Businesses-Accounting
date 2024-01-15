@@ -1,0 +1,109 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - TelerikAspNetCoreApp2</title>
+
+    <environment names="Development">
+        <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.css" />
+        <link rel="stylesheet" href="~/css/site.css" />
+    </environment>
+    <environment names="Staging,Production">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/css/bootstrap.min.css"
+              asp-fallback-href="~/lib/bootstrap/css/bootstrap.min.css"
+              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
+        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+    </environment>
+
+    @* Add the App Font: *@
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
+    @*Core Content Start*@
+
+    <link href="https://cdn.kendostatic.com/2023.1.117/styles/kendo.bootstrap-urban.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.kendostatic.com/2023.1.117/js/jquery.min.js"></script>
+    <script src="https://cdn.kendostatic.com/2023.1.117/js/jszip.min.js"></script>
+    <script src="https://cdn.kendostatic.com/2023.1.117/js/kendo.all.min.js"></script>
+    <script src="https://cdn.kendostatic.com/2023.1.117/js/kendo.aspnetmvc.min.js"></script>
+    @*Core Content End*@
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body class="k-content">
+
+<main class="k-d-flex-row k-align-items-center k-justify-content-center">
+    <div class="sign-in-layout k-d-flex ">
+        <div class="waves"></div>
+        <div class="signin-container k-content k-d-flex-col k-align-items-center k-justify-content-center">
+            @RenderBody()
+        </div>
+        <div style="width:100%" class="k-d-flex-col k-align-items-center k-justify-content-end">
+            <div class="slogan-container k-d-flex-col k-align-items-center k-justify-content-center">
+                <div class="title">How Does Telerik UI Cut Development Time?</div>
+                <div class="subtitle">Telerik UI delivers everything you need to build modern, beautiful, responsive apps.</div>
+                <div class="kendoka"></div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<style>
+        .slogan-container {
+            width: 540px;
+            height: 80%;
+            position: absolute;
+            gap: 30px;
+        }
+
+        .sign-in-layout {
+            width: 1440px;
+            height: 900px;
+            background:url(@Url.Content("~/assets/signin/background.svg"));
+            background-repeat: no-repeat;
+        }
+
+        .kendoka {
+            background: url( @Url.Content("~/assets/signin/kendoka.svg") );
+            width: 480px;
+            height: 480px;
+            transform: scale(-1,1);
+        }
+
+        .title {
+            font-weight: 700;
+            font-size: 48px;
+            line-height: 67px;
+            color: #FFFFFF;
+            text-align: center
+        }
+
+        .subtitle {
+            font-weight: 400;
+            font-size: 19px;
+            color: #FFFFFF;
+            line-height: 25px;
+            text-align: center;
+        }
+
+        .signin-container {
+            width: 560px;
+            z-index: 1;
+        }
+
+        .waves {
+            background:url(@Url.Content("~/assets/signin/bgr-image.svg"));
+            width: 100%;
+            height: 390px;
+            align-self: flex-end;
+            position: absolute;
+            background-repeat: no-repeat
+        }
+</style>
+
+    <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

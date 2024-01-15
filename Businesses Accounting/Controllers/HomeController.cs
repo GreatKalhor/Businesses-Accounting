@@ -1,4 +1,5 @@
 ﻿using Businesses_Accounting.Models;
+using Kendo.Mvc.UI;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -28,5 +29,6 @@ namespace Businesses_Accounting.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+       
     }
 }
