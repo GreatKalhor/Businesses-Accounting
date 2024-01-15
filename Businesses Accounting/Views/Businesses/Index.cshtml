@@ -1,0 +1,48 @@
+﻿@model IEnumerable<Businesses_Accounting.Models.Business>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+
+
+@(
+Html.Kendo().Grid<Businesses_Accounting.Models.Business>()
+                           .Name("grid")
+                           .Columns(columns =>
+                           {
+                               columns.Bound(model => model.Name);
+                               columns.Bound(model => model.LegalName);
+                               columns.Bound(model => model.BusinessLine);
+                               columns.Bound(model => model.NationalCode);
+                               columns.Bound(model => model.EconomicCode);
+                               columns.Bound(model => model.RegistrationNumber);
+                               columns.Bound(model => model.Country);
+                               columns.Bound(model => model.StateProvince);
+                               columns.Bound(model => model.City);
+                               columns.Bound(model => model.PostalCode);
+                               columns.Bound(model => model.Phone);
+                               columns.Bound(model => model.Fax);
+                               columns.Bound(model => model.Address);
+                               columns.Bound(model => model.Website);
+                               columns.Bound(model => model.Email);
+                               columns.Bound(model => model.LogoUrl);
+                               columns.Bound(model => model.Id).Filterable(false).ClientHeaderTemplate("").ClientTemplate(
+                    @"<a href='" + @Url.Action("Edit", "Businesses", new { Id = "#:data.Id#" }) + @"'>Edit</a> | <a href='" + @Url.Action("Details", "Businesses", new { Id = "#:data.Id#" }) + @"'>Details</a>  |  <a href='" + @Url.Action("Delete", "Businesses", new { Id = "#:data.Id#" }) + @"'>Delete</a>  ").Width(230);
+                           })
+                           .Pageable()
+                           .Sortable()
+                           .Scrollable()
+                           .Groupable()
+                           .Filterable()
+                           .HtmlAttributes(new { style = "height:550px;" })
+                           .DataSource(dataSource => dataSource
+                               .Ajax()
+                               .PageSize(20)
+                               .Read("BusinessesList", "Businesses")
+                            )
+       )

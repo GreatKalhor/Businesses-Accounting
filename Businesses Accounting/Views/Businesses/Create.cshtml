@@ -1,0 +1,82 @@
+﻿@model Businesses_Accounting.Models.Business
+
+@{
+    ViewData["Title"] = "Create";
+    // Layout = "~/Areas/Panel/Views/Shared/_PanelLayout.cshtml";
+}
+
+
+<div class="demo-section">
+    <div id="validation-success"></div>
+    @(
+        Html.Kendo().Form<Businesses_Accounting.Models.Business>()
+            .Name("formExample")
+            .HtmlAttributes(new { action = "Create", method = "POST" })
+            .Validatable(v =>
+            {
+                v.ValidateOnBlur(true);
+                v.ValidationSummary(vs => vs.Enable(true));
+            })
+            .Items(items =>
+            {
+                items.AddGroup()
+                .Label("Create Business Form")
+                .Items(i =>
+                {
+                i.AddAntiForgeryToken(Html.AntiForgeryToken());
+                i.Add().Field(f => f.Id).Label(l => l.Text("Id:")).Editor(e => { e.Hidden(); });
+                i.Add().Field(f => f.Name).Label(l => l.Text("Name:")).Editor(e => { e.TextBox().Placeholder("TextBox"); });
+                i.Add().Field(f => f.LanguageId).Label(l => l.Text("Language:").Optional(true)).Editor(e => { e.ComboBox().Filter(FilterType.Contains).MinLength(3).Placeholder("Select...").DataTextField("Name").DataValueField("Id").HtmlAttributes(new { style = "width:100%" }).Height(520).DataSource(source => { source.Read(read => { read.Action("Items_GetLanguages", "Businesses").Data("filterLanguages"); }).ServerFiltering(true); }); });
+                    i.Add().Field(f => f.LegalName).Label(l => l.Text("LegalName:")).Editor(e => { e.TextBox().Placeholder("TextBox"); });
+                i.Add().Field(f => f.TypeId).Label(l => l.Text("BusinessTypes:").Optional(true)).Editor(e => { e.ComboBox().Filter(FilterType.Contains).MinLength(3).Placeholder("Select...").DataTextField("Name").DataValueField("Id").HtmlAttributes(new { style = "width:100%" }).Height(520).DataSource(source => { source.Read(read => { read.Action("Items_GetBusinessTypes", "Businesses").Data("filterBusinessTypes"); }).ServerFiltering(true); }); });
+                    i.Add().Field(f => f.BusinessLine).Label(l => l.Text("BusinessLine:")).Editor(e => { e.TextBox().Placeholder("TextBox"); });
+                    i.Add().Field(f => f.NationalCode).Label(l => l.Text("NationalCode:")).Editor(e => { e.TextBox().Placeholder("TextBox"); });
+                    i.Add().Field(f => f.EconomicCode).Label(l => l.Text("EconomicCode:")).Editor(e => { e.TextBox().Placeholder("TextBox"); });
+                    i.Add().Field(f => f.RegistrationNumber).Label(l => l.Text("RegistrationNumber:")).Editor(e => { e.TextBox().Placeholder("TextBox"); });
+                    i.Add().Field(f => f.Country).Label(l => l.Text("Country:")).Editor(e => { e.TextBox().Placeholder("TextBox"); });
+                    i.Add().Field(f => f.StateProvince).Label(l => l.Text("StateProvince:")).Editor(e => { e.TextBox().Placeholder("TextBox"); });
+                    i.Add().Field(f => f.City).Label(l => l.Text("City:")).Editor(e => { e.TextBox().Placeholder("TextBox"); });
+                    i.Add().Field(f => f.PostalCode).Label(l => l.Text("PostalCode:")).Editor(e => { e.TextBox().Placeholder("TextBox"); });
+                    i.Add().Field(f => f.Phone).Label(l => l.Text("Phone:")).Editor(e => { e.TextBox().Placeholder("TextBox"); });
+                    i.Add().Field(f => f.Fax).Label(l => l.Text("Fax:")).Editor(e => { e.TextBox().Placeholder("TextBox"); });
+                    i.Add().Field(f => f.Address).Label(l => l.Text("Address:")).Editor(e => { e.TextBox().Placeholder("TextBox"); });
+                    i.Add().Field(f => f.Website).Label(l => l.Text("Website:")).Editor(e => { e.TextBox().Placeholder("TextBox"); });
+                    i.Add().Field(f => f.Email).Label(l => l.Text("Email:")).Editor(e => { e.TextBox().Placeholder("TextBox"); });
+                    i.Add().Field(f => f.LogoUrl).Label(l => l.Text("LogoUrl:")).Editor(e => { e.TextBox().Placeholder("TextBox"); });
+                }); 
+            })
+      //  .Events(ev => ev.ValidateField("onFormValidateField").Clear("onFormClear"))
+        )
+</div>
+
+<script>
+    function filterLanguages(e) {
+        return kendo.ui.ComboBox.requestData($("#LanguageId"));
+    }
+    function filterBusinessTypes(e) {
+        return kendo.ui.ComboBox.requestData($("#TypeId"));
+    }
+    function onFormValidateField(e) {
+        $("#validation-success").html("");
+    }
+
+    function onFormSubmit(e) {
+        e.preventDefault();
+        $("#validation-success").html("<div class='k-messagebox k-messagebox-success'>Form data is valid!</div>");
+    }
+
+    function onFormClear(e) {
+        $("#validation-success").html("");
+    }
+</script>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+
+

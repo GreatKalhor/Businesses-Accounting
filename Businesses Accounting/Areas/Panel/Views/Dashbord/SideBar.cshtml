@@ -6,10 +6,12 @@
 
 <ul>
     \
-    <li data-role='drawer-item' class='k-state-selected'><span class='k-icon k-i-grid'></span><span class='k-item-text' data-id='Inbox'>Dashboard</span></li> \
-    <li data-role='drawer-item'><span class='k-icon k-i-notification k-i-globe'></span><span class='k-item-text' data-id='Notifications'>Performance & Sales</span></li> \
-    <li data-role='drawer-item'><span class='k-icon k-i-aggregate-fields'></span><span class='k-item-text' data-id='Calendar'>Products</span></li> \
-    <li data-role='drawer-separator'></li> \
-    <li data-role='drawer-item'><span class='k-icon k-i-gear'></span><span class='k-item-text' data-id='Attachments'>Settings</span></li> \
+    <li data-role='drawer-item' class='k-state-selected'><span class='k-icon k-i-grid'></span><span class='k-item-text' data-id='Inbox'>داشبورد</span></li> \
+    <li data-role='drawer-item'><span class='k-icon k-i-notification k-i-globe'></span><span class='k-item-text' data-id='Notifications'>
+            <a asp-action="Index" asp-controller="Businesses" asp-area="">کسب و کار </a>
+    </span></li> \
+    <li data-role='drawer-item'><span class='k-icon k-i-aggregate-fields'></span><span class='k-item-text' data-id='Calendar'>اشخاص</span></li> \
+@*     <li data-role='drawer-separator'></li> \ *@
+    <li data-role='drawer-item'><span class='k-icon k-i-gear'></span><span class='k-item-text' data-id='Attachments'>سندها</span></li> \
 
 </ul>
