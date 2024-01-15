@@ -6,7 +6,13 @@
 
 <ul>
     \
-    <li data-role='drawer-item' class='k-state-selected'><span class='k-icon k-i-grid'></span><span class='k-item-text' data-id='Inbox'>داشبورد</span></li> \
+    <li data-role='drawer-item' class='k-state-selected'><span class='k-icon k-i-grid'></span><span class='k-item-text' data-id='Inbox'>
+            <a asp-action="Index" asp-controller="Dashbord" asp-area="Panel">
+        
+        داشبورد
+    </a>
+
+    </span></li> \
     <li data-role='drawer-item'><span class='k-icon k-i-notification k-i-globe'></span><span class='k-item-text' data-id='Notifications'>
             <a asp-action="Index" asp-controller="Businesses" asp-area="">کسب و کار </a>
     </span></li> \
