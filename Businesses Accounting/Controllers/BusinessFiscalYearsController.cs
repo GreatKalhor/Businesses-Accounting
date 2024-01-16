@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Businesses_Accounting.Data;
 using Businesses_Accounting.Models;
+using Businesses_Accounting.Services;
 
 namespace Businesses_Accounting.Controllers
 {
@@ -20,8 +21,9 @@ namespace Businesses_Accounting.Controllers
         }
 
         // GET: BusinessFiscalYears
-        public async Task<IActionResult> Index(int businessId)
+        public async Task<IActionResult> Index(int businessId, string ubis)
         {
+            var sss = HttpContext.ToPanelViewModel();
             if (businessId > 0)
             {
                 ViewData["businessId"] = businessId;

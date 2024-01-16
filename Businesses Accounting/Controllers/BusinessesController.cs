@@ -28,6 +28,8 @@ namespace Businesses_Accounting.Controllers
         // GET: Businesses
         public async Task<IActionResult> Index()
         {
+            var sss = HttpContext.ToPanelViewModel();
+            ;
             using (BusinessServices bs = new BusinessServices(_context))
             {
                 return View(await bs.GetBusinessWithUser(CurrentUser.GetUserId(User)));
