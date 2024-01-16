@@ -8,8 +8,9 @@ namespace Businesses_Accounting.Areas.Panel.Controllers
     [Authorize]
     public class DashbordController : Controller
     {
-        public IActionResult Index()
+        public IActionResult Index(int businessId)
         {
+            ViewData["businessId"] = businessId;
             return View();
         }
 
