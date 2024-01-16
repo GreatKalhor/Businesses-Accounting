@@ -1,6 +1,9 @@
 ﻿using Businesses_Accounting.Data;
 using Businesses_Accounting.Models;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace Businesses_Accounting.Services
 {
@@ -19,7 +22,7 @@ namespace Businesses_Accounting.Services
             db = dbContext;
         }
 
-
+     
         public async Task InsertBusiness(Business business, Guid? userId)
         {
             if (userId is not null)
@@ -28,7 +31,7 @@ namespace Businesses_Accounting.Services
                 await db.SaveChangesAsync();
                 if (business.Id > 0)
                 {
-                    db.Add(new BusinessUser() { BusinessId = business.Id, UserId = userId.Value, AccessTypeId = 1 });
+                    db.Add(new BusinessUser() { BusinessId = business.Id, UserId = userId.Value, AccessTypeId = (int)Resources.Variable.AccessType.Owner });
                     await db.SaveChangesAsync();
                 }
             }
@@ -49,6 +52,10 @@ namespace Businesses_Accounting.Services
             }
         }
 
+        public async Task<Business?> FindAsync(int id)
+        {
+            return await db.Businesses.FindAsync(id);
+        }
 
 
 

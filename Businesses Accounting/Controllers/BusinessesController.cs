@@ -113,8 +113,6 @@ namespace Businesses_Accounting.Controllers
                 {
                     await bs.InsertBusiness(business, CurrentUser.GetUserId(User));
                 }
-                //_context.Add(business);
-                //await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(business);

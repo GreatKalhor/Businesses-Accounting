@@ -14,6 +14,21 @@ public partial class BusinessUser
     public int BusinessId { get; set; }
 
     public int AccessTypeId { get; set; }
+    public Resources.Variable.AccessType AccessType
+    {
+        get
+        {
+            try
+            {
+                return (Resources.Variable.AccessType)AccessTypeId;
+            }
+            catch (Exception ex)
+            {
+
+                return Resources.Variable.AccessType.Ignore;
+            }
+        }
+    }
 
     public virtual Business Business { get; set; }
 
