@@ -8,12 +8,16 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Data\Migrations\**" />
+    <Compile Remove="packages\**" />
     <Compile Remove="wwwroot\lib\lib\**" />
     <Content Remove="Data\Migrations\**" />
+    <Content Remove="packages\**" />
     <Content Remove="wwwroot\lib\lib\**" />
     <EmbeddedResource Remove="Data\Migrations\**" />
+    <EmbeddedResource Remove="packages\**" />
     <EmbeddedResource Remove="wwwroot\lib\lib\**" />
     <None Remove="Data\Migrations\**" />
+    <None Remove="packages\**" />
     <None Remove="wwwroot\lib\lib\**" />
   </ItemGroup>
   <ItemGroup>
