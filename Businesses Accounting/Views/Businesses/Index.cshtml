@@ -32,7 +32,7 @@ Html.Kendo().Grid<Businesses_Accounting.Models.Business>()
                                columns.Bound(model => model.Email);
                                columns.Bound(model => model.LogoUrl);
                                columns.Bound(model => model.Id).Filterable(false).ClientHeaderTemplate("").ClientTemplate(
-                    @"<a href='" + @Url.Action("Edit", "Businesses", new { Id = "#:data.Id#" }) + @"'>Edit</a> | <a href='" + @Url.Action("Details", "Businesses", new { Id = "#:data.Id#" }) + @"'>Details</a>  |  <a href='" + @Url.Action("Delete", "Businesses", new { Id = "#:data.Id#" }) + @"'>Delete</a>  ").Width(230);
+                    @"<a href='" + @Url.Action("Edit", "Businesses", new { Id = "#:data.Id#" }) + @"'>Edit</a> | <a href='" + @Url.Action("Details", "Businesses", new { Id = "#:data.Id#" }) + @"'>Details</a>  |  <a href='" + @Url.Action("Delete", "Businesses", new { Id = "#:data.Id#" }) + @"'>Delete</a> |  <a href='" + @Url.Action("Index", "BusinessFiscalYears", new { businessId = "#:data.Id#" }) + @"'>سال های مالی</a>  ").Width(230);
                            })
                            .Pageable()
                            .Sortable()

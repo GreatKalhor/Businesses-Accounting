@@ -22,7 +22,7 @@ namespace Businesses_Accounting.Services
             db = dbContext;
         }
 
-     
+
         public async Task InsertBusiness(Business business, Guid? userId)
         {
             if (userId is not null)
@@ -32,6 +32,7 @@ namespace Businesses_Accounting.Services
                 if (business.Id > 0)
                 {
                     db.Add(new BusinessUser() { BusinessId = business.Id, UserId = userId.Value, AccessTypeId = (int)Resources.Variable.AccessType.Owner });
+                    db.Add(new BusinessFiscalYear() { BusinessId = business.Id, Title = "پیش فرض", StartDate = DateTime.Now, EndDate = DateTime.Now.AddYears(3), InventoryValuationMethod = 1 });
                     await db.SaveChangesAsync();
                 }
             }
@@ -43,7 +44,7 @@ namespace Businesses_Accounting.Services
                 var bA_dbContext = db.BusinessUsers.Where(x => x.UserId == userId.Value).Include(b => b.Business)
                     //.Include(b => b.Business.Language).Include(b => b.Business.Type)
                     .Select(f => f.Business);
-                   var ans= await bA_dbContext.ToListAsync();
+                var ans = await bA_dbContext.ToListAsync();
                 return ans;
             }
             else

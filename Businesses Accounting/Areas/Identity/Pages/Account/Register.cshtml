@@ -1,67 +1,82 @@
 ﻿@page
 @model RegisterModel
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@Html.AntiForgeryToken()
 @{
     ViewData["Title"] = "Register";
+    var token = Xsrf.GetAndStoreTokens(HttpContext).RequestToken;
 }
-
-<h1>@ViewData["Title"]</h1>
-
-<div class="row">
-    <div class="col-md-4">
-        <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
-            <h2>Create a new account.</h2>
-            <hr />
-            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
-            <div class="form-floating mb-3">
-                <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
-                <label asp-for="Input.Email">Email</label>
-                <span asp-validation-for="Input.Email" class="text-danger"></span>
-            </div>
-            <div class="form-floating mb-3">
-                <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
-                <label asp-for="Input.Password">Password</label>
-                <span asp-validation-for="Input.Password" class="text-danger"></span>
-            </div>
-            <div class="form-floating mb-3">
-                <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
-                <label asp-for="Input.ConfirmPassword">Confirm Password</label>
-                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
-            </div>
-            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
-        </form>
+    
+<div class="form-container k-d-flex-col k-align-items-center k-justify-content-center">
+    <div>
+        <img src="@Url.Content("~/assets/signin/signin.svg")" />
+        <div class="signin k-justify-content-center">Sign Up</div>
+        <div class="register k-d-flex-row k-justify-content-evenly"><span>Already have an account?</span> <a class="k-link" asp-page="./Login" asp-route-returnUrl="@Model.ReturnUrl">Sign In</a></div>
     </div>
-    <div class="col-md-6 col-md-offset-2">
-        <section>
-            <h3>Use another service to register.</h3>
-            <hr />
-            @{
-                if ((Model.ExternalLogins?.Count ?? 0) == 0)
-                {
-                    <div>
-                        <p>
-                            There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">article
-                            about setting up this ASP.NET application to support logging in via external services</a>.
-                        </p>
-                    </div>
-                }
-                else
-                {
-                    <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
-                        <div>
-                            <p>
-                                @foreach (var provider in Model.ExternalLogins!)
-                                {
-                                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
-                                }
-                            </p>
-                        </div>
-                    </form>
-                }
-            }
-        </section>
-    </div>
+    @(
+        Html.Kendo().Form<RegisterModel.InputModel>()
+            .Name("Register")
+            .FormData(Model.Input)
+            .Layout("grid")
+            .Grid(g => g.Cols(1).Gutter(5))
+            .HtmlAttributes(new { method = "POST", style = "width: 100%;" })
+            .Items(items =>
+            {
+                items.Add()
+                .Field(f => f.FullName).Label("Full Name");
+                items.Add()
+                .Field(f => f.Email)
+                .Label(l => l.Text("Email"));
+                items.Add()
+                .Field(f => f.Password)
+                .Label(l => l.Text("Password"))
+                .EditorTemplateHandler("setPasswordEditor");
+                
+            items.Add()
+            .Field(f => f.AgreeToTerms)
+            .Label(l => l.Text("<span>I agree to the <a class=\"k-link\" href=\"#\">Terms of Services</a> and <a class=\"k-link\" href=\"#\">Privacy Policy<a/></span>").Encoded(false));
+        })
+        .ButtonsTemplate("<button class='k-button k-button-md k-rounded-md k-button-solid-primary' style='width:100%'>Create free account</button>")
+        )
 </div>
+<style>
+    .form-container {
+        width: 270px;
+    }
 
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-}
+        .form-container > div > span {
+            display: inherit;
+            position: static;
+            width: 75px;
+            left: calc(50% - 75px/2 + 97.5px);
+            border: 1px solid #8F8F8F;
+        }
+
+    .signin {
+        display: flex;
+        font-weight: 300;
+        font-size: 56px;
+        line-height: 67px;
+    }
+
+    .register {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+    }
+
+    #Register > div.k-form-layout.k-d-grid.k-grid-cols-1 > div:nth-child(5) {
+        display: flex;
+    }
+
+    #AgreeToTerms-form-label {
+        order: 1;
+        padding-left: 0.5em;
+    }
+</style>
+<script>
+    function setPasswordEditor(container, options) {
+        container.append($("<input type='password' class='k-textbox k-valid' id='Password' name='Password' title='Password' required='required' autocomplete='off' aria-labelledby='Password-form-label' data-bind='value:Password' aria-describedby='Password-form-hint'>"));
+    }
+    $("#Register").append($("<input type='hidden' name='__RequestVerificationToken' value='@token' data-stop='true' />"))
+</script>

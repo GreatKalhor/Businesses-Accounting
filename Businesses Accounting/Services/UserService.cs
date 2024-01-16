@@ -32,7 +32,11 @@ namespace Businesses_Accounting.Services
         {
             return db.AspNetUsers.FirstOrDefault(x => x.Id == userid);
         }
-
+        public async Task UpdateUser(AspNetUser user)
+        {
+            db.AspNetUsers.Update(user);
+            await db.SaveChangesAsync();
+        }
         protected virtual void Dispose(bool disposing)
         {
             if (!disposedValue)

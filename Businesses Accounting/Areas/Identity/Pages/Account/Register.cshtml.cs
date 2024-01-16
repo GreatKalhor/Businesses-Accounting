@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using Businesses_Accounting.Services;
 
 namespace Businesses_Accounting.Areas.Identity.Pages.Account
 {
@@ -71,6 +72,9 @@ namespace Businesses_Accounting.Areas.Identity.Pages.Account
         /// </summary>
         public class InputModel
         {
+            [Required]
+            [Display(Name = "Full Name")]
+            public string FullName { get; set; }
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
@@ -96,13 +100,19 @@ namespace Businesses_Accounting.Areas.Identity.Pages.Account
             /// </summary>
             [DataType(DataType.Password)]
             [Display(Name = "Confirm password")]
-            [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+            // [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+            public bool AgreeToTerms { get; set; }
         }
 
 
         public async Task OnGetAsync(string returnUrl = null)
         {
+            if (Input == null)
+            {
+                Input = new InputModel();
+
+            }
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
@@ -114,7 +124,7 @@ namespace Businesses_Accounting.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
-
+                user.EmailConfirmed = true;
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);
@@ -124,6 +134,14 @@ namespace Businesses_Accounting.Areas.Identity.Pages.Account
                     _logger.LogInformation("User created a new account with password.");
 
                     var userId = await _userManager.GetUserIdAsync(user);
+                    using (UserService us = new UserService())
+                    {
+                        var _user = us.GetUser(Input.Email);
+                        _user.FullName= Input.FullName;
+                        _user.EmailConfirmed = !_userManager.Options.SignIn.RequireConfirmedAccount;
+                        await us.UpdateUser(_user);
+
+                    }
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                     var callbackUrl = Url.Page(
@@ -141,6 +159,7 @@ namespace Businesses_Accounting.Areas.Identity.Pages.Account
                     }
                     else
                     {
+
                         await _signInManager.SignInAsync(user, isPersistent: false);
                         return LocalRedirect(returnUrl);
                     }
