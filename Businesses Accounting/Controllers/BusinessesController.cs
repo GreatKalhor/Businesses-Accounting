@@ -12,6 +12,7 @@ using Kendo.Mvc.Extensions;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Authorization;
 using Businesses_Accounting.Services;
+using Businesses_Accounting.Models.ViewModels;
 
 namespace Businesses_Accounting.Controllers
 {
@@ -28,8 +29,7 @@ namespace Businesses_Accounting.Controllers
         // GET: Businesses
         public async Task<IActionResult> Index()
         {
-            var sss = HttpContext.ToPanelViewModel();
-            ;
+            
             using (BusinessServices bs = new BusinessServices(_context))
             {
                 return View(await bs.GetBusinessWithUser(CurrentUser.GetUserId(User)));
@@ -74,40 +74,16 @@ namespace Businesses_Accounting.Controllers
         // GET: Businesses/Create
         public IActionResult Create()
         {
-            ViewData["Id"] = new SelectList(_context.Languages, "Id", "Flag");
-            ViewData["TypeId"] = new SelectList(_context.BusinessTypes, "Id", "Name");
-            return View(new Business());
+          
+            return View(new CreateBusinessViewModel());
         }
-        public JsonResult Items_GetLanguages(string text)
-        {
-
-            var languages = _context.Languages.Select(x => x);
-
-            if (!string.IsNullOrEmpty(text))
-            {
-                languages = languages.Where(p => p.Name.Contains(text));
-            }
-
-            return Json(languages.ToList());
-        }
-        public JsonResult Items_GetBusinessTypes(string text)
-        {
-
-            var businessTypes = _context.BusinessTypes.Select(x => x);
-
-            if (!string.IsNullOrEmpty(text))
-            {
-                businessTypes = businessTypes.Where(p => p.Name.Contains(text));
-            }
-
-            return Json(businessTypes.ToList());
-        }
+      
         // POST: Businesses/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Business business)
+        public async Task<IActionResult> Create(CreateBusinessViewModel business)
         {
             if (ModelState.IsValid)
             {

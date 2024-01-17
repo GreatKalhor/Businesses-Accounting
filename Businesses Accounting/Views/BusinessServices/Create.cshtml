@@ -1,0 +1,137 @@
+﻿@model Businesses_Accounting.Models.BusinessService
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Create</h1>
+
+<h4>BusinessService</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="BusinessId" class="control-label"></label>
+                <select asp-for="BusinessId" class ="form-control" asp-items="ViewBag.BusinessId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsActive" /> @Html.DisplayNameFor(model => model.IsActive)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProductCode" class="control-label"></label>
+                <input asp-for="ProductCode" class="form-control" />
+                <span asp-validation-for="ProductCode" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Barcode" class="control-label"></label>
+                <input asp-for="Barcode" class="form-control" />
+                <span asp-validation-for="Barcode" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CategoryId" class="control-label"></label>
+                <select asp-for="CategoryId" class ="form-control" asp-items="ViewBag.CategoryId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="SalesPrice" class="control-label"></label>
+                <input asp-for="SalesPrice" class="form-control" />
+                <span asp-validation-for="SalesPrice" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SalesInformation" class="control-label"></label>
+                <input asp-for="SalesInformation" class="form-control" />
+                <span asp-validation-for="SalesInformation" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PurchaseCost" class="control-label"></label>
+                <input asp-for="PurchaseCost" class="form-control" />
+                <span asp-validation-for="PurchaseCost" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PurchaseInformation" class="control-label"></label>
+                <input asp-for="PurchaseInformation" class="form-control" />
+                <span asp-validation-for="PurchaseInformation" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MainUnit" class="control-label"></label>
+                <input asp-for="MainUnit" class="form-control" />
+                <span asp-validation-for="MainUnit" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Note" class="control-label"></label>
+                <input asp-for="Note" class="form-control" />
+                <span asp-validation-for="Note" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SubUnit" class="control-label"></label>
+                <input asp-for="SubUnit" class="form-control" />
+                <span asp-validation-for="SubUnit" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UnitConversionFactor" class="control-label"></label>
+                <input asp-for="UnitConversionFactor" class="form-control" />
+                <span asp-validation-for="UnitConversionFactor" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="SalesTaxable" /> @Html.DisplayNameFor(model => model.SalesTaxable)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="SalesTax" class="control-label"></label>
+                <input asp-for="SalesTax" class="form-control" />
+                <span asp-validation-for="SalesTax" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="PurchaseTaxable" /> @Html.DisplayNameFor(model => model.PurchaseTaxable)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="PurchaseTax" class="control-label"></label>
+                <input asp-for="PurchaseTax" class="form-control" />
+                <span asp-validation-for="PurchaseTax" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TaxId" class="control-label"></label>
+                <input asp-for="TaxId" class="form-control" />
+                <span asp-validation-for="TaxId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TaxUnitId" class="control-label"></label>
+                <input asp-for="TaxUnitId" class="form-control" />
+                <span asp-validation-for="TaxUnitId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IranianTaxTypeId" class="control-label"></label>
+                <input asp-for="IranianTaxTypeId" class="form-control" />
+                <span asp-validation-for="IranianTaxTypeId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ImageUrl" class="control-label"></label>
+                <input asp-for="ImageUrl" class="form-control" />
+                <span asp-validation-for="ImageUrl" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

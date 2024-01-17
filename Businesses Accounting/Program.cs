@@ -5,6 +5,7 @@ using Businesses_Accounting.Models;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Businesses_Accounting.Areas.Identity.Data;
+using Businesses_Accounting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,7 +33,10 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-
+//builder.Services.AddControllersWithViews(options =>
+//{
+//    options.Filters.Add(typeof(GreatAsyncActionFilter));
+//});
 
 
 var app = builder.Build();
@@ -53,10 +57,23 @@ app.UseRouting();
 
 app.UseAuthorization();
 
+
+
+app.MapControllerRoute(
+        name: "areaubisRoute",
+        pattern: "{area:exists}/{ubis}/{controller}/{action=Index}/{id?}"
+    );
+app.MapControllerRoute(
+        name: "ubisRoute",
+        pattern: "{ubis}/{controller}/{action=Index}/{id?}"
+    );
+
 app.MapControllerRoute(
         name: "areaRoute",
         pattern: "{area:exists}/{controller=Dashbord}/{action=Index}/{id?}"
     );
+
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");

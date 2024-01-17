@@ -1,0 +1,162 @@
+﻿@model IEnumerable<Businesses_Accounting.Models.BusinessService>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsActive)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Barcode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SalesPrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SalesInformation)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PurchaseCost)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PurchaseInformation)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MainUnit)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Note)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SubUnit)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UnitConversionFactor)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SalesTaxable)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SalesTax)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PurchaseTaxable)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PurchaseTax)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TaxId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TaxUnitId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IranianTaxTypeId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ImageUrl)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Business)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Category)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsActive)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Barcode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SalesPrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SalesInformation)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PurchaseCost)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PurchaseInformation)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MainUnit)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Note)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SubUnit)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UnitConversionFactor)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SalesTaxable)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SalesTax)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PurchaseTaxable)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PurchaseTax)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TaxId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TaxUnitId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IranianTaxTypeId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ImageUrl)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Business.LegalName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Category.Title)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

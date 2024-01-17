@@ -28,5 +28,20 @@ namespace Businesses_Accounting.Resources
             Ignore = 20000
 
         }
+        public enum CalendarType
+        {
+            /// <summary>
+            /// هجری شمسی
+            /// </summary>
+            [Description("هجری شمسی")]
+            Persian = 1,
+            /// <summary>
+            /// میلادی
+            /// </summary>
+            [Description("میلادی")]
+            Gregorian = 2
+
+        }
+
     }
 }

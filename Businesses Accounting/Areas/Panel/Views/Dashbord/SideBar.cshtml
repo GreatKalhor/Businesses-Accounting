@@ -12,7 +12,7 @@
         \
         <li data-role='drawer-item' class='k-state-selected'>
             <span class='k-icon k-i-grid'></span><span class='k-item-text' data-id='Inbox'>
-                <a asp-action="Index" asp-controller="Dashbord" asp-area="Panel">
+                <a asp-action="Index" asp-controller="App" asp-area="">
 
                     داشبورد
                 </a>
@@ -24,10 +24,36 @@
                 <a asp-action="Index" asp-controller="Businesses" asp-area="">کسب و کار </a>
             </span>
         </li> \
-        <li data-role='drawer-item'><span class='k-icon k-i-aggregate-fields'></span><span class='k-item-text' data-id='Calendar'>اشخاص</span></li> \
-        @*     <li data-role='drawer-separator'></li> \ *@
-        <li data-role='drawer-item'><span class='k-icon k-i-gear'></span><span class='k-item-text' data-id='Attachments'>سندها</span></li> \
-        <li data-role='drawer-item'><span class='k-icon k-i-gear'></span><span class='k-item-text' data-id='Attachments'><a href='@Url.Action("Index", "BusinessFiscalYears", new { businessId = businessId ,area=""})'>سال های مالی</a></span></li> \
+        <li data-role='drawer-item'><span class='k-icon k-i-aggregate-fields'></span>
+            <span class='k-item-text' data-id='Notifications'>
+                <a asp-action="Index" asp-controller="Contacts" asp-area="">اشخاص </a>
+            </span>
+        </li> \
+       
+        <li data-role='drawer-item'>
+            <span class='k-icon k-i-aggregate-fields'></span>
+            <span class='k-item-text' data-id='Notifications'>
+                <a asp-action="Index" asp-controller="BusinessProducts" asp-area="">کالا ها</a>
+            </span>
+        </li> \
+        <li data-role='drawer-item'>
+            <span class='k-icon k-i-aggregate-fields'></span>
+            <span class='k-item-text' data-id='Notifications'>
+                <a asp-action="Index" asp-controller="BusinessServices" asp-area="">خدمت ها</a>
+            </span>
+        </li> \
+        <li data-role='drawer-item'>
+            <span class='k-icon k-i-aggregate-fields'></span>
+            <span class='k-item-text' data-id='Notifications'>
+                <a asp-action="Index" asp-controller="BusinessBankings" asp-area="">بانک ها</a>
+            </span>
+        </li> \
+        <li data-role='drawer-item'>
+            <span class='k-icon k-i-gear'></span>
+            <span class='k-item-text' data-id='Notifications'>
+                <a asp-action="Index" asp-controller="Documents" asp-area="">سندها </a>
+            </span>
+        </li> \
 
     </ul>
 }
@@ -47,6 +73,9 @@ else
         </li> \
         <li data-role='drawer-item'><span class='k-icon k-i-aggregate-fields'></span><span class='k-item-text' data-id='Calendar'>اشخاص</span></li> \
         @*     <li data-role='drawer-separator'></li> \ *@
+        <li data-role='drawer-item'><span class='k-icon k-i-gear'></span><span class='k-item-text' data-id='Attachments'>کالا ها</span></li> \
+        <li data-role='drawer-item'><span class='k-icon k-i-gear'></span><span class='k-item-text' data-id='Attachments'>خدمات</span></li> \
+        <li data-role='drawer-item'><span class='k-icon k-i-gear'></span><span class='k-item-text' data-id='Attachments'>بانک ها</span></li> \
         <li data-role='drawer-item'><span class='k-icon k-i-gear'></span><span class='k-item-text' data-id='Attachments'>سندها</span></li> \
 
     </ul>

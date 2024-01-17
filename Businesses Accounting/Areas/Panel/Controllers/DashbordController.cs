@@ -17,7 +17,7 @@ namespace Businesses_Accounting.Areas.Panel.Controllers
         {
             _context = context;
         }
-        public async Task<IActionResult> Index(int businessId)
+        public async Task<IActionResult> Check(int businessId)
         {
             if (businessId > 0)
             {
@@ -32,7 +32,7 @@ namespace Businesses_Accounting.Areas.Panel.Controllers
                             var bfyss = await bfys.GetWithBusinessId(businessId);
                             if (bfyss != null)
                             {
-                                return RedirectToAction("Index", "Dashbord", new { area = "Panel", ubis = PanelServices.GenerateUBselected(_userId.Value, businessId, bfyss.Id) });
+                                return RedirectToAction("Index", "App", new { area = "", ubis = PanelServices.GenerateUBselected(_userId.Value, businessId, bfyss.Id) });
                             }
                             else
                             {
@@ -50,17 +50,19 @@ namespace Businesses_Accounting.Areas.Panel.Controllers
             }
             else
             {
-                if (HttpContext.ToPanelViewModel().BusinessId == 0)
-                {
-                    return RedirectToAction("Index", "Businesses", new { area = "", ubis = "" });
-                }
-                else
-                {
-                    return View();
-                }
+
+                return RedirectToAction("Index", "Businesses", new { area = "", ubis = "" });
+
             }
         }
-
+        public async Task<IActionResult> Index(int businessId)
+        {
+            if (businessId == 0)
+            {
+                return RedirectToAction("Index", "Businesses", new { area = "", ubis = "" });
+            }
+            return View();
+        }
         public IActionResult SideBar()
         {
             return PartialView();

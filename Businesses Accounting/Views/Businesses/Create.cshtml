@@ -1,4 +1,4 @@
-﻿@model Businesses_Accounting.Models.Business
+﻿@model Businesses_Accounting.Models.ViewModels.CreateBusinessViewModel
 
 @{
     ViewData["Title"] = "Create";
@@ -9,43 +9,45 @@
 <div class="demo-section">
     <div id="validation-success"></div>
     @(
-        Html.Kendo().Form<Businesses_Accounting.Models.Business>()
-            .Name("formExample")
-            .HtmlAttributes(new { action = "Create", method = "POST" })
-            .Validatable(v =>
+        Html.Kendo().Form<Businesses_Accounting.Models.ViewModels.CreateBusinessViewModel>()
+        .Name("formExample")
+        .HtmlAttributes(new { action = "Create", method = "POST" })
+        .Validatable(v =>
+        {
+            v.ValidateOnBlur(true);
+            v.ValidationSummary(vs => vs.Enable(true));
+        })
+        .Items(items =>
+        {
+            items.AddGroup()
+            .Label("Create Business Form")
+            .Items(i =>
             {
-                v.ValidateOnBlur(true);
-                v.ValidationSummary(vs => vs.Enable(true));
-            })
-            .Items(items =>
-            {
-                items.AddGroup()
-                .Label("Create Business Form")
-                .Items(i =>
-                {
                 i.AddAntiForgeryToken(Html.AntiForgeryToken());
                 i.Add().Field(f => f.Id).Label(l => l.Text("Id:")).Editor(e => { e.Hidden(); });
-                i.Add().Field(f => f.Name).Label(l => l.Text("Name:")).Editor(e => { e.TextBox().Placeholder("TextBox"); });
-                i.Add().Field(f => f.LanguageId).Label(l => l.Text("Language:").Optional(true)).Editor(e => { e.ComboBox().Filter(FilterType.Contains).MinLength(3).Placeholder("Select...").DataTextField("Name").DataValueField("Id").HtmlAttributes(new { style = "width:100%" }).Height(520).DataSource(source => { source.Read(read => { read.Action("Items_GetLanguages", "Businesses").Data("filterLanguages"); }).ServerFiltering(true); }); });
-                    i.Add().Field(f => f.LegalName).Label(l => l.Text("LegalName:")).Editor(e => { e.TextBox().Placeholder("TextBox"); });
-                i.Add().Field(f => f.TypeId).Label(l => l.Text("BusinessTypes:").Optional(true)).Editor(e => { e.ComboBox().Filter(FilterType.Contains).MinLength(3).Placeholder("Select...").DataTextField("Name").DataValueField("Id").HtmlAttributes(new { style = "width:100%" }).Height(520).DataSource(source => { source.Read(read => { read.Action("Items_GetBusinessTypes", "Businesses").Data("filterBusinessTypes"); }).ServerFiltering(true); }); });
-                    i.Add().Field(f => f.BusinessLine).Label(l => l.Text("BusinessLine:")).Editor(e => { e.TextBox().Placeholder("TextBox"); });
-                    i.Add().Field(f => f.NationalCode).Label(l => l.Text("NationalCode:")).Editor(e => { e.TextBox().Placeholder("TextBox"); });
-                    i.Add().Field(f => f.EconomicCode).Label(l => l.Text("EconomicCode:")).Editor(e => { e.TextBox().Placeholder("TextBox"); });
-                    i.Add().Field(f => f.RegistrationNumber).Label(l => l.Text("RegistrationNumber:")).Editor(e => { e.TextBox().Placeholder("TextBox"); });
-                    i.Add().Field(f => f.Country).Label(l => l.Text("Country:")).Editor(e => { e.TextBox().Placeholder("TextBox"); });
-                    i.Add().Field(f => f.StateProvince).Label(l => l.Text("StateProvince:")).Editor(e => { e.TextBox().Placeholder("TextBox"); });
-                    i.Add().Field(f => f.City).Label(l => l.Text("City:")).Editor(e => { e.TextBox().Placeholder("TextBox"); });
-                    i.Add().Field(f => f.PostalCode).Label(l => l.Text("PostalCode:")).Editor(e => { e.TextBox().Placeholder("TextBox"); });
-                    i.Add().Field(f => f.Phone).Label(l => l.Text("Phone:")).Editor(e => { e.TextBox().Placeholder("TextBox"); });
-                    i.Add().Field(f => f.Fax).Label(l => l.Text("Fax:")).Editor(e => { e.TextBox().Placeholder("TextBox"); });
-                    i.Add().Field(f => f.Address).Label(l => l.Text("Address:")).Editor(e => { e.TextBox().Placeholder("TextBox"); });
-                    i.Add().Field(f => f.Website).Label(l => l.Text("Website:")).Editor(e => { e.TextBox().Placeholder("TextBox"); });
-                    i.Add().Field(f => f.Email).Label(l => l.Text("Email:")).Editor(e => { e.TextBox().Placeholder("TextBox"); });
-                    i.Add().Field(f => f.LogoUrl).Label(l => l.Text("LogoUrl:")).Editor(e => { e.TextBox().Placeholder("TextBox"); });
-                }); 
-            })
-      //  .Events(ev => ev.ValidateField("onFormValidateField").Clear("onFormClear"))
+                i.Add().Field(f => f.Name).Editor(e => { e.TextBox(); });
+                i.Add().Field(f => f.LanguageId).Editor(e => { e.ComboBox().Filter(FilterType.Contains).MinLength(3).Placeholder("Select...").DataTextField("Name").DataValueField("Id").HtmlAttributes(new { style = "width:100%" }).Height(520).DataSource(source => { source.Read(read => { read.Action("Items_GetLanguages", "Basic").Data("filterLanguages"); }).ServerFiltering(true); }); });
+                i.Add().Field(f => f.LegalName).Editor(e => { e.TextBox(); });
+                i.Add().Field(f => f.TypeId).Editor(e => { e.ComboBox().Filter(FilterType.Contains).MinLength(3).Placeholder("Select...").DataTextField("Name").DataValueField("Id").HtmlAttributes(new { style = "width:100%" }).Height(520).DataSource(source => { source.Read(read => { read.Action("Items_GetBusinessTypes", "Basic").Data("filterBusinessTypes"); }).ServerFiltering(true); }); });
+                i.Add().Field(f => f.InventoryAccountingSystem).Editor(e => { e.TextBox().Placeholder("ادواری"); });
+                i.Add().Field(f => f.HasMultiCurrency).Editor(e => { e.Switch().Messages(c => c.Checked("بله").Unchecked("خیر")); });
+                i.Add().Field(f => f.HasWarehouseManagement).Editor(e => { e.Switch().Messages(c => c.Checked("بله").Unchecked("خیر")); });
+                i.Add().Field(f => f.MainCurrencyId).Editor(e => { e.ComboBox().Filter(FilterType.Contains).MinLength(3).Placeholder("Select...").DataTextField("Name").DataValueField("Id").HtmlAttributes(new { style = "width:100%" }).Height(520).DataSource(source => { source.Read(read => { read.Action("Items_GetCurrency", "Basic").Data("filterCurrency"); }).ServerFiltering(true); }); });
+                i.Add().Field(f => f.CurrenciesIds).Editor(e => { e.MultiSelect().Name("multiselect").Placeholder("Please select your favourite sport...").DownArrow(true).NoDataTemplateId("noDataTemplate").DataTextField("Text").DataValueField("Value").Filter("contains").DataSource(source => { source.Read(read => { read.Action("Items_GetCurrencies", "Basic"); }); }); });
+                i.Add().Field(f => f.CalendarId).Editor(e => { e.ComboBox().Filter(FilterType.Contains).MinLength(3).Placeholder("Select...").DataTextField("Text").DataValueField("Value").HtmlAttributes(new { style = "width:100%" }).Height(520).DataSource(source => { source.Read(read => { read.Action("Items_GetCalendars", "Basic").Data("filterCalendarsTypes"); }).ServerFiltering(true); }); });
+
+                i.Add().Field(f => f.ValueAddedTaxRate).Editor(e => { e.TextBox().Placeholder("TextBox"); });
+                @*   i.Add().Field(f => f.City).Editor(e => { e.TextBox().Placeholder("TextBox"); });
+    i.Add().Field(f => f.PostalCode).Editor(e => { e.TextBox().Placeholder("TextBox"); });
+    i.Add().Field(f => f.Phone).Editor(e => { e.TextBox().Placeholder("TextBox"); });
+    i.Add().Field(f => f.Fax).Editor(e => { e.TextBox().Placeholder("TextBox"); });
+    i.Add().Field(f => f.Address).Editor(e => { e.TextBox().Placeholder("TextBox"); });
+    i.Add().Field(f => f.Website).Editor(e => { e.TextBox().Placeholder("TextBox"); });
+    i.Add().Field(f => f.Email).Editor(e => { e.TextBox().Placeholder("TextBox"); });
+    i.Add().Field(f => f.LogoUrl).Editor(e => { e.TextBox().Placeholder("TextBox"); }); *@
+            });
+        })
+        //  .Events(ev => ev.ValidateField("onFormValidateField").Clear("onFormClear"))
         )
 </div>
 
@@ -55,6 +57,12 @@
     }
     function filterBusinessTypes(e) {
         return kendo.ui.ComboBox.requestData($("#TypeId"));
+    }
+    function filterCurrency(e) {
+        return kendo.ui.ComboBox.requestData($("#MainCurrencyId"));
+    } 
+    function filterCalendarsTypes(e) {
+        return kendo.ui.ComboBox.requestData($("#CalendarId"));
     }
     function onFormValidateField(e) {
         $("#validation-success").html("");
@@ -75,7 +83,9 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
 
 

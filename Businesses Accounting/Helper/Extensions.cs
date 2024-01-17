@@ -6,13 +6,34 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.ComponentModel;
+using System.Drawing;
 using System.IO;
+using System.Reflection;
 using System.Threading.Tasks;
+using static Businesses_Accounting.Resources.Variable;
 
 namespace Microsoft.AspNetCore.Mvc.Rendering
 {
     public static class HtmlHelperViewExtensions
     {
+        public static string GetDescription(this Enum enumValue)
+        {
+            var field = enumValue.GetType().GetField(enumValue.ToString());
+            if (field == null)
+                return enumValue.ToString();
+
+            var attributes = field.GetCustomAttributes(typeof(DescriptionAttribute), false);
+            if (Attribute.GetCustomAttribute(field, typeof(DescriptionAttribute)) is DescriptionAttribute attribute)
+            {
+                return attribute.Description;
+            }
+
+            return enumValue.ToString();
+        }
+       
+
+        
         public static IHtmlContent Action(this IHtmlHelper helper, string action, object parameters = null)
         {
             var controller = (string)helper.ViewContext.RouteData.Values["controller"];

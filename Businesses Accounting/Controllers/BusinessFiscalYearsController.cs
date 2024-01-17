@@ -8,9 +8,12 @@ using Microsoft.EntityFrameworkCore;
 using Businesses_Accounting.Data;
 using Businesses_Accounting.Models;
 using Businesses_Accounting.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Businesses_Accounting.Controllers
 {
+    [Authorize]
+    [GreatAttribute]
     public class BusinessFiscalYearsController : Controller
     {
         private readonly BA_dbContext _context;

@@ -1,5 +1,6 @@
 ﻿using Businesses_Accounting.Data;
 using Businesses_Accounting.Models;
+using Businesses_Accounting.Models.ViewModels;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel;
@@ -33,6 +34,27 @@ namespace Businesses_Accounting.Services
                 {
                     db.Add(new BusinessUser() { BusinessId = business.Id, UserId = userId.Value, AccessTypeId = (int)Resources.Variable.AccessType.Owner });
                     db.Add(new BusinessFiscalYear() { BusinessId = business.Id, Title = "پیش فرض", StartDate = DateTime.Now, EndDate = DateTime.Now.AddYears(3), InventoryValuationMethod = 1 });
+                    await db.SaveChangesAsync();
+                }
+            }
+        }
+        public async Task InsertBusiness(CreateBusinessViewModel business, Guid? userId)
+        {
+            if (userId is not null)
+            {
+                var _b = new Business() { Name = business.Name, LanguageId = business.LanguageId, LegalName = business.LegalName, TypeId = business.TypeId };
+                db.Add(_b);
+                await db.SaveChangesAsync();
+                if (_b.Id > 0)
+                {
+                    db.Add(new BusinessUser() { BusinessId = _b.Id, UserId = userId.Value, AccessTypeId = (int)Resources.Variable.AccessType.Owner });
+                    db.Add(new BusinessFiscalYear() { BusinessId = _b.Id, Title = "پیش فرض", StartDate = DateTime.Now, EndDate = DateTime.Now.AddYears(3), InventoryValuationMethod = 1 });
+                    db.Add(new BusinessFinancialInfo() { BusinessId = _b.Id, InventoryAccountingSystem = business.InventoryAccountingSystem, CalendarId = business.CalendarId, MainCurrencyId = business.MainCurrencyId, ValueAddedTaxRate = business.ValueAddedTaxRate, HasMultiCurrency = business.HasMultiCurrency, HasWarehouseManagement = business.HasWarehouseManagement });
+                    foreach (var item in business.CurrenciesIds)
+                    {
+                        db.Add(new BusinessCurrencyConversion() { BusinessId = _b.Id, CurrencyId = item, MainValue = 1 });
+                    }
+
                     await db.SaveChangesAsync();
                 }
             }

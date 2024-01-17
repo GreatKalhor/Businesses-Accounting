@@ -15,7 +15,8 @@ namespace Businesses_Accounting.Controllers
         {
             _logger = logger;
         }
-
+     
+        [GreatAttribute]
         public IActionResult Index()
         {
             return View();
