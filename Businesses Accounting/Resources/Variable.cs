@@ -20,12 +20,36 @@ namespace Businesses_Accounting.Resources
             /// مدیر
             /// </summary>
             [Description("مدیر")]
-            Admin = 1,
+            Admin = 2,
             /// <summary>
             /// بدون دسترسی
             /// </summary>
             [Description("بدون دسترسی")]
             Ignore = 20000
+
+        } 
+        public enum CategoryType
+        {
+            /// <summary>
+            /// اشخاص
+            /// </summary>
+            [Description("اشخاص")]
+            Contact = 0,
+            /// <summary>
+            /// بانکداری
+            /// </summary>
+            [Description("بانکداری")]
+            Banking = 1,
+            /// <summary>
+            /// کالا
+            /// </summary>
+            [Description("کالا")]
+            Product = 2,
+            /// <summary>
+            /// خدمات
+            /// </summary>
+            [Description("خدمات")]
+            Service = 3
 
         }
         public enum CalendarType
@@ -42,6 +66,14 @@ namespace Businesses_Accounting.Resources
             Gregorian = 2
 
         }
+        public enum InventoryAccountingSystemType
+        {
+            /// <summary>
+            /// ادواری
+            /// </summary>
+            [Description("ادواری")]
+            Periodic = 0
 
+        }
     }
 }

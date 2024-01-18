@@ -4,42 +4,89 @@
     ViewData["Title"] = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<div style=" grid-column-end: span 3; grid-row-end: span 1;"></div>
 
-<h1>Create</h1>
+<div class="demo-section">
+    <div id="validation-success"></div>
+    @(
+        Html.Kendo().Form<Businesses_Accounting.Models.ViewModels.CreateBusinessViewModel>()
+        .Name("formExample")
+        .HtmlAttributes(new { action = "Create", method = "POST" })
+        .Validatable(v =>
+        {
+            v.ValidateOnBlur(true);
+            v.ValidationSummary(vs => vs.Enable(true));
+        })
+        .Items(items =>
+        {
+            items.AddGroup()
+            .Label("ساخت کسب و کار")//.Layout("<div class'k-columns-2'>")
+            .Items(i =>
+            {
+                i.AddAntiForgeryToken(Html.AntiForgeryToken());
+                i.Add().Field(f => f.Id).Label(l => l.Text("Id:")).Editor(e => { e.Hidden(); });
+                i.Add().Field(f => f.Name).Editor(e => { e.TextBox(); });
+                i.Add().Field(f => f.LanguageId).Editor(e => { e.ComboBox().Filter(FilterType.Contains).MinLength(3).Placeholder("انتخاب کنید...").DataTextField("Name").DataValueField("Id").HtmlAttributes(new { style = "width:100%" }).Height(520).DataSource(source => { source.Read(read => { read.Action("Items_GetLanguages", "Basic").Data("filterLanguages"); }).ServerFiltering(true); }); });
+                i.Add().Field(f => f.LegalName).Editor(e => { e.TextBox(); });
+                i.Add().Field(f => f.TypeId).Editor(e => { e.ComboBox().Filter(FilterType.Contains).MinLength(3).Placeholder("انتخاب کنید...").DataTextField("Name").DataValueField("Id").HtmlAttributes(new { style = "width:100%" }).Height(520).DataSource(source => { source.Read(read => { read.Action("Items_GetBusinessTypes", "Basic").Data("filterBusinessTypes"); }).ServerFiltering(true); }); });
+            });
+            items.AddGroup()
+            .Label("تنظیمات مالی")//.Layout("<div class'k-columns-2'>")
+            .Items(i =>
+            {
 
-<h4>BusinessFiscalYear</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-           @Html.HiddenFor(model=> model.BusinessId)
-            <div class="form-group">
-                <label asp-for="StartDate" class="control-label"></label>
-                <input asp-for="StartDate" class="form-control" />
-                <span asp-validation-for="StartDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="EndDate" class="control-label"></label>
-                <input asp-for="EndDate" class="form-control" />
-                <span asp-validation-for="EndDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="InventoryValuationMethod" class="control-label"></label>
-                <input asp-for="InventoryValuationMethod" class="form-control" />
-                <span asp-validation-for="InventoryValuationMethod" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
+                i.Add().Field(f => f.HasMultiCurrency).Editor(e => { e.Switch().Messages(c => c.Checked("بله").Unchecked("خیر")); });
+                i.Add().Field(f => f.HasWarehouseManagement).Editor(e => { e.Switch().Messages(c => c.Checked("بله").Unchecked("خیر")); });
+
+            });
+            items.AddGroup().Label(" ")
+            .Items(i =>
+            {
+
+                i.Add().Field(f => f.MainCurrencyId).Editor(e => { e.ComboBox().Filter(FilterType.Contains).MinLength(3).Placeholder("انتخاب کنید...").DataTextField("Name").DataValueField("Id").HtmlAttributes(new { style = "width:100%" }).Height(520).DataSource(source => { source.Read(read => { read.Action("Items_GetCurrency", "Basic").Data("filterCurrency"); }).ServerFiltering(true); }); });
+                i.Add().Field(f => f.CurrenciesIds).Label(l => l.Optional(true)).Editor(e => { e.MultiSelect().AutoClose(false).Placeholder("Please select your favourite sport...").DownArrow(true).NoDataTemplateId("noDataTemplate").DataTextField("Text").Height(520).DataValueField("Value").Filter("contains").DataSource(source => { source.Read(read => { read.Action("Items_GetCurrencies", "Basic"); }); }); });
+                i.Add().Field(f => f.InventoryAccountingSystem).Editor(e => { e.ComboBox().Filter(FilterType.Contains).MinLength(3).Placeholder("انتخاب کنید...").DataTextField("Text").DataValueField("Value").HtmlAttributes(new { style = "width:100%" }).Height(520).DataSource(source => { source.Read(read => { read.Action("Items_GetInventoryAccountingSystemTypes", "Basic").Data("filterInventoryAccountingSystems"); }).ServerFiltering(true); }); });
+                i.Add().Field(f => f.ValueAddedTaxRate).Editor(e => { e.TextBox().Placeholder("TextBox"); });
+            });
+            items.AddGroup().Label(" ")
+            .Items(i =>
+            {
+                i.Add().Field(f => f.CalendarId).Editor(e => { e.ComboBox().Filter(FilterType.Contains).MinLength(3).Placeholder("انتخاب کنید...").DataTextField("Text").DataValueField("Value").HtmlAttributes(new { style = "width:100%" }).Height(520).DataSource(source => { source.Read(read => { read.Action("Items_GetCalendars", "Basic").Data("filterCalendarsTypes"); }).ServerFiltering(true); }); });
+            });
+        })//.HtmlAttributes(new {@class="k-columns-2"})
+          //  .Events(ev => ev.ValidateField("onFormValidateField").Clear("onFormClear"))
+        )
 </div>
+
+<script>
+    function filterLanguages(e) {
+        return kendo.ui.ComboBox.requestData($("#LanguageId"));
+    }
+    function filterBusinessTypes(e) {
+        return kendo.ui.ComboBox.requestData($("#TypeId"));
+    }
+    function filterCurrency(e) {
+        return kendo.ui.ComboBox.requestData($("#MainCurrencyId"));
+    }
+    function filterCalendarsTypes(e) {
+        return kendo.ui.ComboBox.requestData($("#CalendarId"));
+    }
+    function filterInventoryAccountingSystems(e) {
+        return kendo.ui.ComboBox.requestData($("#InventoryAccountingSystem"));
+    }
+    function onFormValidateField(e) {
+        $("#validation-success").html("");
+    }
+
+    function onFormSubmit(e) {
+        e.preventDefault();
+        $("#validation-success").html("<div class='k-messagebox k-messagebox-success'>Form data is valid!</div>");
+    }
+
+    function onFormClear(e) {
+        $("#validation-success").html("");
+    }
+</script>
 
 <div>
     <a asp-action="Index">Back to List</a>

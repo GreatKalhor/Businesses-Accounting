@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Businesses_Accounting.Controllers
 {
     [Authorize]
-    [GreatAttribute]
+    [GreatAttribute(true)]
 
     public class AppController : Controller
     {

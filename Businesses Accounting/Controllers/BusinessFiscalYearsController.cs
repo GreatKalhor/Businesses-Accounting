@@ -9,11 +9,13 @@ using Businesses_Accounting.Data;
 using Businesses_Accounting.Models;
 using Businesses_Accounting.Services;
 using Microsoft.AspNetCore.Authorization;
+using Kendo.Mvc.Extensions;
+using Kendo.Mvc.UI;
 
 namespace Businesses_Accounting.Controllers
 {
     [Authorize]
-    [GreatAttribute]
+    [GreatAttribute(true)]
     public class BusinessFiscalYearsController : Controller
     {
         private readonly BA_dbContext _context;
@@ -22,7 +24,6 @@ namespace Businesses_Accounting.Controllers
         {
             _context = context;
         }
-
         // GET: BusinessFiscalYears
         public async Task<IActionResult> Index(int businessId, string ubis)
         {
@@ -37,6 +38,14 @@ namespace Businesses_Accounting.Controllers
             {
                 return LocalRedirect(Url.Action("Index", "Dashbord", new { area = "Panel" }));
             }
+        }
+        [AcceptVerbs("Post")]
+        public ActionResult List(DataSourceRequest request)
+        {
+            var userpanel = HttpContext.ToPanelViewModel();
+            var result = _context.Contacts.Where(x => x.BusinessId == userpanel.BusinessId);
+            var dsResult = result.ToDataSourceResult(request);
+            return Json(dsResult);
         }
 
         // GET: BusinessFiscalYears/Details/5
@@ -59,8 +68,10 @@ namespace Businesses_Accounting.Controllers
         }
 
         // GET: BusinessFiscalYears/Create
-        public IActionResult Create(int businessId)
+        public IActionResult Create()
         {
+            var userpanel = HttpContext.ToPanelViewModel();
+            int businessId = userpanel.BusinessId;
             if (businessId > 0)
             {
                 return View(new BusinessFiscalYear() { BusinessId = businessId });
@@ -76,7 +87,7 @@ namespace Businesses_Accounting.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,BusinessId,StartDate,EndDate,Title,InventoryValuationMethod")] BusinessFiscalYear businessFiscalYear)
+        public async Task<IActionResult> Create( BusinessFiscalYear businessFiscalYear)
         {
             if (ModelState.IsValid)
             {

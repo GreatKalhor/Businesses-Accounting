@@ -8,11 +8,14 @@ using Microsoft.EntityFrameworkCore;
 using Businesses_Accounting.Data;
 using Businesses_Accounting.Models;
 using Microsoft.AspNetCore.Authorization;
+using Businesses_Accounting.Services;
+using Kendo.Mvc.Extensions;
+using Kendo.Mvc.UI;
 
 namespace Businesses_Accounting.Controllers
 {
     [Authorize]
-    [GreatAttribute]
+    [GreatAttribute(true)]
     public class BusinessProductsController : Controller
     {
         private readonly BA_dbContext _context;
@@ -21,14 +24,20 @@ namespace Businesses_Accounting.Controllers
         {
             _context = context;
         }
-
         // GET: BusinessProducts
         public async Task<IActionResult> Index()
         {
             var bA_dbContext = _context.BusinessProducts.Include(b => b.Business).Include(b => b.Category);
             return View(await bA_dbContext.ToListAsync());
         }
-
+        [AcceptVerbs("Post")]
+        public ActionResult List(DataSourceRequest request)
+        {
+            var userpanel = HttpContext.ToPanelViewModel();
+            var result = _context.Contacts.Where(x => x.BusinessId == userpanel.BusinessId);
+            var dsResult = result.ToDataSourceResult(request);
+            return Json(dsResult);
+        }
         // GET: BusinessProducts/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -52,9 +61,8 @@ namespace Businesses_Accounting.Controllers
         // GET: BusinessProducts/Create
         public IActionResult Create()
         {
-            ViewData["BusinessId"] = new SelectList(_context.Businesses, "Id", "LegalName");
-            ViewData["CategoryId"] = new SelectList(_context.BusinessCategories, "Id", "Title");
-            return View();
+            var userpanel = HttpContext.ToPanelViewModel();
+            return View(new BusinessProduct() { BusinessId = userpanel.BusinessId });
         }
 
         // POST: BusinessProducts/Create
@@ -62,7 +70,7 @@ namespace Businesses_Accounting.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,BusinessId,Name,IsActive,ProductCode,Barcode,CategoryId,SalesPrice,SalesInformation,PurchaseCost,PurchaseInformation,MainUnit,Note,SubUnit,UnitConversionFactor,TrackQuantity,ReorderPoint,MinimumOrder,LeadTimeDays,SalesTaxable,SalesTax,PurchaseTaxable,PurchaseTax,TaxId,TaxUnitId,IranianTaxTypeId,ImageUrl")] BusinessProduct businessProduct)
+        public async Task<IActionResult> Create( BusinessProduct businessProduct)
         {
             if (ModelState.IsValid)
             {

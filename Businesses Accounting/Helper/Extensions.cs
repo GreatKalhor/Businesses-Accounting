@@ -31,9 +31,12 @@ namespace Microsoft.AspNetCore.Mvc.Rendering
 
             return enumValue.ToString();
         }
-       
+        public static int ToInt(this Enum enumValue)
+        {
+            return Convert.ToInt32((object)enumValue);
+        }
 
-        
+
         public static IHtmlContent Action(this IHtmlHelper helper, string action, object parameters = null)
         {
             var controller = (string)helper.ViewContext.RouteData.Values["controller"];

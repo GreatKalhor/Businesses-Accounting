@@ -8,14 +8,19 @@ using Microsoft.EntityFrameworkCore;
 using Businesses_Accounting.Data;
 using Businesses_Accounting.Models;
 using Microsoft.AspNetCore.Authorization;
+using Businesses_Accounting.Services;
+using Kendo.Mvc.Extensions;
+using Kendo.Mvc.UI;
+using Businesses_Accounting.Models.ViewModels;
 
 namespace Businesses_Accounting.Controllers
 {
     [Authorize]
-    [GreatAttribute]
+    [GreatAttribute(true)]
     public class ContactsController : Controller
     {
         private readonly BA_dbContext _context;
+
 
         public ContactsController(BA_dbContext context)
         {
@@ -28,7 +33,14 @@ namespace Businesses_Accounting.Controllers
             var bA_dbContext = _context.Contacts.Include(c => c.Business).Include(c => c.Category);
             return View(await bA_dbContext.ToListAsync());
         }
-
+        [AcceptVerbs("Post")]
+        public ActionResult List(DataSourceRequest request)
+        {
+            var userpanel = HttpContext.ToPanelViewModel();
+            var result = _context.Contacts.Where(x => x.BusinessId == userpanel.BusinessId);
+            var dsResult = result.ToDataSourceResult(request);
+            return Json(dsResult);
+        }
         // GET: Contacts/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -52,9 +64,47 @@ namespace Businesses_Accounting.Controllers
         // GET: Contacts/Create
         public IActionResult Create()
         {
-            ViewData["BusinessId"] = new SelectList(_context.Businesses, "Id", "LegalName");
-            ViewData["CategoryId"] = new SelectList(_context.BusinessCategories, "Id", "Title");
-            return View();
+            var userpanel = HttpContext.ToPanelViewModel();
+            return View(new CreateContactViewModel() { BusinessId = userpanel.BusinessId ,
+                Type = new CheckBoxGroupViewModel()
+                {
+                    Items = new List<Kendo.Mvc.UI.IInputGroupItem>()
+        {
+            new InputGroupItemModel ()
+                {
+                    Label = "مشتری",
+                    Enabled = true,
+                    Encoded = false,
+                   // CssClass = "blue",
+                    Value = "IsCustomer"
+                },
+            new InputGroupItemModel ()
+                {
+                    Label = "تامین کننده",
+                    Enabled = true,
+                    Encoded = false,
+                   // CssClass = "blue",
+                    Value = "IsVendor"
+                },
+           new InputGroupItemModel ()
+    {
+        Label = "سهامدار",
+        Enabled = true,
+        Encoded = false,
+       // CssClass = "blue",
+        Value = "IsStockholder"
+    },new InputGroupItemModel ()
+    {
+        Label = "کارمند",
+        Enabled = true,
+        Encoded = false,
+       // CssClass = "blue",
+        Value = "Employee"
+    },
+        },
+                    CheckBoxGroupValue = new string[] { "نوع" }
+                }
+            });
         }
 
         // POST: Contacts/Create
@@ -62,7 +112,7 @@ namespace Businesses_Accounting.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,BusinessId,IsActive,Company,Title,FirstName,LastName,DisplayName,CategoryId,ImageUrl,IsCustomer,IsVendor,IsStockholder,Employee")] Contact contact)
+        public async Task<IActionResult> Create(CreateContactViewModel contact)
         {
             if (ModelState.IsValid)
             {
@@ -71,7 +121,6 @@ namespace Businesses_Accounting.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["BusinessId"] = new SelectList(_context.Businesses, "Id", "LegalName", contact.BusinessId);
-            ViewData["CategoryId"] = new SelectList(_context.BusinessCategories, "Id", "Title", contact.CategoryId);
             return View(contact);
         }
 
@@ -164,14 +213,14 @@ namespace Businesses_Accounting.Controllers
             {
                 _context.Contacts.Remove(contact);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool ContactExists(int id)
         {
-          return (_context.Contacts?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Contacts?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

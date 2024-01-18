@@ -7,9 +7,15 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Businesses_Accounting.Data;
 using Businesses_Accounting.Models;
+using Microsoft.AspNetCore.Authorization;
+using Businesses_Accounting.Services;
+using Kendo.Mvc.Extensions;
+using Kendo.Mvc.UI;
 
 namespace Businesses_Accounting.Controllers
 {
+    [Authorize]
+    [GreatAttribute(true)]
     public class BusinessBankingsController : Controller
     {
         private readonly BA_dbContext _context;
@@ -18,12 +24,19 @@ namespace Businesses_Accounting.Controllers
         {
             _context = context;
         }
-
         // GET: BusinessBankings
         public async Task<IActionResult> Index()
         {
             var bA_dbContext = _context.BusinessBankings.Include(b => b.Banking).Include(b => b.Business).Include(b => b.Currency);
             return View(await bA_dbContext.ToListAsync());
+        }
+        [AcceptVerbs("Post")]
+        public ActionResult List(DataSourceRequest request)
+        {
+            var userpanel = HttpContext.ToPanelViewModel();
+            var result = _context.Contacts.Where(x => x.BusinessId == userpanel.BusinessId);
+            var dsResult = result.ToDataSourceResult(request);
+            return Json(dsResult);
         }
 
         // GET: BusinessBankings/Details/5
@@ -50,10 +63,8 @@ namespace Businesses_Accounting.Controllers
         // GET: BusinessBankings/Create
         public IActionResult Create()
         {
-            ViewData["BankingId"] = new SelectList(_context.BankingTypes, "Id", "Name");
-            ViewData["BusinessId"] = new SelectList(_context.Businesses, "Id", "LegalName");
-            ViewData["CurrencyId"] = new SelectList(_context.Currencies, "Id", "DisplayName");
-            return View();
+            var userpanel = HttpContext.ToPanelViewModel();
+            return View(new BusinessBanking() { BusinessId = userpanel.BusinessId });
         }
 
         // POST: BusinessBankings/Create
@@ -61,7 +72,7 @@ namespace Businesses_Accounting.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,BusinessId,BankingId,IsActive,Name,CurrencyId,IsDefault,Note")] BusinessBanking businessBanking)
+        public async Task<IActionResult> Create(BusinessBanking businessBanking)
         {
             if (ModelState.IsValid)
             {
@@ -167,14 +178,14 @@ namespace Businesses_Accounting.Controllers
             {
                 _context.BusinessBankings.Remove(businessBanking);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool BusinessBankingExists(int id)
         {
-          return (_context.BusinessBankings?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.BusinessBankings?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

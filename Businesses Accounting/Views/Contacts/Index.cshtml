@@ -1,108 +1,35 @@
 ﻿@model IEnumerable<Businesses_Accounting.Models.Contact>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "اشخاص";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">شخص جدید</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.IsActive)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Company)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FirstName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LastName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DisplayName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ImageUrl)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsCustomer)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsVendor)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsStockholder)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Employee)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Business)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Category)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsActive)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Company)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DisplayName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ImageUrl)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsCustomer)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsVendor)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsStockholder)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Employee)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Business.LegalName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Category.Title)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+@(
+    Html.Kendo().Grid<Businesses_Accounting.Models.Contact>()
+                           .Name("grid")
+                           .Columns(columns =>
+                           {
+                               columns.Bound(model => model.DisplayName);
+                               columns.Bound(model => model.Company);
+                               columns.Bound(model => model.IsActive);
+                               columns.Bound(model => model.Id).Filterable(false).ClientHeaderTemplate(" ")
+                               .ClientTemplate(@"<a href='" + @Url.Action("Edit", "Contacts", new { Id = "#:data.Id#" }) + @"'>Edit</a> |  <a href='" + @Url.Action("Delete", "Contacts", new { Id = "#:data.Id#" }) + @"'>Delete</a>  ").Width(430);
+                })
+
+                           .Pageable()
+                           .Sortable()
+                           .Scrollable()
+                           //.Groupable()
+                           .Filterable()
+                           .HtmlAttributes(new { style = "height:550px;" })
+                           .DataSource(dataSource => dataSource
+                               .Ajax()
+                               .PageSize(20)
+                               .Read("List", "Contacts")
+                            )
+       )

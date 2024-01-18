@@ -29,7 +29,7 @@ namespace Businesses_Accounting.Controllers
         // GET: Businesses
         public async Task<IActionResult> Index()
         {
-            
+
             using (BusinessServices bs = new BusinessServices(_context))
             {
                 return View(await bs.GetBusinessWithUser(CurrentUser.GetUserId(User)));
@@ -41,7 +41,7 @@ namespace Businesses_Accounting.Controllers
         }
 
         [AcceptVerbs("Post")]
-        public ActionResult BusinessesList(DataSourceRequest request)
+        public ActionResult List(DataSourceRequest request)
         {
             using (BusinessServices bs = new BusinessServices(_context))
             {
@@ -74,10 +74,11 @@ namespace Businesses_Accounting.Controllers
         // GET: Businesses/Create
         public IActionResult Create()
         {
-          
-            return View(new CreateBusinessViewModel());
+            var l = _context.Languages.FirstOrDefault();
+            var c = _context.Currencies.FirstOrDefault();
+            return View(new CreateBusinessViewModel() { LanguageId = (l != null ? l.Id : 1), MainCurrencyId = (c != null ? c.Id : 1) });
         }
-      
+
         // POST: Businesses/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -89,9 +90,9 @@ namespace Businesses_Accounting.Controllers
             {
                 using (BusinessServices bs = new BusinessServices(_context))
                 {
-                    await bs.InsertBusiness(business, CurrentUser.GetUserId(User));
+                    int id = await bs.InsertBusiness(business, CurrentUser.GetUserId(User));
+                    return RedirectToAction("Check", "Dashbord", new { area = "Panel", businessId = id });
                 }
-                return RedirectToAction(nameof(Index));
             }
             return View(business);
         }

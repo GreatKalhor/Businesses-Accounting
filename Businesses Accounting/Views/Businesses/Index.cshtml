@@ -1,11 +1,11 @@
 ﻿@model IEnumerable<Businesses_Accounting.Models.Business>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "کسب وکار های من";
 }
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">کسب و کار جدید</a>
 </p>
 
 
@@ -39,12 +39,12 @@ Html.Kendo().Grid<Businesses_Accounting.Models.Business>()
                            .Pageable()
                            .Sortable()
                            .Scrollable()
-                           .Groupable()
+                           //.Groupable()
                            .Filterable()
                            .HtmlAttributes(new { style = "height:550px;" })
                            .DataSource(dataSource => dataSource
                                .Ajax()
                                .PageSize(20)
-                               .Read("BusinessesList", "Businesses")
+                               .Read("List", "Businesses")
                             )
        )

@@ -8,11 +8,14 @@ using Microsoft.EntityFrameworkCore;
 using Businesses_Accounting.Data;
 using Businesses_Accounting.Models;
 using Microsoft.AspNetCore.Authorization;
+using Businesses_Accounting.Services;
+using Kendo.Mvc.Extensions;
+using Kendo.Mvc.UI;
 
 namespace Businesses_Accounting.Controllers
 {
     [Authorize]
-    [GreatAttribute]
+    [GreatAttribute(true)]
     public class DocumentsController : Controller
     {
         private readonly BA_dbContext _context;
@@ -21,14 +24,20 @@ namespace Businesses_Accounting.Controllers
         {
             _context = context;
         }
-
         // GET: Documents
         public async Task<IActionResult> Index()
         {
             var bA_dbContext = _context.Documents.Include(d => d.BusinessFiscalYear).Include(d => d.Project);
             return View(await bA_dbContext.ToListAsync());
         }
-
+        [AcceptVerbs("Post")]
+        public ActionResult List(DataSourceRequest request)
+        {
+            var userpanel = HttpContext.ToPanelViewModel();
+            var result = _context.Contacts.Where(x => x.BusinessId == userpanel.BusinessId);
+            var dsResult = result.ToDataSourceResult(request);
+            return Json(dsResult);
+        }
         // GET: Documents/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -52,9 +61,8 @@ namespace Businesses_Accounting.Controllers
         // GET: Documents/Create
         public IActionResult Create()
         {
-            ViewData["BusinessFiscalYearId"] = new SelectList(_context.BusinessFiscalYears, "Id", "Title");
-            ViewData["ProjectId"] = new SelectList(_context.BusinessProjects, "Id", "Name");
-            return View();
+            var userpanel = HttpContext.ToPanelViewModel();
+            return View(new Document() { BusinessFiscalYearId = userpanel.BusinessFiscalYearId });
         }
 
         // POST: Documents/Create
@@ -62,7 +70,7 @@ namespace Businesses_Accounting.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,BusinessFiscalYearId,Number,Reference,InsertDate,ProjectId,Description,DocumentDate,Amount")] Document document)
+        public async Task<IActionResult> Create(Document document)
         {
             if (ModelState.IsValid)
             {

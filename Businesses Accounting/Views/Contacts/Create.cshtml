@@ -1,82 +1,101 @@
-﻿@model Businesses_Accounting.Models.Contact
+﻿@model Businesses_Accounting.Models.ViewModels.CreateContactViewModel
 
 @{
     ViewData["Title"] = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<div style=" grid-column-end: span 3; grid-row-end: span 1;"></div>
 
-<h1>Create</h1>
+<div class="demo-section">
+    <div id="validation-success"></div>
+    @(
+        Html.Kendo().Form<Businesses_Accounting.Models.ViewModels.CreateContactViewModel>()
+        .Name("formExample")
+        .HtmlAttributes(new { action = "Create", method = "POST" })
+        .Validatable(v =>
+        {
+            v.ValidateOnBlur(true);
+            v.ValidationSummary(vs => vs.Enable(true));
+        })
+        .Items(items =>
+        {
+            items.AddGroup()
+            .Label("شخص جدید")//.Layout("<div class'k-columns-2'>")
+            .Items(i =>
+            {
+                i.AddAntiForgeryToken(Html.AntiForgeryToken());
+                i.Add().Field(f => f.Id).Label(l => l.Text("Id:")).Editor(e => { e.Hidden(); });
+                i.Add().Field(f => f.BusinessId).Label(l => l.Text("BusinessId:")).Editor(e => { e.Hidden(); });
+                i.Add().Field(f => f.Company).Editor(e => { e.TextBox(); });
+                i.Add().Field(f => f.TitleC).Editor(e => { e.TextBox(); });
+                i.Add().Field(f => f.LastName).Editor(e => { e.TextBox(); });
+                i.Add().Field(f => f.FirstName).Editor(e => { e.TextBox(); });
+                i.Add().Field(f => f.DisplayName).Editor(e => { e.TextBox(); });
+                i.Add().Field(f => f.CategoryId).Editor(e => { e.ComboBox().Filter(FilterType.Contains).MinLength(3).Placeholder("انتخاب کنید...").DataTextField("Title").DataValueField("Id").HtmlAttributes(new { style = "width:100%" }).Height(520).DataSource(source => { source.Read(read => { read.Action("Items_BusinessCategories", "Basic").Data("filterBusinessCategories"); }).ServerFiltering(true); }); });
+                i.Add().Field(f => f.Type).Editor(e =>
+                {
+                    e.CheckBoxGroup().Name("checkboxgroup-second")
+            .Layout("horizontal")
+            .Value(Model.Type.CheckBoxGroupValue)
+            .BindTo(Model.Type.Items);
+                });
+            });
+            items.AddGroup()
+            .Label("تنظیمات مالی")//.Layout("<div class'k-columns-2'>")
+            .Items(i =>
+            {
 
-<h4>Contact</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="BusinessId" class="control-label"></label>
-                <select asp-for="BusinessId" class ="form-control" asp-items="ViewBag.BusinessId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="Company" class="control-label"></label>
-                <input asp-for="Company" class="form-control" />
-                <span asp-validation-for="Company" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="FirstName" class="control-label"></label>
-                <input asp-for="FirstName" class="form-control" />
-                <span asp-validation-for="FirstName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="LastName" class="control-label"></label>
-                <input asp-for="LastName" class="form-control" />
-                <span asp-validation-for="LastName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DisplayName" class="control-label"></label>
-                <input asp-for="DisplayName" class="form-control" />
-                <span asp-validation-for="DisplayName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CategoryId" class="control-label"></label>
-                <select asp-for="CategoryId" class ="form-control" asp-items="ViewBag.CategoryId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="ImageUrl" class="control-label"></label>
-                <input asp-for="ImageUrl" class="form-control" />
-                <span asp-validation-for="ImageUrl" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsCustomer" /> @Html.DisplayNameFor(model => model.IsCustomer)
-                </label>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsVendor" /> @Html.DisplayNameFor(model => model.IsVendor)
-                </label>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsStockholder" /> @Html.DisplayNameFor(model => model.IsStockholder)
-                </label>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="Employee" /> @Html.DisplayNameFor(model => model.Employee)
-                </label>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
+                i.Add().Field(f => f.IsActive).Editor(e => { e.Switch().Messages(c => c.Checked("فعال").Unchecked("غیر فعال")); });
+
+            });
+          @*   items.AddGroup().Label(" ")
+            .Items(i =>
+            {
+
+                i.Add().Field(f => f.MainCurrencyId).Editor(e => { e.ComboBox().Filter(FilterType.Contains).MinLength(3).Placeholder("انتخاب کنید...").DataTextField("Name").DataValueField("Id").HtmlAttributes(new { style = "width:100%" }).Height(520).DataSource(source => { source.Read(read => { read.Action("Items_GetCurrency", "Basic").Data("filterCurrency"); }).ServerFiltering(true); }); });
+                i.Add().Field(f => f.CurrenciesIds).Label(l => l.Optional(true)).Editor(e => { e.MultiSelect().AutoClose(false).Placeholder("Please select your favourite sport...").DownArrow(true).NoDataTemplateId("noDataTemplate").DataTextField("Text").Height(520).DataValueField("Value").Filter("contains").DataSource(source => { source.Read(read => { read.Action("Items_GetCurrencies", "Basic"); }); }); });
+                i.Add().Field(f => f.InventoryAccountingSystem).Editor(e => { e.ComboBox().Filter(FilterType.Contains).MinLength(3).Placeholder("انتخاب کنید...").DataTextField("Text").DataValueField("Value").HtmlAttributes(new { style = "width:100%" }).Height(520).DataSource(source => { source.Read(read => { read.Action("Items_GetInventoryAccountingSystemTypes", "Basic").Data("filterInventoryAccountingSystems"); }).ServerFiltering(true); }); });
+                i.Add().Field(f => f.ValueAddedTaxRate).Editor(e => { e.TextBox().Placeholder("TextBox"); });
+            });
+            items.AddGroup().Label(" ")
+            .Items(i =>
+            {
+                i.Add().Field(f => f.CalendarId).Editor(e => { e.ComboBox().Filter(FilterType.Contains).MinLength(3).Placeholder("انتخاب کنید...").DataTextField("Text").DataValueField("Value").HtmlAttributes(new { style = "width:100%" }).Height(520).DataSource(source => { source.Read(read => { read.Action("Items_GetCalendars", "Basic").Data("filterCalendarsTypes"); }).ServerFiltering(true); }); });
+             });*@
+        })//.HtmlAttributes(new {@class="k-columns-2"})
+          //  .Events(ev => ev.ValidateField("onFormValidateField").Clear("onFormClear"))
+        )
 </div>
+
+<script>
+    function filterBusinessCategories(e) {
+        return kendo.ui.ComboBox.requestData($("#CategoryId"));
+    }
+    function filterBusinessTypes(e) {
+        return kendo.ui.ComboBox.requestData($("#TypeId"));
+    }
+    function filterCurrency(e) {
+        return kendo.ui.ComboBox.requestData($("#MainCurrencyId"));
+    }
+    function filterCalendarsTypes(e) {
+        return kendo.ui.ComboBox.requestData($("#CalendarId"));
+    }
+    function filterInventoryAccountingSystems(e) {
+        return kendo.ui.ComboBox.requestData($("#InventoryAccountingSystem"));
+    }
+    function onFormValidateField(e) {
+        $("#validation-success").html("");
+    }
+
+    function onFormSubmit(e) {
+        e.preventDefault();
+        $("#validation-success").html("<div class='k-messagebox k-messagebox-success'>Form data is valid!</div>");
+    }
+
+    function onFormClear(e) {
+        $("#validation-success").html("");
+    }
+</script>
 
 <div>
     <a asp-action="Index">Back to List</a>

@@ -1,60 +1,35 @@
 ﻿@model IEnumerable<Businesses_Accounting.Models.BusinessFiscalYear>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "سال های مالی";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
 
 <p>
-    <a href="@Url.Action("Create","BusinessFiscalYears",new {area="",businessId=ViewData["businessId"]})">Create New</a>
+    <a asp-action="Create">سال مالی جدید</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.StartDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EndDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.InventoryValuationMethod)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Business)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.StartDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EndDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.InventoryValuationMethod)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Business.LegalName)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+@(
+    Html.Kendo().Grid<Businesses_Accounting.Models.BusinessFiscalYear>()
+                           .Name("grid")
+                           .Columns(columns =>
+                           {
+                               columns.Bound(model => model.Title);
+                               columns.Bound(model => model.StartDate);
+                               columns.Bound(model => model.EndDate);
+                               columns.Bound(model => model.Id).Filterable(false).ClientHeaderTemplate(" ")
+                               .ClientTemplate(@"<a href='" + @Url.Action("Edit", "BusinessFiscalYears", new { Id = "#:data.Id#" }) + @"'>Edit</a> |  <a href='" + @Url.Action("Delete", "BusinessFiscalYears", new { Id = "#:data.Id#" }) + @"'>Delete</a>  ").Width(430);
+                           })
+
+                           .Pageable()
+                           .Sortable()
+                           .Scrollable()
+                           //.Groupable()
+                           .Filterable()
+                           .HtmlAttributes(new { style = "height:550px;" })
+                           .DataSource(dataSource => dataSource
+                               .Ajax()
+                               .PageSize(20)
+                               .Read("List", "BusinessFiscalYears")
+                            )
+       )

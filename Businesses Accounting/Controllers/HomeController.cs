@@ -7,6 +7,7 @@ using System.Diagnostics;
 namespace Businesses_Accounting.Controllers
 {
     [Authorize]
+    [GreatAttribute(true)]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
