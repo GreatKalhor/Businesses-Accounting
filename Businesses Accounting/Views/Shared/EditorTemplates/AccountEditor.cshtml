@@ -1,0 +1,13 @@
+﻿@model int?
+
+@(Html.Kendo().DropDownTreeFor(m => m)
+    .ValuePrimitive(true)
+    .DataValueField("Value")
+    .DataTextField("Text")
+    .LoadOnDemand(true)
+    .DataSource( d => d
+        .Read(r => r.Action("ReadAccountsDropDownTree", "Basic"))
+        .Model(m => m.Id("Value").HasChildren("HasChildren").Children("Items"))
+    )
+    .Events(e => e.DataBound("onDataBound"))
+)

@@ -1,7 +1,7 @@
 ﻿@model Businesses_Accounting.Models.ViewModels.CreateContactViewModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "شخص جدید";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <div style=" grid-column-end: span 3; grid-row-end: span 1;"></div>
@@ -14,8 +14,8 @@
         .HtmlAttributes(new { action = "Create", method = "POST" })
         .Validatable(v =>
         {
-            v.ValidateOnBlur(true);
-            v.ValidationSummary(vs => vs.Enable(true));
+            v.ValidateOnBlur(false);
+            v.ValidationSummary(vs => vs.Enable(false));
         })
         .Items(items =>
         {
@@ -25,8 +25,13 @@
             {
                 i.AddAntiForgeryToken(Html.AntiForgeryToken());
                 i.Add().Field(f => f.Id).Label(l => l.Text("Id:")).Editor(e => { e.Hidden(); });
+                i.Add().Field(f => f.ImageUrl).Editor(e => { e.Hidden(); });
+                i.Add().Field(f => f.IsCustomer).Editor(e => { e.Hidden(); });
+                i.Add().Field(f => f.IsStockholder).Editor(e => { e.Hidden(); });
+                i.Add().Field(f => f.Employee).Editor(e => { e.Hidden(); });
+                i.Add().Field(f => f.IsVendor).Editor(e => { e.Hidden(); });
                 i.Add().Field(f => f.BusinessId).Label(l => l.Text("BusinessId:")).Editor(e => { e.Hidden(); });
-                i.Add().Field(f => f.Company).Editor(e => { e.TextBox(); });
+                i.Add().Field(f => f.Company).Editor(e => { e.TextBox().HtmlAttributes(new { required = "required" }); });
                 i.Add().Field(f => f.TitleC).Editor(e => { e.TextBox(); });
                 i.Add().Field(f => f.LastName).Editor(e => { e.TextBox(); });
                 i.Add().Field(f => f.FirstName).Editor(e => { e.TextBox(); });
@@ -37,31 +42,17 @@
                     e.CheckBoxGroup().Name("checkboxgroup-second")
             .Layout("horizontal")
             .Value(Model.Type.CheckBoxGroupValue)
-            .BindTo(Model.Type.Items);
+            .BindTo(Model.Type.Items).Events(e => e.Select("onCheckBoxGroupSelect"));
                 });
             });
             items.AddGroup()
-            .Label("تنظیمات مالی")//.Layout("<div class'k-columns-2'>")
+            //.Label(" مالی")//.Layout("<div class'k-columns-2'>")
             .Items(i =>
             {
 
                 i.Add().Field(f => f.IsActive).Editor(e => { e.Switch().Messages(c => c.Checked("فعال").Unchecked("غیر فعال")); });
 
             });
-          @*   items.AddGroup().Label(" ")
-            .Items(i =>
-            {
-
-                i.Add().Field(f => f.MainCurrencyId).Editor(e => { e.ComboBox().Filter(FilterType.Contains).MinLength(3).Placeholder("انتخاب کنید...").DataTextField("Name").DataValueField("Id").HtmlAttributes(new { style = "width:100%" }).Height(520).DataSource(source => { source.Read(read => { read.Action("Items_GetCurrency", "Basic").Data("filterCurrency"); }).ServerFiltering(true); }); });
-                i.Add().Field(f => f.CurrenciesIds).Label(l => l.Optional(true)).Editor(e => { e.MultiSelect().AutoClose(false).Placeholder("Please select your favourite sport...").DownArrow(true).NoDataTemplateId("noDataTemplate").DataTextField("Text").Height(520).DataValueField("Value").Filter("contains").DataSource(source => { source.Read(read => { read.Action("Items_GetCurrencies", "Basic"); }); }); });
-                i.Add().Field(f => f.InventoryAccountingSystem).Editor(e => { e.ComboBox().Filter(FilterType.Contains).MinLength(3).Placeholder("انتخاب کنید...").DataTextField("Text").DataValueField("Value").HtmlAttributes(new { style = "width:100%" }).Height(520).DataSource(source => { source.Read(read => { read.Action("Items_GetInventoryAccountingSystemTypes", "Basic").Data("filterInventoryAccountingSystems"); }).ServerFiltering(true); }); });
-                i.Add().Field(f => f.ValueAddedTaxRate).Editor(e => { e.TextBox().Placeholder("TextBox"); });
-            });
-            items.AddGroup().Label(" ")
-            .Items(i =>
-            {
-                i.Add().Field(f => f.CalendarId).Editor(e => { e.ComboBox().Filter(FilterType.Contains).MinLength(3).Placeholder("انتخاب کنید...").DataTextField("Text").DataValueField("Value").HtmlAttributes(new { style = "width:100%" }).Height(520).DataSource(source => { source.Read(read => { read.Action("Items_GetCalendars", "Basic").Data("filterCalendarsTypes"); }).ServerFiltering(true); }); });
-             });*@
         })//.HtmlAttributes(new {@class="k-columns-2"})
           //  .Events(ev => ev.ValidateField("onFormValidateField").Clear("onFormClear"))
         )
@@ -85,6 +76,29 @@
     }
     function onFormValidateField(e) {
         $("#validation-success").html("");
+    }
+    function onCheckBoxGroupSelect(e) {
+        let hItemid = ``;
+        let selected = $(e.target[0]).is(":checked");
+        let itemval = $(e.target[0]).val();
+            switch (itemval) {
+            case "1":
+                    hItemid = `IsCustomer`;
+                break;
+            case "2":
+                hItemid = `IsVendor`;
+                break;
+            case "3":
+                hItemid = `IsStockholder`;
+                break;
+            case "4":
+                hItemid = `Employee`;
+                break;
+            default:
+            // code block
+        }
+        let el = document.getElementById(hItemid);
+        el.value = selected;
     }
 
     function onFormSubmit(e) {

@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using Businesses_Accounting.Services;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
+using Businesses_Accounting.Models.ViewModels;
 
 namespace Businesses_Accounting.Controllers
 {
@@ -34,7 +35,7 @@ namespace Businesses_Accounting.Controllers
         public ActionResult List(DataSourceRequest request)
         {
             var userpanel = HttpContext.ToPanelViewModel();
-            var result = _context.Contacts.Where(x => x.BusinessId == userpanel.BusinessId);
+            var result = _context.BusinessBankings.Where(x => x.BusinessId == userpanel.BusinessId);
             var dsResult = result.ToDataSourceResult(request);
             return Json(dsResult);
         }
@@ -64,7 +65,7 @@ namespace Businesses_Accounting.Controllers
         public IActionResult Create()
         {
             var userpanel = HttpContext.ToPanelViewModel();
-            return View(new BusinessBanking() { BusinessId = userpanel.BusinessId });
+            return View(new CreateBusinessBankingViewModel() { BusinessId = userpanel.BusinessId });
         }
 
         // POST: BusinessBankings/Create
@@ -80,9 +81,6 @@ namespace Businesses_Accounting.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["BankingId"] = new SelectList(_context.BankingTypes, "Id", "Name", businessBanking.BankingId);
-            ViewData["BusinessId"] = new SelectList(_context.Businesses, "Id", "LegalName", businessBanking.BusinessId);
-            ViewData["CurrencyId"] = new SelectList(_context.Currencies, "Id", "DisplayName", businessBanking.CurrencyId);
             return View(businessBanking);
         }
 

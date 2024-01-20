@@ -75,7 +75,7 @@ namespace Businesses_Accounting.Controllers
         public IActionResult Create()
         {
             var l = _context.Languages.FirstOrDefault();
-            var c = _context.Currencies.FirstOrDefault();
+            var c = _context.Currencies.Where(x=>x.Name.Contains("IRR")).FirstOrDefault();
             return View(new CreateBusinessViewModel() { LanguageId = (l != null ? l.Id : 1), MainCurrencyId = (c != null ? c.Id : 1) });
         }
 
@@ -105,14 +105,13 @@ namespace Businesses_Accounting.Controllers
                 return NotFound();
             }
 
-            var business = await _context.Businesses.FindAsync(id);
+            var business = await _context.Businesses.Where(x=>x.Id==id).Include(x=>x.Language).Include(x=>x.BusinessFinancialInfos).FirstOrDefaultAsync();
             if (business == null)
             {
                 return NotFound();
             }
-            ViewData["LanguageId"] = new SelectList(_context.Languages, "Id", "Flag", business.LanguageId);
-            ViewData["TypeId"] = new SelectList(_context.BusinessTypes, "Id", "Name", business.TypeId);
-            return View(business);
+
+            return View(new CreateBusinessViewModel(business));
         }
 
         // POST: Businesses/Edit/5

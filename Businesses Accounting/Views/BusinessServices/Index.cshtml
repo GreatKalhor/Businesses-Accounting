@@ -10,7 +10,7 @@
     <a asp-action="Create">خدمات جدید</a>
 </p>
 @(
-    Html.Kendo().Grid<Businesses_Accounting.Models.BusinessService>()
+    Html.Kendo().Grid<Businesses_Accounting.Models.ViewModels.CreatBusinessProductViewModel>()
                            .Name("grid")
                            .Columns(columns =>
                            {

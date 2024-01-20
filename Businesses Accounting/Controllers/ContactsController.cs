@@ -12,6 +12,7 @@ using Businesses_Accounting.Services;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using Businesses_Accounting.Models.ViewModels;
+using static Businesses_Accounting.Resources.Variable;
 
 namespace Businesses_Accounting.Controllers
 {
@@ -65,46 +66,7 @@ namespace Businesses_Accounting.Controllers
         public IActionResult Create()
         {
             var userpanel = HttpContext.ToPanelViewModel();
-            return View(new CreateContactViewModel() { BusinessId = userpanel.BusinessId ,
-                Type = new CheckBoxGroupViewModel()
-                {
-                    Items = new List<Kendo.Mvc.UI.IInputGroupItem>()
-        {
-            new InputGroupItemModel ()
-                {
-                    Label = "مشتری",
-                    Enabled = true,
-                    Encoded = false,
-                   // CssClass = "blue",
-                    Value = "IsCustomer"
-                },
-            new InputGroupItemModel ()
-                {
-                    Label = "تامین کننده",
-                    Enabled = true,
-                    Encoded = false,
-                   // CssClass = "blue",
-                    Value = "IsVendor"
-                },
-           new InputGroupItemModel ()
-    {
-        Label = "سهامدار",
-        Enabled = true,
-        Encoded = false,
-       // CssClass = "blue",
-        Value = "IsStockholder"
-    },new InputGroupItemModel ()
-    {
-        Label = "کارمند",
-        Enabled = true,
-        Encoded = false,
-       // CssClass = "blue",
-        Value = "Employee"
-    },
-        },
-                    CheckBoxGroupValue = new string[] { "نوع" }
-                }
-            });
+            return View(new CreateContactViewModel() { BusinessId = userpanel.BusinessId,CategoryId=_context.BusinessCategories.FirstOrDefault(c=>c.BusinessId==userpanel.BusinessId && c.CategoryType== (int)CategoryType.Contact).Id });
         }
 
         // POST: Contacts/Create
@@ -114,13 +76,17 @@ namespace Businesses_Accounting.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateContactViewModel contact)
         {
+
+
+
             if (ModelState.IsValid)
             {
-                _context.Add(contact);
+                var _contact = contact.ToContact();
+                _context.Add(_contact);
                 await _context.SaveChangesAsync();
+                _context.Add(new SubAccount() { BusinessId = contact.BusinessId, ObjetcId = _contact.Id, ObjetcType = ((int)ObjectType.Contact) });
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["BusinessId"] = new SelectList(_context.Businesses, "Id", "LegalName", contact.BusinessId);
             return View(contact);
         }
 
@@ -147,7 +113,7 @@ namespace Businesses_Accounting.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,BusinessId,IsActive,Company,Title,FirstName,LastName,DisplayName,CategoryId,ImageUrl,IsCustomer,IsVendor,IsStockholder,Employee")] Contact contact)
+        public async Task<IActionResult> Edit(int id, CreateContactViewModel contact)
         {
             if (id != contact.Id)
             {
@@ -158,7 +124,7 @@ namespace Businesses_Accounting.Controllers
             {
                 try
                 {
-                    _context.Update(contact);
+                    _context.Update(contact.ToContact());
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -174,8 +140,6 @@ namespace Businesses_Accounting.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["BusinessId"] = new SelectList(_context.Businesses, "Id", "LegalName", contact.BusinessId);
-            ViewData["CategoryId"] = new SelectList(_context.BusinessCategories, "Id", "Title", contact.CategoryId);
             return View(contact);
         }
 

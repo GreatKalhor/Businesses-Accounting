@@ -27,7 +27,7 @@ namespace Businesses_Accounting.Resources
             [Description("بدون دسترسی")]
             Ignore = 20000
 
-        } 
+        }
         public enum CategoryType
         {
             /// <summary>
@@ -74,6 +74,66 @@ namespace Businesses_Accounting.Resources
             [Description("ادواری")]
             Periodic = 0
 
+        }
+
+
+        public enum ObjectType
+        {
+            /// <summary>
+            /// اشخاص
+            /// </summary>
+            [Description("اشخاص")]
+            Contact = 0,
+            /// <summary>
+            /// بانکداری
+            /// </summary>
+            [Description("بانکداری")]
+            Banking = 1,
+            /// <summary>
+            /// کالا
+            /// </summary>
+            [Description("کالا")]
+            Product = 2,
+            /// <summary>
+            /// خدمات
+            /// </summary>
+            [Description("خدمات")]
+            Service = 3
+
+        }
+
+        public enum AppType
+        {
+            /// <summary>
+            /// زبان
+            /// </summary>
+            [Description("زبان")]
+            Language = 0,
+            /// <summary>
+            /// دسته بندی بانکداری
+            /// </summary>
+            [Description("بانکداری")]
+            CategoryBanking = 1,
+            /// <summary>
+            /// دسته بندی کالا
+            /// </summary>
+            [Description("دسته بندی کالا")]
+            CategoryProduct = 2,
+            /// <summary>
+            /// دسته بندی خدمات
+            /// </summary>
+            [Description("دسته بندی خدمات")]
+            CategoryService = 3,
+            /// <summary>
+            /// دسته بندی اشخاص
+            /// </summary>
+            [Description("دسته بندی اشخاص")]
+            CategoryContact = 4,
+            /// <summary>
+            /// واحد مالی
+            /// </summary>
+            [Description("واحد مالی")]
+            Currency = 5,
         }
     }
 }

@@ -8,7 +8,33 @@ namespace Businesses_Accounting.Models.ViewModels
     {
         public CreateBusinessViewModel()
         {
-            CurrenciesIds = new Collection<int>();
+            CurrenciesIds = new List<int>();
+        }
+        public CreateBusinessViewModel(Business b)
+        {
+            CurrenciesIds = new List<int>();
+            Name = b.Name;
+            Id = b.Id;
+            LanguageId = b.LanguageId;
+            LegalName = b.LegalName;
+            TypeId = b.TypeId;
+            var _BusinessFinancialInfos = b.BusinessFinancialInfos.FirstOrDefault();
+            if (_BusinessFinancialInfos != null)
+            {
+                InventoryAccountingSystem = _BusinessFinancialInfos.InventoryAccountingSystem;
+                HasMultiCurrency = _BusinessFinancialInfos.HasMultiCurrency;
+                HasWarehouseManagement = _BusinessFinancialInfos.HasWarehouseManagement;
+                MainCurrencyId = _BusinessFinancialInfos.MainCurrencyId;
+                CalendarId = _BusinessFinancialInfos.CalendarId;
+                ValueAddedTaxRate = _BusinessFinancialInfos.ValueAddedTaxRate;
+            }
+            var _Currencies = b.Currencies;
+            if (_Currencies != null)
+            {
+                CurrenciesIds.AddRange(_Currencies.Select(x => x.Id));
+            }
+          
+
         }
         public int Id { get; set; }
         [Display(Name = "نام کسب و کار")]
@@ -32,7 +58,7 @@ namespace Businesses_Accounting.Models.ViewModels
         [Display(Name = "نرخ مالیات ارزش افزوده")]
         public int ValueAddedTaxRate { get; set; }
         [Display(Name = "سایر ارزها ")]
-        public Collection<int> CurrenciesIds { get; set; }
+        public List<int>? CurrenciesIds { get; set; }
 
     }
 }

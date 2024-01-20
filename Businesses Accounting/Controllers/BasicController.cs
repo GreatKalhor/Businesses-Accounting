@@ -1,8 +1,10 @@
 ﻿using Businesses_Accounting.Data;
+using Businesses_Accounting.Models.ViewModels;
 using Businesses_Accounting.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using static Businesses_Accounting.Resources.Variable;
 
 namespace Businesses_Accounting.Controllers
@@ -18,6 +20,13 @@ namespace Businesses_Accounting.Controllers
         {
             _context = context;
         }
+        public JsonResult ReadAccountsDropDownTree(int? id)
+        {
+            var accounts = _context.Accounts.Where(c=>c.ParentId ==null).Include(z => z.InverseParent).Select(x=>new ItemViewModel(x));
+
+
+            return Json(accounts.ToList());
+        }
         public JsonResult Items_GetLanguages(string text)
         {
             var languages = _context.Languages.Select(x => x);
@@ -26,6 +35,12 @@ namespace Businesses_Accounting.Controllers
         public JsonResult Items_GetCurrency(string text)
         {
             var currencies = _context.Currencies.Select(x => x);
+            return Json(currencies.Where(p => p.Name.Contains(text ?? "")).ToList());
+        }
+        public JsonResult Items_GetMainCurrency(string text)
+        {
+            var ub = HttpContext.ToPanelViewModel();
+            var currencies = _context.BusinessCurrencyConversions.Where(c => c.BusinessId == ub.BusinessId).Include(c => c.Currency).Select(x => x.Currency);
             return Json(currencies.Where(p => p.Name.Contains(text ?? "")).ToList());
         }
         public JsonResult Items_GetCurrencies()
@@ -39,18 +54,18 @@ namespace Businesses_Accounting.Controllers
         }
         public JsonResult Items_BusinessCategories(string text)
         {
-            var upanel=HttpContext.ToPanelViewModel();
-            var businessTypes = _context.BusinessCategories.Where(v=>v.BusinessId==upanel.BusinessId).Select(x => x);
+            var upanel = HttpContext.ToPanelViewModel();
+            var businessTypes = _context.BusinessCategories.Where(v => v.BusinessId == upanel.BusinessId).Select(x => x);
             return Json(businessTypes.Where(p => p.Title.Contains(text ?? "")).ToList());
         }
         public JsonResult Items_GetCalendars(string text)
         {
-            return Json(PanelServices.EnumToSelectListItem<CalendarType>().Where(x=>x.Text.Contains(text??"")).ToList());
+            return Json(PanelServices.EnumToSelectListItem<CalendarType>().Where(x => x.Text.Contains(text ?? "")).ToList());
         }
         public JsonResult Items_GetInventoryAccountingSystemTypes(string text)
         {
             return Json(PanelServices.EnumToSelectListItem<InventoryAccountingSystemType>().Where(x => x.Text.Contains(text ?? "")).ToList());
-        }  
+        }
         public JsonResult Items_CategoryType(string text)
         {
             return Json(PanelServices.EnumToSelectListItem<CategoryType>().Where(x => x.Text.Contains(text ?? "")).ToList());

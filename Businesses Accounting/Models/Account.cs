@@ -14,6 +14,7 @@ public partial class Account
     public int? ParentId { get; set; }
 
     public int SubAccountId { get; set; }
+    public bool HasChildren { get { return InverseParent.Count() > 0; } }
 
     public virtual ICollection<AccountingJournal> AccountingJournals { get; set; } = new List<AccountingJournal>();
 

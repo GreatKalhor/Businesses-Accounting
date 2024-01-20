@@ -38,6 +38,20 @@ namespace Businesses_Accounting.Controllers
             var dsResult = result.ToDataSourceResult(request);
             return Json(dsResult);
         }
+        [AcceptVerbs("Post")]
+        public ActionResult Editing_Create([DataSourceRequest] DataSourceRequest request, [Bind(Prefix = "models")] IEnumerable<CreateAccountingJournalViewModel> accountingJournal)
+        {
+            var results = new List<CreateAccountingJournalViewModel>(accountingJournal);
+            return Json(results.ToDataSourceResult(request, ModelState));
+        }
+        [AcceptVerbs("Post")]
+        public ActionResult Editing_Update([DataSourceRequest] DataSourceRequest request, [Bind(Prefix = "models")] IEnumerable<CreateAccountingJournalViewModel> accountingJournal)
+        {
+            var results = new List<CreateAccountingJournalViewModel>(accountingJournal);
+            return Json(results.ToDataSourceResult(request, ModelState));
+        }
+  
+   
         // GET: Documents/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -62,6 +76,18 @@ namespace Businesses_Accounting.Controllers
         public IActionResult Create()
         {
             var userpanel = HttpContext.ToPanelViewModel();
+            var accounts = from e in _context.Accounts
+                           where ( e.ParentId == null)
+                           select new
+                           {
+                               id = e.Id,
+                               Name = e.Name,
+                               hasChildren = (from q in _context.Accounts
+                                              where (q.ParentId == e.Id)
+                                              select q
+                                              ).Count() > 0
+                           };
+            ViewData["defaultCategory"] = accounts.ToList();
             return View(new Document() { BusinessFiscalYearId = userpanel.BusinessFiscalYearId });
         }
 

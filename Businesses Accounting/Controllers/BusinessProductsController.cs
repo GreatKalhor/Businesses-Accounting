@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Authorization;
 using Businesses_Accounting.Services;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
+using Businesses_Accounting.Models.ViewModels;
+using static Businesses_Accounting.Resources.Variable;
 
 namespace Businesses_Accounting.Controllers
 {
@@ -34,7 +36,7 @@ namespace Businesses_Accounting.Controllers
         public ActionResult List(DataSourceRequest request)
         {
             var userpanel = HttpContext.ToPanelViewModel();
-            var result = _context.Contacts.Where(x => x.BusinessId == userpanel.BusinessId);
+            var result = _context.BusinessProducts.Where(x => x.BusinessId == userpanel.BusinessId);
             var dsResult = result.ToDataSourceResult(request);
             return Json(dsResult);
         }
@@ -62,7 +64,7 @@ namespace Businesses_Accounting.Controllers
         public IActionResult Create()
         {
             var userpanel = HttpContext.ToPanelViewModel();
-            return View(new BusinessProduct() { BusinessId = userpanel.BusinessId });
+            return View(new CreatBusinessProductViewModel() { BusinessId = userpanel.BusinessId, CategoryId = _context.BusinessCategories.FirstOrDefault(c => c.BusinessId == userpanel.BusinessId && c.CategoryType == (int)CategoryType.Product).Id });
         }
 
         // POST: BusinessProducts/Create
