@@ -140,10 +140,8 @@ namespace Businesses_Accounting.Controllers
                     _context.Add(item);
                 }
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "Documents");
             }
-            ViewData["BusinessFiscalYearId"] = new SelectList(_context.BusinessFiscalYears, "Id", "Title", document.BusinessFiscalYearId);
-            ViewData["ProjectId"] = new SelectList(_context.BusinessProjects, "Id", "Name", document.ProjectId);
             return View(document);
         }
 
