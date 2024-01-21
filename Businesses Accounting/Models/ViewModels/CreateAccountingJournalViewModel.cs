@@ -12,21 +12,26 @@ public partial class CreateAccountingJournalViewModel
 
     public int? DocumentId { get; set; }
     [UIHint("AccountEditor")]
-    public int AccountId { get; set; }
+    [Display(Name = "حساب")]
+    public int AccountId { get; set; } = 1;
+    public string? Accounttxt { get; set; }
 
     public int? SubAccountId { get; set; }
 
     public string? SubAccount { get; set; }
 
     public string? Description { get; set; }
-
-    public int Debit { get; set; }
-
-    public int? Credit { get; set; }
+    [Display(Name = "بدهکار")]
+    [UIHint("Currency")]
+    public decimal Debit { get; set; }
+    [Display(Name = "بستانکار")]
+    [UIHint("Currency")]
+    public decimal Credit { get; set; }
 
     public int? CurrencyId { get; set; }
-
-    public int? Amount { get; set; }
+    [UIHint("Currency")]
+    [Display(Name = "مبلغ")]
+    public int Amount { get; set; }
 
     public virtual Account Account { get; set; }
 

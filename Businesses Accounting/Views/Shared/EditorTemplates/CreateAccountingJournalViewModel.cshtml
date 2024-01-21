@@ -1,0 +1,44 @@
+﻿@model CreateAccountingJournalViewModel
+
+
+<div class="form-group">
+    @(Html.Kendo().DropDownTreeFor(m => m.AccountId).Label(l =>
+        {
+            l.Content("حساب");
+        })
+        .ValuePrimitive(true)
+        .DataValueField("Value")
+        .DataTextField("Text")
+        .LoadOnDemand(true)
+        .DataSource(d => d
+        .Read(r => r.Action("ReadAccountsDropDownTree", "Basic"))
+        .Model(m => m.Id("Value").HasChildren("HasChildren").Children("Items"))
+        )
+        .Events(e => e.DataBound("onDataBound"))
+        )
+</div>
+
+<div class="form-group">
+    @(Html.Kendo().NumericTextBoxFor(m => m.Credit).Label(l =>
+        {
+            l.Content("بستانکار");
+        })
+        .HtmlAttributes(new { style = "width:100%" })
+        )
+</div>
+<div class="form-group">
+    @(Html.Kendo().NumericTextBoxFor(m => m.Debit).Label(l =>
+        {
+            l.Content("بدهکار");
+        })
+        .HtmlAttributes(new { style = "width:100%" })
+        )
+</div>
+<div class="form-group">
+    @(Html.Kendo().NumericTextBoxFor<int>(m => m.Amount).Label(l =>
+        {
+            l.Content("مبلغ");
+        })
+        .HtmlAttributes(new { style = "width:100%" })
+        )
+</div>

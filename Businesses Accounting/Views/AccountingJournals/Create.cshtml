@@ -1,0 +1,39 @@
+﻿@model Businesses_Accounting.Models.AccountingJournal
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Create</h1>
+
+<h4>AccountingJournal</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+             @Html.HiddenFor(x => x.Id)
+            @Html.HiddenFor(x => x.DocumentId)
+            @Html.HiddenFor(x => x.AccountId)
+            @Html.HiddenFor(x => x.SubAccountId)
+            @Html.HiddenFor(x => x.SubAccount)
+            @Html.HiddenFor(x => x.Description)
+            @Html.HiddenFor(x => x.Debit)
+            @Html.HiddenFor(x => x.Credit)
+            @Html.HiddenFor(x => x.CurrencyId)
+            @Html.HiddenFor(x => x.Amount)
+           
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

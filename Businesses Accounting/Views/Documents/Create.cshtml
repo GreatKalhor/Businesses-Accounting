@@ -5,14 +5,60 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <div style=" grid-column-end: span 3; grid-row-end: span 1;"></div>
-
-@(Html.Kendo().Grid<CreateAccountingJournalViewModel>()
+<form asp-action="Create" id="myform">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    @Html.HiddenFor(x => x.BusinessFiscalYearId)
+    <div class="form-group">
+        @(Html.Kendo().NumericTextBoxFor(m => m.Number).Label(l =>
+            {
+                l.Content("شماره");
+            })
+            .HtmlAttributes(new { style = "width:100%" })
+            )
+    </div>
+    <div class="form-group">
+        @(Html.Kendo().NumericTextBoxFor(m => m.Reference).Label(l =>
+            {
+                l.Content("ارجاع");
+            })
+            .HtmlAttributes(new { style = "width:100%" })
+            )
+    </div>
+ 
+    <div class="form-group">
+        @(Html.Kendo().TextAreaFor(m => m.Description).Label(l =>
+            {
+                l.Content("شرح");
+            })
+            .HtmlAttributes(new { style = "width:100%" })
+            )
+    </div>
+    <div class="form-group">
+        @(Html.Kendo().DateTimePickerFor(m => m.DocumentDate).Label(l =>
+            {
+                l.Content("تاریخ سند");
+            })
+            .HtmlAttributes(new { style = "width:100%" })
+            )
+    </div>
+    @Html.HiddenFor(x => x.DocumentDate)
+@*     <div class="form-group">
+        @(Html.Kendo().NumericTextBoxFor(m => m.Amount).Label(l =>
+            {
+                l.Content("مبلغ");
+            })
+            .HtmlAttributes(new { style = "width:100%" })
+            )
+    </div> *@
+ @(Html.Kendo().Grid<CreateAccountingJournalViewModel>()
     .Name("Grid")
     .Columns(columns =>
     {
         //columns.Bound(p => p.Id).Filterable(false);
         columns.Bound(p => p.AccountId);
-        columns.Bound(p => p.Debit).Width(140);
+            columns.Bound(p => p.Credit).Width(140);
+            columns.Bound(p => p.Debit).Width(140);
+            columns.Bound(p => p.Amount).Width(140);
         @* columns.Bound(p => p.UnitsInStock).Width(140); *@
         @* columns.Bound(p => p.Discontinued).Width(100); *@
         columns.Command(command => command.Destroy());
@@ -20,30 +66,27 @@
     .ToolBar(toolbar =>
     {
         toolbar.Create();
-        toolbar.Save();
     })
-    .Editable(editable => editable.Mode(GridEditMode.InLine))
-   //.Pageable()
-   //.Navigatable()
-   //.Sortable()
+    .Editable(editable => editable.Mode(GridEditMode.PopUp))
+   .Pageable()
+   .Navigatable()
+   .Sortable()
    .Scrollable()
-   //.Events(events => events.Sort("onSort"))
-    .DataSource(dataSource => dataSource
+   .DataSource(dataSource => dataSource
         .Ajax()
-    //    .Batch(true)
+        .Batch(true)
         .PageSize(20)
-   //     .ServerOperation(false)
-  //      .Events(events => events.Error("error_handler"))
  .Model(m =>
  {
      m.Id(p => p.Id);
      m.Field(f => f.AccountId);
  })
-        .Create("Editing_Create", "Documents")
+        .Create("Editing_Create", "Documents")//.Events(e => e.Change("onMySave"))
         .Read("Editing_Read", "Documents")
         .Update("Editing_Update", "Documents")
         .Destroy("Editing_Destroy", "Documents")
-    ).Events(e => e.Edit("onEdit"))
+
+    ).Events(e => e.Save("onEdit"))
 )
 <script type="text/javascript">
     function error_handler(e) {
@@ -74,9 +117,23 @@
 
 <script>
     var selectedItem;
+    // function onMySave(e) {
+    //     debugger;
+    //     console.log(e)
+    //   //  selectedItem = e.model.AccountId;
+    // }
+    function onMySave(e) {
+        var displayedData = $(document.getElementById(e)).data().kendoGrid.dataSource.view();
+        console.log(displayedData)
+        fetch("@(Url.Action("Editing_Save", "Documents"))", {
+            "body": JSON.stringify(displayedData),
+            "method": "POST",
+        }).then(console.log("ok"))
+    }
 
     function onEdit(e) {
-        selectedItem = e.model.EmployeeID;
+        ;
+        selectedItem = e.model.AccountId;
     }
 
     function onDataBound(e) {
@@ -88,9 +145,43 @@
         }
     }
 </script>
+<div id="ajdata"></div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary" onclick="mysub('myform')">Create</button>
+       
+    </div>
+</form>
 <div>
     <a asp-action="Index">Back to List</a>
-</div>
+</div> 
+<script>
+    function mysub(e) {
+
+        var  mdiv= document.getElementById('ajdata');
+        var displayedData = $(document.getElementById('Grid')).data().kendoGrid.dataSource.view();
+        let ss = "";
+        for (let i = 0; i < displayedData.length; i++) {
+            displayedData[i].Id = i;
+            ss += myAccountingJournals(displayedData[i]) ;
+        }
+        mdiv.innerHTML = ss;
+        document.getElementById(e).submit();
+    }
+    function myAccountingJournals(j) {
+      
+
+        if (j) {
+            var html = "<input data-val='true' name='AccountingJournals[" + j.Id + "].Id' type='hidden' value='" + j.Id + "'>" + "<input data-val='true' name='AccountingJournals[" + j.Id + "].DocumentId' type='hidden' value='" + j.DocumentId + "'>" + "<input data-val='true' name='AccountingJournals[" + j.Id + "].AccountId' type='hidden' value='" + j.AccountId + "'>" + "<input data-val='true' name='AccountingJournals[" + j.Id + "].SubAccountId' type='hidden' value='" + j.SubAccountId + "'>" + "<input data-val='true' name='AccountingJournals[" + j.Id + "].SubAccount' type='hidden' value='" + j.SubAccount + "'>" + "<input data-val='true' name='AccountingJournals[" + j.Id + "].Description' type='hidden' value='" + j.Description + "'>" + "<input data-val='true' name='AccountingJournals[" + j.Id + "].Debit' type='hidden' value='" + j.Debit + "'>" + "<input data-val='true' name='AccountingJournals[" + j.Id + "].Credit' type='hidden' value='" + j.Credit + "'>" + "<input data-val='true' name='AccountingJournals[" + j.Id + "].CurrencyId' type='hidden' value='" + j.CurrencyId + "'>" + "<input data-val='true' name='AccountingJournals[" + j.Id + "].Amount' type='hidden' value='" + j.Amount + "'>";
+
+            return html;
+        }
+        else {
+            return " ";
+        }
+    }
+</script>
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
