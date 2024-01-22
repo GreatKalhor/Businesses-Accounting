@@ -4,6 +4,7 @@
     ViewData["Title"] = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
 <div style=" grid-column-end: span 3; grid-row-end: span 1;"></div>
 <form asp-action="Create" id="myform">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -54,15 +55,15 @@
     .Name("Grid")
     .Columns(columns =>
     {
-        //columns.Bound(p => p.Id).Filterable(false);
-        columns.Bound(p => p.AccountId);
+            columns.Bound(p => p.AccountId).Hidden();
+            columns.Bound(p => p.Accounttxt);
             columns.Bound(p => p.Credit).Width(140);
             columns.Bound(p => p.Debit).Width(140);
             columns.Bound(p => p.Amount).Width(140);
         @* columns.Bound(p => p.UnitsInStock).Width(140); *@
-        @* columns.Bound(p => p.Discontinued).Width(100); *@
-        columns.Command(command => command.Destroy());
-    })
+            @* columns.Bound(p => p.Discontinued).Width(100); *@
+            columns.Command(command =>{ command.Edit().Text("ویرایش");            command.Destroy().Text("حذف"); });
+        })
     .ToolBar(toolbar =>
     {
         toolbar.Create();
@@ -86,7 +87,7 @@
         .Update("Editing_Update", "Documents")
         .Destroy("Editing_Destroy", "Documents")
 
-    ).Events(e => e.Save("onEdit"))
+        ).Events(e => e.Edit("onEdit"))
 )
 <script type="text/javascript">
     function error_handler(e) {
@@ -114,37 +115,36 @@
     }
 </script>
 
+    <script>
+        var selectedItem;
 
-<script>
-    var selectedItem;
-    // function onMySave(e) {
-    //     debugger;
-    //     console.log(e)
-    //   //  selectedItem = e.model.AccountId;
-    // }
-    function onMySave(e) {
-        var displayedData = $(document.getElementById(e)).data().kendoGrid.dataSource.view();
-        console.log(displayedData)
-        fetch("@(Url.Action("Editing_Save", "Documents"))", {
-            "body": JSON.stringify(displayedData),
-            "method": "POST",
-        }).then(console.log("ok"))
-    }
-
-    function onEdit(e) {
-        ;
-        selectedItem = e.model.AccountId;
-    }
-
-    function onDataBound(e) {
-        if (selectedItem) {
-            setTimeout(function () {
-                e.sender.value(selectedItem);
-                e.sender.trigger('change')
-            });
+        function onMySave(e) {
+            var displayedData = $(document.getElementById(e)).data().kendoGrid.dataSource.view();
+            console.log(displayedData)
+            fetch("@(Url.Action("Editing_Save", "Documents"))", {
+                "body": JSON.stringify(displayedData),
+                "method": "POST",
+            }).then(console.log("ok"))
         }
-    }
-</script>
+
+        function onEdit(e) {
+             selectedItem = e.model.AccountId;
+        }
+        function onOpen(e) {
+            debugger
+             selectedItem = null;
+        }
+        function onDataBound(e) {
+            debugger;
+            if (selectedItem ) {
+                setTimeout(function () {
+                    e.sender.value(selectedItem);
+                    e.sender.trigger('change')
+                });
+            }
+        }
+    </script>
+
 <div id="ajdata"></div>
     <div class="form-group">
         <button type="submit" class="btn btn-primary" onclick="mysub('myform')">Create</button>

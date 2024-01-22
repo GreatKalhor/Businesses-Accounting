@@ -14,7 +14,7 @@
         .Read(r => r.Action("ReadAccountsDropDownTree", "Basic"))
         .Model(m => m.Id("Value").HasChildren("HasChildren").Children("Items"))
         )
-        .Events(e => e.DataBound("onDataBound"))
+        .Events(e => e.DataBound("onDataBound").Open("onOpen"))
         )
 </div>
 
@@ -42,3 +42,5 @@
         .HtmlAttributes(new { style = "width:100%" })
         )
 </div>
+
+

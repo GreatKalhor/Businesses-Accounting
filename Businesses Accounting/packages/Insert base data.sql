@@ -17,15 +17,15 @@ GO
 
 IF NOT EXISTS ( SELECT * FROM [dbo].[Currencies] WHERE [Id]<304)
 BEGIN
-INSERT [dbo].[Currencies] ( [Name], [ShortName], [DisplayName]) VALUES ('ADP - پزتای آندورا', N'ADP', N'')
-INSERT [dbo].[Currencies] ( [Name], [ShortName], [DisplayName]) VALUES ('AED - درهم امارات متحدهٔ عربی', N'AED', N'')
-INSERT [dbo].[Currencies] ( [Name], [ShortName], [DisplayName]) VALUES ('AFA - افغانی افغانستان (۱۹۲۷ تا ۲۰۰۲)', N'AFA', N'')
-INSERT [dbo].[Currencies] ( [Name], [ShortName], [DisplayName]) VALUES ('AFN - افغانی افغانستان', N'AFN', N'')
-INSERT [dbo].[Currencies] ( [Name], [ShortName], [DisplayName]) VALUES ('ALK - ALK', N'ALK', N'')
-INSERT [dbo].[Currencies] ( [Name], [ShortName], [DisplayName]) VALUES ('ALL - لک آلبانی', N'ALL', N'')
-INSERT [dbo].[Currencies] ( [Name], [ShortName], [DisplayName]) VALUES ('AMD - درام ارمنستان', N'AMD', N'')
-INSERT [dbo].[Currencies] ( [Name], [ShortName], [DisplayName]) VALUES ('ANG - گیلدر آنتیل هلند', N'ANG', N'')
-INSERT [dbo].[Currencies] ( [Name], [ShortName], [DisplayName]) VALUES ('AOA - کوانزای آنگولا', N'AOA', N'')
+INSERT [dbo].[Currencies] ( [Name], [ShortName], [DisplayName]) VALUES (N'ADP - پزتای آندورا', N'ADP', N'')
+INSERT [dbo].[Currencies] ( [Name], [ShortName], [DisplayName]) VALUES (N'AED - درهم امارات متحدهٔ عربی', N'AED', N'')
+INSERT [dbo].[Currencies] ( [Name], [ShortName], [DisplayName]) VALUES (N'AFA - افغانی افغانستان (۱۹۲۷ تا ۲۰۰۲)', N'AFA', N'')
+INSERT [dbo].[Currencies] ( [Name], [ShortName], [DisplayName]) VALUES (N'AFN - افغانی افغانستان', N'AFN', N'')
+INSERT [dbo].[Currencies] ( [Name], [ShortName], [DisplayName]) VALUES (N'ALK - ALK', N'ALK', N'')
+INSERT [dbo].[Currencies] ( [Name], [ShortName], [DisplayName]) VALUES (N'ALL - لک آلبانی', N'ALL', N'')
+INSERT [dbo].[Currencies] ( [Name], [ShortName], [DisplayName]) VALUES (N'AMD - درام ارمنستان', N'AMD', N'')
+INSERT [dbo].[Currencies] ( [Name], [ShortName], [DisplayName]) VALUES (N'ANG - گیلدر آنتیل هلند', N'ANG', N'')
+INSERT [dbo].[Currencies] ( [Name], [ShortName], [DisplayName]) VALUES (N'AOA - کوانزای آنگولا', N'AOA', N'')
 INSERT [dbo].[Currencies] ( [Name], [ShortName], [DisplayName]) VALUES (N'AOK - AOK', N'AOK', N'')
 INSERT [dbo].[Currencies] ( [Name], [ShortName], [DisplayName]) VALUES (N'AON - AON', N'AON', N'')
 INSERT [dbo].[Currencies] ( [Name], [ShortName], [DisplayName]) VALUES (N'AOR - AOR', N'AOR', N'')
@@ -372,7 +372,7 @@ GO
 
 
 
-IF NOT EXISTS ( SELECT * FROM [dbo].[Accounts] WHERE [Id]<27)
+IF NOT EXISTS ( SELECT * FROM [dbo].[Accounts] WHERE [Id]>8 AND [Id]<27)
 BEGIN
 INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'دارایی های جاری', 1,1)
 INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'دارایی های غیر جاری', 1,1)
@@ -397,7 +397,7 @@ GO
 
 
 
-IF NOT EXISTS ( SELECT * FROM [dbo].[Accounts] WHERE [Id]<81)
+IF NOT EXISTS ( SELECT * FROM [dbo].[Accounts] WHERE  [Id]>26 AND [Id]<81)
 BEGIN
 INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'موجودی نقد و بانک', 9,1)
 INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'سرمایه گذاری های کوتاه مدت', 9,1)
@@ -458,7 +458,7 @@ GO
 
 
 
-IF NOT EXISTS ( SELECT * FROM [dbo].[Accounts] WHERE [Id]<136)
+IF NOT EXISTS ( SELECT * FROM [dbo].[Accounts] WHERE  [Id]>80 AND [Id]<136)
 BEGIN
 
 INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'تنخواه گردان', 27,1)

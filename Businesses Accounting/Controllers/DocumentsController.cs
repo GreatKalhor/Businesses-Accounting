@@ -37,7 +37,7 @@ namespace Businesses_Accounting.Controllers
             var result = _context.Documents.Where(x => x.BusinessFiscalYearId == userpanel.BusinessFiscalYearId);
             var dsResult = result.ToDataSourceResult(request);
             return Json(dsResult);
-        } 
+        }
         [AcceptVerbs("Post")]
         public ActionResult Editing_Create([DataSourceRequest] DataSourceRequest request, IEnumerable<CreateAccountingJournalViewModel> models)
         {
@@ -46,6 +46,13 @@ namespace Businesses_Accounting.Controllers
             for (int i = 0; i < _results.Count; i++)
             {
                 var model = _results[i];
+                if (model.AccountId.HasValue)
+                {
+                    using (AccountServices _as = new AccountServices(_context))
+                    {
+                        model.Accounttxt = _as.GetAccountsTextFromParents(model.AccountId.Value);
+                    } 
+                }
                 model.Id = i;
                 model.DocumentId = i;
                 model.CurrencyId = i;
@@ -54,8 +61,8 @@ namespace Businesses_Accounting.Controllers
             }
             return Json(results.ToDataSourceResult(request, ModelState));
         }
-    
-        public ActionResult Editing_Seva([FromBody]  IEnumerable<CreateAccountingJournalViewModel> models)
+
+        public ActionResult Editing_Seva([FromBody] IEnumerable<CreateAccountingJournalViewModel> models)
         {
             var results = new List<CreateAccountingJournalViewModel>(models);
             var rrr = Request;
@@ -64,15 +71,32 @@ namespace Businesses_Accounting.Controllers
             return Json("ok");
         }
         [AcceptVerbs("Post")]
-        public ActionResult Editing_Read([DataSourceRequest] DataSourceRequest request,  IEnumerable<CreateAccountingJournalViewModel> accountingJournal)
+        public ActionResult Editing_Read([DataSourceRequest] DataSourceRequest request, IEnumerable<CreateAccountingJournalViewModel> accountingJournal)
         {
             var results = new List<CreateAccountingJournalViewModel>(accountingJournal);
             return Json(results.ToDataSourceResult(request, ModelState));
         }
         [AcceptVerbs("Post")]
-        public ActionResult Editing_Update([DataSourceRequest] DataSourceRequest request,  IEnumerable<CreateAccountingJournalViewModel> accountingJournal)
+        public ActionResult Editing_Update([DataSourceRequest] DataSourceRequest request, IEnumerable<CreateAccountingJournalViewModel> models)
         {
-            var results = new List<CreateAccountingJournalViewModel>(accountingJournal);
+            var _results = new List<CreateAccountingJournalViewModel>(models);
+            var results = new List<CreateAccountingJournalViewModel>();
+            for (int i = 0; i < _results.Count; i++)
+            {
+                var model = _results[i];
+                if (model.AccountId.HasValue)
+                {
+                    using (AccountServices _as = new AccountServices(_context))
+                    {
+                        model.Accounttxt = _as.GetAccountsTextFromParents(model.AccountId.Value);
+                    } 
+                }
+                model.Id = i;
+                model.DocumentId = i;
+                model.CurrencyId = i;
+                model.SubAccountId = i;
+                results.Add(model);
+            }
             return Json(results.ToDataSourceResult(request, ModelState));
         }
         [AcceptVerbs("Post")]
@@ -107,8 +131,8 @@ namespace Businesses_Accounting.Controllers
         public IActionResult Create()
         {
             var userpanel = PanelUser;
-       
-            return View(new Document() { BusinessFiscalYearId = userpanel.BusinessFiscalYearId,DocumentDate=DateTime.Now,InsertDate=DateTime.Now });
+
+            return View(new Document() { BusinessFiscalYearId = userpanel.BusinessFiscalYearId, DocumentDate = DateTime.Now, InsertDate = DateTime.Now });
         }
 
         // POST: Documents/Create
@@ -125,14 +149,14 @@ namespace Businesses_Accounting.Controllers
                     BusinessFiscalYearId = document.BusinessFiscalYearId,
                     DocumentDate = document.DocumentDate,
                     InsertDate = DateTime.Now,
-                    Amount = document.AccountingJournals.Sum(s=>s.Credit),
+                    Amount = document.AccountingJournals.Sum(s => s.Credit),
                     Description = document.Description,
                     Number = document.Number,
                     Reference = document.Reference
                 };
                 _context.Add(d);
                 await _context.SaveChangesAsync();
-                    var c = _context.Currencies.Where(x => x.Name.Contains("IRR")).FirstOrDefault();
+                var c = _context.Currencies.Where(x => x.Name.Contains("IRR")).FirstOrDefault();
                 foreach (var item in document.AccountingJournals)
                 {
                     item.DocumentId = d.Id;
@@ -230,14 +254,14 @@ namespace Businesses_Accounting.Controllers
             {
                 _context.Documents.Remove(document);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction("Index", "Documents");
         }
 
         private bool DocumentExists(int id)
         {
-          return (_context.Documents?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Documents?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

@@ -13,8 +13,8 @@ public partial class CreateAccountingJournalViewModel
     public int? DocumentId { get; set; }
     [UIHint("AccountEditor")]
     [Display(Name = "حساب")]
-    public int AccountId { get; set; } = 1;
-    public string? Accounttxt { get; set; }
+    public int? AccountId { get; set; } = 1;
+    public string Accounttxt { get; set; }
 
     public int? SubAccountId { get; set; }
 
