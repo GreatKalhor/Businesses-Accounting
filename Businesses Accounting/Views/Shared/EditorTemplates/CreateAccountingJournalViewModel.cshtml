@@ -14,7 +14,7 @@
         .Read(r => r.Action("ReadAccountsDropDownTree", "Basic"))
         .Model(m => m.Id("Value").HasChildren("HasChildren").Children("Items"))
         )
-        .Events(e => e.DataBound("onDataBound").Open("onOpen"))
+        .Events(e => e.DataBound("onDataBound").Open("onOpen").Select("onsel").Change("onch"))
         )
 </div>
 
