@@ -4,13 +4,15 @@ using Businesses_Accounting.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.CodeAnalysis.Host;
 using Microsoft.EntityFrameworkCore;
 using static Businesses_Accounting.Resources.Variable;
+using LanguageServices = Businesses_Accounting.Services.LanguageServices;
 
 namespace Businesses_Accounting.Controllers
 {
     [Authorize]
-    public class BasicController : Controller
+    public class BasicController : GreatController
     {
 
         private readonly BA_dbContext _context;
@@ -22,30 +24,43 @@ namespace Businesses_Accounting.Controllers
         }
         public JsonResult ReadAccountsDropDownTree(int? id)
         {
-            var accounts = _context.Accounts.Where(c=>c.ParentId ==null).Include(z => z.InverseParent).Select(x=>new ItemViewModel(x));
-
-
-            return Json(accounts.ToList());
+            using (AccountServices _as = new AccountServices(_context))
+            {
+                return Json(_as.GetAccountsForTree());
+            }
         }
         public JsonResult Items_GetLanguages(string text)
         {
-            var languages = _context.Languages.Select(x => x);
-            return Json(languages.Where(p => p.Name.Contains(text ?? "")).ToList());
+            using (LanguageServices ls = new LanguageServices(_context))
+            {
+                var languages = ls.GetAll();
+                return Json(languages.Where(p => p.Name.Contains(text ?? "")).ToList());
+            }
         }
         public JsonResult Items_GetCurrency(string text)
         {
-            var currencies = _context.Currencies.Select(x => x);
-            return Json(currencies.Where(p => p.Name.Contains(text ?? "")).ToList());
+            using (CurrencyServices cs = new CurrencyServices(_context))
+            {
+                var currencies = cs.GetAll();
+                return Json(currencies.Where(p => p.Name.Contains(text ?? "")).ToList());
+            }
         }
         public JsonResult Items_GetMainCurrency(string text)
         {
-            var ub = HttpContext.ToPanelViewModel();
-            var currencies = _context.BusinessCurrencyConversions.Where(c => c.BusinessId == ub.BusinessId).Include(c => c.Currency).Select(x => x.Currency);
-            return Json(currencies.Where(p => p.Name.Contains(text ?? "")).ToList());
+            var ub = PanelUser;
+            using (CurrencyServices cs = new CurrencyServices(_context))
+            {
+                var currencies = cs.GetBusinessCurrencies(ub.BusinessId);
+                return Json(currencies.Where(p => p.Name.Contains(text ?? "")).ToList());
+            }
         }
         public JsonResult Items_GetCurrencies()
         {
-            return Json(new SelectList(_context.Currencies, "Id", "Name"));
+            using (CurrencyServices cs = new CurrencyServices(_context))
+            {
+                var currencies = cs.GetAll();
+                return Json(new SelectList(currencies, "Id", "Name"));
+            }
         }
         public JsonResult Items_GetBusinessTypes(string text)
         {
@@ -54,7 +69,7 @@ namespace Businesses_Accounting.Controllers
         }
         public JsonResult Items_BusinessCategories(string text)
         {
-            var upanel = HttpContext.ToPanelViewModel();
+            var upanel = PanelUser;
             var businessTypes = _context.BusinessCategories.Where(v => v.BusinessId == upanel.BusinessId).Select(x => x);
             return Json(businessTypes.Where(p => p.Title.Contains(text ?? "")).ToList());
         }

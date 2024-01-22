@@ -43,7 +43,7 @@
             {
 
                 i.Add().Field(f => f.MainCurrencyId).Editor(e => { e.ComboBox().Filter(FilterType.Contains).MinLength(3).Placeholder("انتخاب کنید...").DataTextField("Name").DataValueField("Id").HtmlAttributes(new { style = "width:100%" }).Height(520).DataSource(source => { source.Read(read => { read.Action("Items_GetCurrency", "Basic").Data("filterCurrency"); }).ServerFiltering(true); }); });
-                i.Add().Field(f => f.CurrenciesIds).Label(l => l.Optional(true)).Editor(e => { e.MultiSelect().AutoClose(false).Placeholder("Please select your favourite sport...").DownArrow(true).NoDataTemplateId("noDataTemplate").DataTextField("Text").Height(520).DataValueField("Value").Filter("contains").DataSource(source => { source.Read(read => { read.Action("Items_GetCurrencies", "Basic"); }); }); });
+                i.Add().Field(f => f.CurrenciesIds).Label(l => l.Optional(true)).Editor(e => { e.MultiSelect().AutoClose(false).Placeholder("Please select your favourite sport...").DownArrow(true).NoDataTemplateId("noDataTemplate").DataTextField("Text").Height(520).DataValueField("Value").Filter("contains").DataSource(source => { source.Read(read => { read.Action("Items_GetCurrencies", "Basic").Data("filterCurrencies"); }); }); });
                 i.Add().Field(f => f.InventoryAccountingSystem).Editor(e => { e.ComboBox().Filter(FilterType.Contains).MinLength(3).Placeholder("انتخاب کنید...").DataTextField("Text").DataValueField("Value").HtmlAttributes(new { style = "width:100%" }).Height(520).DataSource(source => { source.Read(read => { read.Action("Items_GetInventoryAccountingSystemTypes", "Basic").Data("filterInventoryAccountingSystems"); }).ServerFiltering(true); }); });
                 i.Add().Field(f => f.ValueAddedTaxRate).Editor(e => { e.TextBox().Placeholder("TextBox"); });
             });
@@ -67,6 +67,9 @@
     function filterCurrency(e) {
         return kendo.ui.ComboBox.requestData($("#MainCurrencyId"));
     } 
+    function filterCurrencies(e) {
+        return kendo.ui.MultiSelect.requestData($("#CurrenciesIds"));
+    }
     function filterCalendarsTypes(e) {
         return kendo.ui.ComboBox.requestData($("#CalendarId"));
     }  
@@ -94,15 +97,6 @@
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
-                             //            <script>
-                             //                $(document).ready(function () {
-                             // let els=       document.querySelectorAll(`.k-form-fieldset`);
-                             //                    for (let i = 0; i < els.length; i++) {
-                             //                        els[i].className = "k-form-fieldset k-columns-2";
-                             //                    }
-                             //                });
-                                        
-                             //            </script>
     }
 }
 

@@ -1,6 +1,7 @@
 ﻿using Businesses_Accounting.Data;
 using Businesses_Accounting.Models;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace Businesses_Accounting.Services
 {
@@ -13,5 +14,6 @@ namespace Businesses_Accounting.Services
         public BusinessCurrencyConversionServices(BA_dbContext dbContext) : base(dbContext)
         {
         }
+       
     }
 }

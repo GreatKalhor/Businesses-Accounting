@@ -16,7 +16,7 @@ namespace Businesses_Accounting.Controllers
 {
     [Authorize]
     [GreatAttribute(true)]
-    public class DocumentsController : Controller
+    public class DocumentsController : GreatController
     {
         private readonly BA_dbContext _context;
 
@@ -33,7 +33,7 @@ namespace Businesses_Accounting.Controllers
         [AcceptVerbs("Post")]
         public ActionResult List(DataSourceRequest request)
         {
-            var userpanel = HttpContext.ToPanelViewModel();
+            var userpanel = PanelUser;
             var result = _context.Documents.Where(x => x.BusinessFiscalYearId == userpanel.BusinessFiscalYearId);
             var dsResult = result.ToDataSourceResult(request);
             return Json(dsResult);
@@ -106,7 +106,7 @@ namespace Businesses_Accounting.Controllers
         // GET: Documents/Create
         public IActionResult Create()
         {
-            var userpanel = HttpContext.ToPanelViewModel();
+            var userpanel = PanelUser;
        
             return View(new Document() { BusinessFiscalYearId = userpanel.BusinessFiscalYearId,DocumentDate=DateTime.Now,InsertDate=DateTime.Now });
         }

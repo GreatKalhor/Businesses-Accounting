@@ -13,5 +13,9 @@ namespace Businesses_Accounting.Services
         public BusinessFinancialInfoServices(BA_dbContext dbContext) : base(dbContext)
         {
         }
+        public BusinessFinancialInfo FindWithBusinessId(int businessid)
+        {
+            return db.BusinessFinancialInfos.FirstOrDefault(c => c.BusinessId == businessid);
+        }
     }
 }

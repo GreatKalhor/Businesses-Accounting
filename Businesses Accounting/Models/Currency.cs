@@ -7,6 +7,22 @@ namespace Businesses_Accounting.Models;
 
 public partial class Currency
 {
+    public Currency() { }
+    public Currency(Currency currency, bool fixValeus)
+    {
+        Id = currency.Id;
+        Name = currency.Name;
+        ShortName = currency.ShortName;
+        DisplayName = currency.DisplayName;
+        AccountingJournals  = currency.AccountingJournals;
+        BusinessBankings = currency.BusinessBankings;   
+        BusinessCurrencyConversions = currency.BusinessCurrencyConversions; 
+        ProductPriceLists = currency.ProductPriceLists;
+        ServicePriceLists = currency.ServicePriceLists;
+        Businesses = currency.Businesses;
+        FixValeus = fixValeus;
+    }
+    public bool FixValeus { get; private set; }
     public int Id { get; set; }
 
     public string Name { get; set; }

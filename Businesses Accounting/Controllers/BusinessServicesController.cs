@@ -18,7 +18,7 @@ namespace Businesses_Accounting.Controllers
 {
     [Authorize]
     [GreatAttribute(true)]
-    public class BusinessServicesController : Controller
+    public class BusinessServicesController : GreatController
     {
         private readonly BA_dbContext _context;
 
@@ -35,7 +35,7 @@ namespace Businesses_Accounting.Controllers
         [AcceptVerbs("Post")]
         public ActionResult List(DataSourceRequest request)
         {
-            var userpanel = HttpContext.ToPanelViewModel();
+            var userpanel = PanelUser;
             var result = _context.BusinessServices.Where(x => x.BusinessId == userpanel.BusinessId);
             var dsResult = result.ToDataSourceResult(request);
             return Json(dsResult);
@@ -63,7 +63,7 @@ namespace Businesses_Accounting.Controllers
         // GET: BusinessServices/Create
         public IActionResult Create()
         {
-            var userpanel = HttpContext.ToPanelViewModel();
+            var userpanel = PanelUser;
             return View(new CreatBusinessServiceViewModel() { BusinessId = userpanel.BusinessId, CategoryId = _context.BusinessCategories.FirstOrDefault(c => c.BusinessId == userpanel.BusinessId && c.CategoryType == (int)CategoryType.Service).Id });
         }
 
@@ -96,7 +96,7 @@ namespace Businesses_Accounting.Controllers
             {
                 return NotFound();
             }
-             return View(businessService);
+            return View(businessService);
         }
 
         // POST: BusinessServices/Edit/5
@@ -168,14 +168,14 @@ namespace Businesses_Accounting.Controllers
             {
                 _context.BusinessServices.Remove(businessService);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction("Index", "BusinessServices");
         }
 
         private bool BusinessServiceExists(int id)
         {
-          return (_context.BusinessServices?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.BusinessServices?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

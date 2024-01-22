@@ -18,7 +18,7 @@ namespace Businesses_Accounting.Controllers
 {
     [Authorize]
     [GreatAttribute(true)]
-    public class BusinessProductsController : Controller
+    public class BusinessProductsController : GreatController
     {
         private readonly BA_dbContext _context;
 
@@ -35,7 +35,7 @@ namespace Businesses_Accounting.Controllers
         [AcceptVerbs("Post")]
         public ActionResult List(DataSourceRequest request)
         {
-            var userpanel = HttpContext.ToPanelViewModel();
+            var userpanel = PanelUser;
             var result = _context.BusinessProducts.Where(x => x.BusinessId == userpanel.BusinessId);
             var dsResult = result.ToDataSourceResult(request);
             return Json(dsResult);
@@ -63,7 +63,7 @@ namespace Businesses_Accounting.Controllers
         // GET: BusinessProducts/Create
         public IActionResult Create()
         {
-            var userpanel = HttpContext.ToPanelViewModel();
+            var userpanel = PanelUser;
             return View(new CreatBusinessProductViewModel() { BusinessId = userpanel.BusinessId, CategoryId = _context.BusinessCategories.FirstOrDefault(c => c.BusinessId == userpanel.BusinessId && c.CategoryType == (int)CategoryType.Product).Id });
         }
 

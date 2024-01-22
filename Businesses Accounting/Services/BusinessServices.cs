@@ -49,10 +49,10 @@ namespace Businesses_Accounting.Services
                     db.Add(new BusinessUser() { BusinessId = _b.Id, UserId = userId.Value, AccessTypeId = (int)Resources.Variable.AccessType.Owner });
                     db.Add(new BusinessFiscalYear() { BusinessId = _b.Id, Title = "پیش فرض", StartDate = DateTime.Now, EndDate = DateTime.Now.AddYears(3), InventoryValuationMethod = 1 });
                     db.Add(new BusinessFinancialInfo() { BusinessId = _b.Id, InventoryAccountingSystem = business.InventoryAccountingSystem, CalendarId = business.CalendarId, MainCurrencyId = business.MainCurrencyId, ValueAddedTaxRate = business.ValueAddedTaxRate, HasMultiCurrency = business.HasMultiCurrency, HasWarehouseManagement = business.HasWarehouseManagement });
-                    db.Add(new BusinessCurrencyConversion() { BusinessId = _b.Id, CurrencyId = business.MainCurrencyId, MainValue = business.MainCurrencyId });
+                    db.Add(new BusinessCurrencyConversion() { BusinessId = _b.Id, CurrencyId = business.MainCurrencyId, MainValue = 1});
                     foreach (var item in business.CurrenciesIds)
                     {
-                        db.Add(new BusinessCurrencyConversion() { BusinessId = _b.Id, CurrencyId = item, MainValue = business.MainCurrencyId });
+                        db.Add(new BusinessCurrencyConversion() { BusinessId = _b.Id, CurrencyId = item, MainValue = 1 });
                     }
                     foreach (var item in PanelServices.GetEnumAllValues<CategoryType>())
                     {
@@ -80,7 +80,7 @@ namespace Businesses_Accounting.Services
 
         public async Task<Business?> FindAsync(int id)
         {
-            return await db.Businesses.FindAsync(id);
+            return await db.Businesses.Where(x => x.Id == id).Include(x => x.Language).Include(x => x.BusinessFinancialInfos).Include(x=>x.BusinessCurrencyConversions).FirstOrDefaultAsync();
         }
 
 

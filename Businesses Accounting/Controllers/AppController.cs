@@ -7,7 +7,7 @@ namespace Businesses_Accounting.Controllers
     [Authorize]
     [GreatAttribute(true)]
 
-    public class AppController : Controller
+    public class AppController : GreatController
     {
         public IActionResult Index()
         {

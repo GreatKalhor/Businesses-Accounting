@@ -18,7 +18,7 @@ using Businesses_Accounting.Resources;
 namespace Businesses_Accounting.Controllers
 {
     [Authorize]
-    public class BusinessesController : Controller
+    public class BusinessesController : GreatController
     {
         private readonly BA_dbContext _context;
 
@@ -27,19 +27,14 @@ namespace Businesses_Accounting.Controllers
             _context = context;
         }
 
-        // GET: Businesses
         public async Task<IActionResult> Index()
         {
-
             using (BusinessServices bs = new BusinessServices(_context))
             {
                 return View(await bs.GetBusinessWithUser(CurrentUser.GetUserId(User)));
             }
         }
-        public IActionResult DetailProducts_Read([DataSourceRequest] DataSourceRequest request)
-        {
-            return Json("");
-        }
+  
 
         [AcceptVerbs("Post")]
         public ActionResult List(DataSourceRequest request)
@@ -52,37 +47,11 @@ namespace Businesses_Accounting.Controllers
             }
         }
 
-        // GET: Businesses/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.Businesses == null)
-            {
-                return NotFound();
-            }
-
-            var business = await _context.Businesses
-                .Include(b => b.Language)
-                .Include(b => b.Type)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (business == null)
-            {
-                return NotFound();
-            }
-
-            return View(business);
-        }
-
-        // GET: Businesses/Create
         public IActionResult Create()
         {
-            
-            
             return View(new CreateBusinessViewModel() { LanguageId = (DefaultValues.LanguageId != 0 ? DefaultValues.LanguageId : 1), MainCurrencyId = (DefaultValues.CurrencyId != 0 ? DefaultValues.CurrencyId : 1) });
         }
 
-        // POST: Businesses/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateBusinessViewModel business)
@@ -98,7 +67,6 @@ namespace Businesses_Accounting.Controllers
             return View(business);
         }
 
-        // GET: Businesses/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Businesses == null)
@@ -106,7 +74,11 @@ namespace Businesses_Accounting.Controllers
                 return NotFound();
             }
 
-            var business = await _context.Businesses.Where(x=>x.Id==id).Include(x=>x.Language).Include(x=>x.BusinessFinancialInfos).FirstOrDefaultAsync();
+            Business? business;
+            using (BusinessServices bs=new BusinessServices(_context))
+            {
+                business = await bs.FindAsync(id.Value);
+            }
             if (business == null)
             {
                 return NotFound();

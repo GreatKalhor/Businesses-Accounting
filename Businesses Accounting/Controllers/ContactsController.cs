@@ -18,7 +18,7 @@ namespace Businesses_Accounting.Controllers
 {
     [Authorize]
     [GreatAttribute(true)]
-    public class ContactsController : Controller
+    public class ContactsController : GreatController
     {
         private readonly BA_dbContext _context;
 
@@ -37,7 +37,7 @@ namespace Businesses_Accounting.Controllers
         [AcceptVerbs("Post")]
         public ActionResult List(DataSourceRequest request)
         {
-            var userpanel = HttpContext.ToPanelViewModel();
+            var userpanel = PanelUser;
             var result = _context.Contacts.Where(x => x.BusinessId == userpanel.BusinessId);
             var dsResult = result.ToDataSourceResult(request);
             return Json(dsResult);
@@ -65,7 +65,7 @@ namespace Businesses_Accounting.Controllers
         // GET: Contacts/Create
         public IActionResult Create()
         {
-            var userpanel = HttpContext.ToPanelViewModel();
+            var userpanel = PanelUser;
             return View(new CreateContactViewModel() { BusinessId = userpanel.BusinessId,CategoryId=_context.BusinessCategories.FirstOrDefault(c=>c.BusinessId==userpanel.BusinessId && c.CategoryType== (int)CategoryType.Contact).Id });
         }
 

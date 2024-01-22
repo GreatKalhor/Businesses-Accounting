@@ -16,7 +16,7 @@ namespace Businesses_Accounting.Controllers
 {
     [Authorize]
     [GreatAttribute(true)]
-    public class BusinessFiscalYearsController : Controller
+    public class BusinessFiscalYearsController : GreatController
     {
         private readonly BA_dbContext _context;
 
@@ -27,7 +27,6 @@ namespace Businesses_Accounting.Controllers
         // GET: BusinessFiscalYears
         public async Task<IActionResult> Index(int businessId, string ubis)
         {
-            var sss = HttpContext.ToPanelViewModel();
             if (businessId > 0)
             {
                 ViewData["businessId"] = businessId;
@@ -42,7 +41,7 @@ namespace Businesses_Accounting.Controllers
         [AcceptVerbs("Post")]
         public ActionResult List(DataSourceRequest request)
         {
-            var userpanel = HttpContext.ToPanelViewModel();
+            var userpanel = PanelUser;
             var result = _context.Contacts.Where(x => x.BusinessId == userpanel.BusinessId);
             var dsResult = result.ToDataSourceResult(request);
             return Json(dsResult);

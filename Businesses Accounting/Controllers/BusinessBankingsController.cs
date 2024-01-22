@@ -17,7 +17,7 @@ namespace Businesses_Accounting.Controllers
 {
     [Authorize]
     [GreatAttribute(true)]
-    public class BusinessBankingsController : Controller
+    public class BusinessBankingsController : GreatController
     {
         private readonly BA_dbContext _context;
 
@@ -34,7 +34,7 @@ namespace Businesses_Accounting.Controllers
         [AcceptVerbs("Post")]
         public ActionResult List(DataSourceRequest request)
         {
-            var userpanel = HttpContext.ToPanelViewModel();
+            var userpanel = PanelUser;
             var result = _context.BusinessBankings.Where(x => x.BusinessId == userpanel.BusinessId);
             var dsResult = result.ToDataSourceResult(request);
             return Json(dsResult);
@@ -64,7 +64,7 @@ namespace Businesses_Accounting.Controllers
         // GET: BusinessBankings/Create
         public IActionResult Create()
         {
-            var userpanel = HttpContext.ToPanelViewModel();
+            var userpanel = PanelUser;
             return View(new CreateBusinessBankingViewModel() { BusinessId = userpanel.BusinessId });
         }
 

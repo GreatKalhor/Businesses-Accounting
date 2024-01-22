@@ -19,5 +19,10 @@ namespace Businesses_Accounting.Services
             var l = db.Languages.FirstOrDefault(x => x.Name == "فارسی");
             return l != null ? l.Id : 0;
         }
+
+        public List<Language> GetAll()
+        {
+            return db.Languages.ToList();
+        }
     }
 }
