@@ -103,8 +103,6 @@ namespace Businesses_Accounting.Controllers
             {
                 return NotFound();
             }
-            ViewData["BusinessId"] = new SelectList(_context.Businesses, "Id", "LegalName", contact.BusinessId);
-            ViewData["CategoryId"] = new SelectList(_context.BusinessCategories, "Id", "Title", contact.CategoryId);
             return View(contact);
         }
 
@@ -138,7 +136,7 @@ namespace Businesses_Accounting.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "Contacts");
             }
             return View(contact);
         }
@@ -179,7 +177,7 @@ namespace Businesses_Accounting.Controllers
             }
 
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index", "Contacts");
         }
 
         private bool ContactExists(int id)

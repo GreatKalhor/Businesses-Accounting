@@ -158,8 +158,6 @@ namespace Businesses_Accounting.Controllers
             {
                 return NotFound();
             }
-            ViewData["BusinessFiscalYearId"] = new SelectList(_context.BusinessFiscalYears, "Id", "Title", document.BusinessFiscalYearId);
-            ViewData["ProjectId"] = new SelectList(_context.BusinessProjects, "Id", "Name", document.ProjectId);
             return View(document);
         }
 
@@ -193,10 +191,8 @@ namespace Businesses_Accounting.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "Documents");
             }
-            ViewData["BusinessFiscalYearId"] = new SelectList(_context.BusinessFiscalYears, "Id", "Title", document.BusinessFiscalYearId);
-            ViewData["ProjectId"] = new SelectList(_context.BusinessProjects, "Id", "Name", document.ProjectId);
             return View(document);
         }
 
@@ -236,7 +232,7 @@ namespace Businesses_Accounting.Controllers
             }
             
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index", "Documents");
         }
 
         private bool DocumentExists(int id)

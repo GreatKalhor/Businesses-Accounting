@@ -2,6 +2,7 @@
 
 namespace Businesses_Accounting.Resources
 {
+    
     public class Variable
     {
         public enum AccessType

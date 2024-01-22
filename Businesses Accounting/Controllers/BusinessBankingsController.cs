@@ -79,12 +79,13 @@ namespace Businesses_Accounting.Controllers
             {
                 _context.Add(businessBanking);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+
+                return RedirectToAction("Index", "BusinessBankings");
             }
             return View(businessBanking);
         }
 
-        // GET: BusinessBankings/Edit/5
+     
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.BusinessBankings == null)
@@ -97,9 +98,6 @@ namespace Businesses_Accounting.Controllers
             {
                 return NotFound();
             }
-            ViewData["BankingId"] = new SelectList(_context.BankingTypes, "Id", "Name", businessBanking.BankingId);
-            ViewData["BusinessId"] = new SelectList(_context.Businesses, "Id", "LegalName", businessBanking.BusinessId);
-            ViewData["CurrencyId"] = new SelectList(_context.Currencies, "Id", "DisplayName", businessBanking.CurrencyId);
             return View(businessBanking);
         }
 
@@ -108,7 +106,7 @@ namespace Businesses_Accounting.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,BusinessId,BankingId,IsActive,Name,CurrencyId,IsDefault,Note")] BusinessBanking businessBanking)
+        public async Task<IActionResult> Edit(int id, BusinessBanking businessBanking)
         {
             if (id != businessBanking.Id)
             {
@@ -133,11 +131,8 @@ namespace Businesses_Accounting.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "BusinessBankings");
             }
-            ViewData["BankingId"] = new SelectList(_context.BankingTypes, "Id", "Name", businessBanking.BankingId);
-            ViewData["BusinessId"] = new SelectList(_context.Businesses, "Id", "LegalName", businessBanking.BusinessId);
-            ViewData["CurrencyId"] = new SelectList(_context.Currencies, "Id", "DisplayName", businessBanking.CurrencyId);
             return View(businessBanking);
         }
 
@@ -178,7 +173,7 @@ namespace Businesses_Accounting.Controllers
             }
 
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index", "BusinessBankings");
         }
 
         private bool BusinessBankingExists(int id)

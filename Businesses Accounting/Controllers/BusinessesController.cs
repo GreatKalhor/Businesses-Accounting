@@ -144,10 +144,8 @@ namespace Businesses_Accounting.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "Businesses");
             }
-            ViewData["LanguageId"] = new SelectList(_context.Languages, "Id", "Flag", business.LanguageId);
-            ViewData["TypeId"] = new SelectList(_context.BusinessTypes, "Id", "Name", business.TypeId);
             return View(business);
         }
 
@@ -187,7 +185,7 @@ namespace Businesses_Accounting.Controllers
             }
 
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index", "Businesses");
         }
 
         private bool BusinessExists(int id)

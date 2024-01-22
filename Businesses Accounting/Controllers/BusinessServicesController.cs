@@ -78,10 +78,8 @@ namespace Businesses_Accounting.Controllers
             {
                 _context.Add(businessService);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "BusinessServices");
             }
-            ViewData["BusinessId"] = new SelectList(_context.Businesses, "Id", "LegalName", businessService.BusinessId);
-            ViewData["CategoryId"] = new SelectList(_context.BusinessCategories, "Id", "Title", businessService.CategoryId);
             return View(businessService);
         }
 
@@ -98,9 +96,7 @@ namespace Businesses_Accounting.Controllers
             {
                 return NotFound();
             }
-            ViewData["BusinessId"] = new SelectList(_context.Businesses, "Id", "LegalName", businessService.BusinessId);
-            ViewData["CategoryId"] = new SelectList(_context.BusinessCategories, "Id", "Title", businessService.CategoryId);
-            return View(businessService);
+             return View(businessService);
         }
 
         // POST: BusinessServices/Edit/5
@@ -108,7 +104,7 @@ namespace Businesses_Accounting.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,BusinessId,Name,IsActive,ProductCode,Barcode,CategoryId,SalesPrice,SalesInformation,PurchaseCost,PurchaseInformation,MainUnit,Note,SubUnit,UnitConversionFactor,SalesTaxable,SalesTax,PurchaseTaxable,PurchaseTax,TaxId,TaxUnitId,IranianTaxTypeId,ImageUrl")] BusinessService businessService)
+        public async Task<IActionResult> Edit(int id, BusinessService businessService)
         {
             if (id != businessService.Id)
             {
@@ -133,10 +129,8 @@ namespace Businesses_Accounting.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "BusinessServices");
             }
-            ViewData["BusinessId"] = new SelectList(_context.Businesses, "Id", "LegalName", businessService.BusinessId);
-            ViewData["CategoryId"] = new SelectList(_context.BusinessCategories, "Id", "Title", businessService.CategoryId);
             return View(businessService);
         }
 
@@ -176,7 +170,7 @@ namespace Businesses_Accounting.Controllers
             }
             
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index", "BusinessServices");
         }
 
         private bool BusinessServiceExists(int id)

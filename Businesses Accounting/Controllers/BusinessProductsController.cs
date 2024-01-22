@@ -78,14 +78,12 @@ namespace Businesses_Accounting.Controllers
             {
                 _context.Add(businessProduct);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "BusinessProducts");
             }
-            ViewData["BusinessId"] = new SelectList(_context.Businesses, "Id", "LegalName", businessProduct.BusinessId);
-            ViewData["CategoryId"] = new SelectList(_context.BusinessCategories, "Id", "Title", businessProduct.CategoryId);
             return View(businessProduct);
         }
 
-        // GET: BusinessProducts/Edit/5
+  
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.BusinessProducts == null)
@@ -98,8 +96,6 @@ namespace Businesses_Accounting.Controllers
             {
                 return NotFound();
             }
-            ViewData["BusinessId"] = new SelectList(_context.Businesses, "Id", "LegalName", businessProduct.BusinessId);
-            ViewData["CategoryId"] = new SelectList(_context.BusinessCategories, "Id", "Title", businessProduct.CategoryId);
             return View(businessProduct);
         }
 
@@ -108,7 +104,7 @@ namespace Businesses_Accounting.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,BusinessId,Name,IsActive,ProductCode,Barcode,CategoryId,SalesPrice,SalesInformation,PurchaseCost,PurchaseInformation,MainUnit,Note,SubUnit,UnitConversionFactor,TrackQuantity,ReorderPoint,MinimumOrder,LeadTimeDays,SalesTaxable,SalesTax,PurchaseTaxable,PurchaseTax,TaxId,TaxUnitId,IranianTaxTypeId,ImageUrl")] BusinessProduct businessProduct)
+        public async Task<IActionResult> Edit(int id, BusinessProduct businessProduct)
         {
             if (id != businessProduct.Id)
             {
@@ -133,10 +129,8 @@ namespace Businesses_Accounting.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "BusinessProducts");
             }
-            ViewData["BusinessId"] = new SelectList(_context.Businesses, "Id", "LegalName", businessProduct.BusinessId);
-            ViewData["CategoryId"] = new SelectList(_context.BusinessCategories, "Id", "Title", businessProduct.CategoryId);
             return View(businessProduct);
         }
 
@@ -176,7 +170,7 @@ namespace Businesses_Accounting.Controllers
             }
             
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index","BusinessProducts");
         }
 
         private bool BusinessProductExists(int id)

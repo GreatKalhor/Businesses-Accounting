@@ -184,7 +184,7 @@ namespace Businesses_Accounting.Controllers
             }
 
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(Url.Action("Index", new { businessId = businessFiscalYear.BusinessId }));
         }
 
         private bool BusinessFiscalYearExists(int id)
