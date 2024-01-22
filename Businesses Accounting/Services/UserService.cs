@@ -3,19 +3,14 @@ using Businesses_Accounting.Models;
 
 namespace Businesses_Accounting.Services
 {
-    public class UserService : IDisposable
+    public class UserService : BaseServices
     {
-        private bool disposedValue;
-        private bool ignorDisposeddb { get; set; }
-        BA_dbContext db { get; }
-        public UserService()
+
+        public UserService() : base()
         {
-            db = new BA_dbContext();
         }
-        public UserService(BA_dbContext dbContext)
+        public UserService(BA_dbContext dbContext) : base(dbContext)
         {
-            ignorDisposeddb = true;
-            db = dbContext;
         }
         public AspNetUser GetUser(string username)
         {
@@ -37,37 +32,6 @@ namespace Businesses_Accounting.Services
             db.AspNetUsers.Update(user);
             await db.SaveChangesAsync();
         }
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    // TODO: dispose managed state (managed objects)
-                    if (!ignorDisposeddb)
-                    {
-                        db.Dispose();
-                    }
-                }
-
-                // TODO: free unmanaged resources (unmanaged objects) and override finalizer
-                // TODO: set large fields to null
-                disposedValue = true;
-            }
-        }
-
-        // // TODO: override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
-        // ~UserService()
-        // {
-        //     // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
-        //     Dispose(disposing: false);
-        // }
-
-        public void Dispose()
-        {
-            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
-            Dispose(disposing: true);
-            GC.SuppressFinalize(this);
-        }
+        
     }
 }

@@ -10,23 +10,18 @@ using static Businesses_Accounting.Resources.Variable;
 
 namespace Businesses_Accounting.Services
 {
-    public class BusinessServices : IDisposable
+    public class BusinessServices :BaseServices
     {
-        private bool disposedValue;
-        private bool ignorDisposeddb { get; set; }
-        BA_dbContext db { get; }
-        public BusinessServices()
-        {
-            db = new BA_dbContext();
-        }
-        public BusinessServices(BA_dbContext dbContext)
-        {
-            ignorDisposeddb = true;
-            db = dbContext;
-        }
+      
+        public BusinessServices() : base()
+    {
+    }
+    public BusinessServices(BA_dbContext dbContext) : base(dbContext)
+    {
+    }
 
 
-        public async Task InsertBusiness(Business business, Guid? userId)
+    public async Task InsertBusiness(Business business, Guid? userId)
         {
             if (userId is not null)
             {
@@ -54,13 +49,14 @@ namespace Businesses_Accounting.Services
                     db.Add(new BusinessUser() { BusinessId = _b.Id, UserId = userId.Value, AccessTypeId = (int)Resources.Variable.AccessType.Owner });
                     db.Add(new BusinessFiscalYear() { BusinessId = _b.Id, Title = "پیش فرض", StartDate = DateTime.Now, EndDate = DateTime.Now.AddYears(3), InventoryValuationMethod = 1 });
                     db.Add(new BusinessFinancialInfo() { BusinessId = _b.Id, InventoryAccountingSystem = business.InventoryAccountingSystem, CalendarId = business.CalendarId, MainCurrencyId = business.MainCurrencyId, ValueAddedTaxRate = business.ValueAddedTaxRate, HasMultiCurrency = business.HasMultiCurrency, HasWarehouseManagement = business.HasWarehouseManagement });
+                    db.Add(new BusinessCurrencyConversion() { BusinessId = _b.Id, CurrencyId = business.MainCurrencyId, MainValue = business.MainCurrencyId });
                     foreach (var item in business.CurrenciesIds)
                     {
-                        db.Add(new BusinessCurrencyConversion() { BusinessId = _b.Id, CurrencyId = item, MainValue = 1 });
+                        db.Add(new BusinessCurrencyConversion() { BusinessId = _b.Id, CurrencyId = item, MainValue = business.MainCurrencyId });
                     }
                     foreach (var item in PanelServices.GetEnumAllValues<CategoryType>())
                     {
-                        db.Add(new BusinessCategory() { BusinessId = _b.Id, Title = item.GetDescription(), CategoryType =item.ToInt() });
+                        db.Add(new BusinessCategory() { BusinessId = _b.Id, Title = item.GetDescription(), CategoryType = item.ToInt() });
                     }
                     await db.SaveChangesAsync();
                 }
@@ -72,7 +68,6 @@ namespace Businesses_Accounting.Services
             if (userId is not null)
             {
                 var bA_dbContext = db.BusinessUsers.Where(x => x.UserId == userId.Value).Include(b => b.Business)
-                    //.Include(b => b.Business.Language).Include(b => b.Business.Type)
                     .Select(f => f.Business);
                 var ans = await bA_dbContext.ToListAsync();
                 return ans;
@@ -89,40 +84,5 @@ namespace Businesses_Accounting.Services
         }
 
 
-
-
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    // TODO: dispose managed state (managed objects)
-                    if (!ignorDisposeddb)
-                    {
-                        db.Dispose();
-                    }
-                }
-
-                // TODO: free unmanaged resources (unmanaged objects) and override finalizer
-                // TODO: set large fields to null
-                disposedValue = true;
-            }
-        }
-
-        // // TODO: override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
-        // ~BusinessServices()
-        // {
-        //     // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
-        //     Dispose(disposing: false);
-        // }
-
-        void IDisposable.Dispose()
-        {
-            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
-            Dispose(disposing: true);
-            GC.SuppressFinalize(this);
-        }
     }
 }

@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Authorization;
 using Businesses_Accounting.Services;
 using Businesses_Accounting.Models.ViewModels;
+using Businesses_Accounting.Resources;
 
 namespace Businesses_Accounting.Controllers
 {
@@ -74,9 +75,9 @@ namespace Businesses_Accounting.Controllers
         // GET: Businesses/Create
         public IActionResult Create()
         {
-            var l = _context.Languages.FirstOrDefault();
-            var c = _context.Currencies.Where(x=>x.Name.Contains("IRR")).FirstOrDefault();
-            return View(new CreateBusinessViewModel() { LanguageId = (l != null ? l.Id : 1), MainCurrencyId = (c != null ? c.Id : 1) });
+            
+            
+            return View(new CreateBusinessViewModel() { LanguageId = (DefaultValues.LanguageId != 0 ? DefaultValues.LanguageId : 1), MainCurrencyId = (DefaultValues.CurrencyId != 0 ? DefaultValues.CurrencyId : 1) });
         }
 
         // POST: Businesses/Create
@@ -119,7 +120,7 @@ namespace Businesses_Accounting.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,LanguageId,LegalName,TypeId,BusinessLine,NationalCode,EconomicCode,RegistrationNumber,Country,StateProvince,City,PostalCode,Phone,Fax,Address,Website,Email,LogoUrl")] Business business)
+        public async Task<IActionResult> Edit(int id, CreateBusinessViewModel business)
         {
             if (id != business.Id)
             {

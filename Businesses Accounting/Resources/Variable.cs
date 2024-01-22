@@ -1,8 +1,56 @@
-﻿using System.ComponentModel;
+﻿using Businesses_Accounting.Services;
+using System.ComponentModel;
 
 namespace Businesses_Accounting.Resources
 {
-    
+    public static class DefaultValues
+    {
+        private static int languageId = 0;
+
+        public static int LanguageId
+        {
+            get
+            {
+                if (languageId == 0)
+                {
+                    using (LanguageServices ls = new LanguageServices())
+                    {
+                        languageId = ls.DefaultId();
+                    }
+                }
+                return languageId;
+            }
+
+        }
+
+        private static int currencyId = 0;
+
+        public static int CurrencyId
+        {
+            get
+            {
+                if (currencyId == 0)
+                {
+                    using (CurrencyServices cs = new CurrencyServices())
+                    {
+                        currencyId = cs.DefaultId();
+                    }
+                }
+                return currencyId;
+            }
+
+        }
+
+
+
+
+
+
+
+
+
+
+    }
     public class Variable
     {
         public enum AccessType
