@@ -15,7 +15,7 @@ namespace Businesses_Accounting.Services
         }
         public int DefaultId()
         {
-            var c = db.Currencies.Where(x => x.Name.Contains("IRR")).FirstOrDefault();
+            var c = db.Currencies.FirstOrDefault(x => x.Name.Contains("IRR"));
             return c != null ? c.Id : 0;
         }
         public List<Currency> GetBusinessCurrencies(int businessid, int mainCurrencyId)

@@ -13,5 +13,9 @@ namespace Businesses_Accounting.Services
         public BusinessTypeServices(BA_dbContext dbContext) : base(dbContext)
         {
         }
+        public List<BusinessType> GetAll()
+        {
+            return db.BusinessTypes.ToList();
+        }
     }
 }

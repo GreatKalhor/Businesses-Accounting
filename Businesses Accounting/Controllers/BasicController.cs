@@ -16,8 +16,6 @@ namespace Businesses_Accounting.Controllers
     {
 
         private readonly BA_dbContext _context;
-
-
         public BasicController(BA_dbContext context)
         {
             _context = context;
@@ -64,14 +62,20 @@ namespace Businesses_Accounting.Controllers
         }
         public JsonResult Items_GetBusinessTypes(string text)
         {
-            var businessTypes = _context.BusinessTypes.Select(x => x);
-            return Json(businessTypes.Where(p => p.Name.Contains(text ?? "")).ToList());
+            using (BusinessTypeServices bts = new BusinessTypeServices(_context))
+            {
+                var businessTypes = bts.GetAll();
+                return Json(businessTypes.Where(p => p.Name.Contains(text ?? "")).ToList()); 
+            }
         }
         public JsonResult Items_BusinessCategories(string text)
         {
-            var upanel = PanelUser;
-            var businessTypes = _context.BusinessCategories.Where(v => v.BusinessId == upanel.BusinessId).Select(x => x);
-            return Json(businessTypes.Where(p => p.Title.Contains(text ?? "")).ToList());
+            var ub = PanelUser;
+            using (BusinessCategoryServices bcs = new BusinessCategoryServices(_context))
+            {
+                var businessTypes = bcs.GetCategoriesWithBusinessId(ub.BusinessId);
+                return Json(businessTypes.Where(p => p.Title.Contains(text ?? "")).ToList());
+            }
         }
         public JsonResult Items_GetCalendars(string text)
         {

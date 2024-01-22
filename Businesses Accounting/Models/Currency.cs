@@ -2,6 +2,7 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Businesses_Accounting.Models;
 
@@ -22,7 +23,8 @@ public partial class Currency
         Businesses = currency.Businesses;
         FixValeus = fixValeus;
     }
-    public bool FixValeus { get; private set; }
+    [NotMapped]
+    public  bool FixValeus { get; private set; }
     public int Id { get; set; }
 
     public string Name { get; set; }

@@ -13,5 +13,9 @@ namespace Businesses_Accounting.Services
         public BusinessCategoryServices(BA_dbContext dbContext) : base(dbContext)
         {
         }
+        public List<BusinessCategory> GetCategoriesWithBusinessId(int businessId)
+        {
+            return db.BusinessCategories.Where(v => v.BusinessId == businessId).ToList();
+        }
     }
 }
