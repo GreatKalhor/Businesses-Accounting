@@ -17,5 +17,15 @@ namespace Businesses_Accounting.Services
         {
             return db.BusinessFinancialInfos.FirstOrDefault(c => c.BusinessId == businessid);
         }
+        public async Task<BusinessFinancialInfo> FindWithBusinessIdAsync(int businessid)
+        {
+            return await db.BusinessFinancialInfos.FirstOrDefaultAsync(c => c.BusinessId == businessid);
+        }
+
+        public async Task UpdateBusinessFinancialInfo(BusinessFinancialInfo bfi)
+        {
+             db.BusinessFinancialInfos.Update(bfi);
+            await db.SaveChangesAsync();
+        }
     }
 }

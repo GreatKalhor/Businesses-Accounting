@@ -1,0 +1,18 @@
+﻿@model string?
+
+@(Html.Kendo().Upload()
+        .Name("files")
+        .Async(a => a
+            .Save("CustomDropZone_Save", "Upload")
+            .Remove("CustomDropZone_Remove", "Upload")
+            .AutoUpload(true)
+        )
+        .Events(e => e.Success("onSuccess"))
+        .ShowFileList(false)
+        .DropZone(".dropZoneElement")
+        .Validation(validation =>
+        {
+            validation.AllowedExtensions(new string[] { ".jpg", ".jpeg", ".png", ".bmp", ".gif" });
+            validation.MinFileSize(500);
+        })
+)

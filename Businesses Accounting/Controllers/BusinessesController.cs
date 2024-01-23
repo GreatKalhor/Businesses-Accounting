@@ -31,17 +31,17 @@ namespace Businesses_Accounting.Controllers
         {
             using (BusinessServices bs = new BusinessServices(_context))
             {
-                return View(await bs.GetBusinessWithUser(CurrentUser.GetUserId(User)));
+                return View(await bs.GetBusinessWithUser(CurrentUserId));
             }
         }
-  
+
 
         [AcceptVerbs("Post")]
         public ActionResult List(DataSourceRequest request)
         {
             using (BusinessServices bs = new BusinessServices(_context))
             {
-                var result = bs.GetBusinessWithUser(CurrentUser.GetUserId(User)).Result;
+                var result = bs.GetBusinessWithUser(CurrentUserId).Result;
                 var dsResult = result.ToDataSourceResult(request);
                 return Json(dsResult);
             }
@@ -56,11 +56,12 @@ namespace Businesses_Accounting.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateBusinessViewModel business)
         {
+            var ss=Request;
             if (ModelState.IsValid)
             {
                 using (BusinessServices bs = new BusinessServices(_context))
                 {
-                    int id = await bs.InsertBusiness(business, CurrentUser.GetUserId(User));
+                    int id = await bs.InsertBusiness(business, CurrentUserId);
                     return RedirectToAction("Check", "Dashbord", new { area = "Panel", businessId = id });
                 }
             }
@@ -75,7 +76,7 @@ namespace Businesses_Accounting.Controllers
             }
 
             Business? business;
-            using (BusinessServices bs=new BusinessServices(_context))
+            using (BusinessServices bs = new BusinessServices(_context))
             {
                 business = await bs.FindAsync(id.Value);
             }
@@ -89,78 +90,48 @@ namespace Businesses_Accounting.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, CreateBusinessViewModel business)
+        public async Task<IActionResult> Edit(CreateBusinessViewModel business)
         {
-            if (id != business.Id)
-            {
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
-                try
+                using (BusinessServices bs = new BusinessServices(_context))
                 {
-                    _context.Update(business);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!BusinessExists(business.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    await bs.UpdateBusiness(business, CurrentUserId);
                 }
                 return RedirectToAction("Index", "Businesses");
             }
             return View(business);
         }
 
-        // GET: Businesses/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Businesses == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var business = await _context.Businesses
-                .Include(b => b.Language)
-                .Include(b => b.Type)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (business == null)
+            using (BusinessServices bs = new BusinessServices(_context))
             {
-                return NotFound();
+                var business = await bs.FindAsync(id.Value);
+                if (business == null)
+                {
+                    return NotFound();
+                }
+                return View(business);
             }
-
-            return View(business);
         }
 
-        // POST: Businesses/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Businesses == null)
+            using (BusinessServices bs = new BusinessServices(_context))
             {
-                return Problem("Entity set 'BA_dbContext.Businesses'  is null.");
+                await bs.DeleteBusiness(id, CurrentUserId);
             }
-            var business = await _context.Businesses.FindAsync(id);
-            if (business != null)
-            {
-                _context.Businesses.Remove(business);
-            }
-
-            await _context.SaveChangesAsync();
             return RedirectToAction("Index", "Businesses");
         }
 
-        private bool BusinessExists(int id)
-        {
-            return (_context.Businesses?.Any(e => e.Id == id)).GetValueOrDefault();
-        }
+
     }
 }

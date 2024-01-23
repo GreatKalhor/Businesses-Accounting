@@ -33,7 +33,7 @@ namespace Businesses_Accounting.Models.ViewModels
                 var _Currencies = b.BusinessCurrencyConversions;
                 if (_Currencies != null)
                 {
-                    CurrenciesIds.AddRange(_Currencies.Select(x => x.CurrencyId));
+                    CurrenciesIds.AddRange(_Currencies.Select(x => x.CurrencyId).Where(x => x != MainCurrencyId));
                 }
             }
 
@@ -63,5 +63,7 @@ namespace Businesses_Accounting.Models.ViewModels
         [Display(Name = "سایر ارزها ")]
         public List<int>? CurrenciesIds { get; set; }
 
+        public string? ImageUrl { get; set; }
+        public IEnumerable<IFormFile> files { get; set; }
     }
 }

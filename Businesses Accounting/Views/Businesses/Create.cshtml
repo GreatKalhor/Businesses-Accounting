@@ -1,8 +1,9 @@
 ﻿@model Businesses_Accounting.Models.ViewModels.CreateBusinessViewModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "راه اندازی کسب و کار جدید ";
 }
+  
 <div style=" grid-column-end: span 3; grid-row-end: span 1;"></div>
 
 <div class="demo-section">
@@ -19,7 +20,13 @@
         .Items(items =>
         {
             items.AddGroup()
-            .Label("ساخت کسب و کار")//.Layout("<div class'k-columns-2'>")
+            .Label("لوگوی کسب و کار")//.Layout("<div class'k-columns-2'>")
+        .Items(i =>
+        {
+                i.Add().Field(f => f.files).Label(l => l.Text(" ")).EditorTemplateHandler("uploadEditor");
+        });
+            items.AddGroup()
+            .Label("اطلاعات کسب و کار")//.Layout("<div class'k-columns-2'>")
             .Items(i =>
             {
                 i.AddAntiForgeryToken(Html.AntiForgeryToken());
@@ -33,7 +40,7 @@
             .Label("تنظیمات مالی")//.Layout("<div class'k-columns-2'>")
             .Items(i =>
             {
-            
+
                 i.Add().Field(f => f.HasMultiCurrency).Editor(e => { e.Switch().Messages(c => c.Checked("بله").Unchecked("خیر")); });
                 i.Add().Field(f => f.HasWarehouseManagement).Editor(e => { e.Switch().Messages(c => c.Checked("بله").Unchecked("خیر")); });
 
@@ -53,11 +60,66 @@
                 i.Add().Field(f => f.CalendarId).Editor(e => { e.ComboBox().Filter(FilterType.Contains).MinLength(3).Placeholder("انتخاب کنید...").DataTextField("Text").DataValueField("Value").HtmlAttributes(new { style = "width:100%" }).Height(520).DataSource(source => { source.Read(read => { read.Action("Items_GetCalendars", "Basic").Data("filterCalendarsTypes"); }).ServerFiltering(true); }); });
             });
         })//.HtmlAttributes(new {@class="k-columns-2"})
-        //  .Events(ev => ev.ValidateField("onFormValidateField").Clear("onFormClear"))
+          //  .Events(ev => ev.ValidateField("onFormValidateField").Clear("onFormClear"))
         )
 </div>
 
+
 <script>
+   
+    function uploadEditor(container, options) {
+        let ofield = options.field;
+        let temphtml = `
+                                    <div id="img${ofield}"></div>
+                                          <div class="k-upload k-upload-sync k-upload-empty" role="application">
+                                          <div class="k-dropzone k-upload-dropzone">
+                                          <div class="k-upload-button-wrap">
+                                          <div class="k-button k-button-md k-rounded-md k-button-solid k-button-solid-base k-upload-button" tabindex="0" role="button"><span class="k-button-text">انتخاب</span>
+                                          </div>
+                                                      <input id="${ofield}" name="${ofield}" type="file"  onchange="onSelect(this)" data-role="upload" aria-label="انتخاب" tabindex="-1" aria-hidden="true" autocomplete="off">
+                                          </div>
+                                          </div>
+                                          </div>
+                                                  <script>kendo.syncReady(function(){jQuery("#${ofield}").kendoUpload({"success":onSelect,"dropZone":".dropZoneElement","multiple":false,"showFileList":true,"validation":{"allowedExtensions":[".jpg",".jpeg",".png",".bmp",".gif"],"minFileSize":1000}});});
+                            function onSelect(e) {
+            let overimg = false;
+            let file;
+            for (var i = 0; i < e.files.length; i++) {
+                if (i == 0) {
+                    file = e.files[i];
+
+                    if (file) {
+                        var reader = new FileReader();
+
+                        reader.onloadend = function () {
+                            $("#img${ofield}").html("<div class=''><img src=" + this.result + " /></div>");
+                        };
+
+                        reader.readAsDataURL(file);
+
+                    }
+                }
+                else {
+                    overimg = true;
+
+                }
+            }
+            if (overimg) {
+                if (file) {
+                  //  e.files = [...file];
+                }
+            }
+        }
+
+                     <\/script>`;
+        $(temphtml).appendTo(container)
+        //.kendoUpload();
+
+    }
+
+
+
+
     function filterLanguages(e) {
         return kendo.ui.ComboBox.requestData($("#LanguageId"));
     }
@@ -66,13 +128,13 @@
     }
     function filterCurrency(e) {
         return kendo.ui.ComboBox.requestData($("#MainCurrencyId"));
-    } 
+    }
     function filterCurrencies(e) {
         return kendo.ui.MultiSelect.requestData($("#CurrenciesIds"));
     }
     function filterCalendarsTypes(e) {
         return kendo.ui.ComboBox.requestData($("#CalendarId"));
-    }  
+    }
     function filterInventoryAccountingSystems(e) {
         return kendo.ui.ComboBox.requestData($("#InventoryAccountingSystem"));
     }

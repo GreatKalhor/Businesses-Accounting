@@ -10,18 +10,18 @@ using static Businesses_Accounting.Resources.Variable;
 
 namespace Businesses_Accounting.Services
 {
-    public class BusinessServices :BaseServices
+    public class BusinessServices : BaseServices
     {
-      
+
         public BusinessServices() : base()
-    {
-    }
-    public BusinessServices(BA_dbContext dbContext) : base(dbContext)
-    {
-    }
+        {
+        }
+        public BusinessServices(BA_dbContext dbContext) : base(dbContext)
+        {
+        }
 
 
-    public async Task InsertBusiness(Business business, Guid? userId)
+        public async Task InsertBusiness(Business business, Guid? userId)
         {
             if (userId is not null)
             {
@@ -49,10 +49,12 @@ namespace Businesses_Accounting.Services
                     db.Add(new BusinessUser() { BusinessId = _b.Id, UserId = userId.Value, AccessTypeId = (int)Resources.Variable.AccessType.Owner });
                     db.Add(new BusinessFiscalYear() { BusinessId = _b.Id, Title = "پیش فرض", StartDate = DateTime.Now, EndDate = DateTime.Now.AddYears(3), InventoryValuationMethod = 1 });
                     db.Add(new BusinessFinancialInfo() { BusinessId = _b.Id, InventoryAccountingSystem = business.InventoryAccountingSystem, CalendarId = business.CalendarId, MainCurrencyId = business.MainCurrencyId, ValueAddedTaxRate = business.ValueAddedTaxRate, HasMultiCurrency = business.HasMultiCurrency, HasWarehouseManagement = business.HasWarehouseManagement });
-                    db.Add(new BusinessCurrencyConversion() { BusinessId = _b.Id, CurrencyId = business.MainCurrencyId, MainValue = 1});
-                    foreach (var item in business.CurrenciesIds)
+                    using (BusinessCurrencyConversionServices bccs = new BusinessCurrencyConversionServices(db))
                     {
-                        db.Add(new BusinessCurrencyConversion() { BusinessId = _b.Id, CurrencyId = item, MainValue = 1 });
+                        var list = new List<int>();
+                        list.Add(business.MainCurrencyId);
+                        list.AddRange(business.CurrenciesIds);
+                        await bccs.InsertWithIds(_b.Id, list, 1);
                     }
                     foreach (var item in PanelServices.GetEnumAllValues<CategoryType>())
                     {
@@ -63,6 +65,76 @@ namespace Businesses_Accounting.Services
             }
             return id;
         }
+        public async Task UpdateBusiness(CreateBusinessViewModel business, Guid? userId)
+        {
+            var _bs = await GetBusinessWithUser(userId);
+            if (_bs != null)
+            {
+                var _b = _bs.FirstOrDefault(x => x.Id == business.Id);
+                if (_b != null)
+                {
+                    _b.Name = business.Name;
+                    _b.LanguageId = business.LanguageId;
+                    _b.LegalName = business.LegalName;
+                    _b.TypeId = business.TypeId;
+                    db.Businesses.Update(_b);
+                    await db.SaveChangesAsync();
+
+                    using (BusinessFinancialInfoServices bfis = new BusinessFinancialInfoServices(db))
+                    {
+                        var _bfi = await bfis.FindWithBusinessIdAsync(_b.Id);
+                        if (_bfi != null)
+                        {
+                            _bfi.InventoryAccountingSystem = business.InventoryAccountingSystem;
+                            _bfi.CalendarId = business.CalendarId;
+                            _bfi.MainCurrencyId = business.MainCurrencyId;
+                            _bfi.ValueAddedTaxRate = business.ValueAddedTaxRate;
+                            _bfi.HasMultiCurrency = business.HasMultiCurrency;
+                            _bfi.HasWarehouseManagement = business.HasWarehouseManagement;
+                            await bfis.UpdateBusinessFinancialInfo(_bfi);
+                        }
+
+                    }
+
+                    using (BusinessCurrencyConversionServices bccs = new BusinessCurrencyConversionServices())
+                    {
+                        var Currences = await bccs.GetBusinessCurrencyConversionWithBusinessId(_b.Id);
+                        if (Currences != null)
+                        {
+                            List<int> delIds = new List<int>();
+                            List<int> addIds = new List<int>();
+                            if (business.CurrenciesIds != null && business.CurrenciesIds.Count > 0)
+                            {
+                                var _delIds = Currences.Where(x => x.CurrencyId != business.MainCurrencyId && !business.CurrenciesIds.Contains(x.CurrencyId));
+                                if (_delIds.Any())
+                                {
+                                    delIds.AddRange(_delIds.Select(x => x.CurrencyId));
+                                }
+                                var _foradd = business.CurrenciesIds.Where(x => !Currences.Any(c => c.CurrencyId == x));
+                                addIds.AddRange(_foradd);
+                            }
+                            else
+                            {
+                                delIds.AddRange(Currences.Where(x => x.CurrencyId != business.MainCurrencyId).Select(c => c.CurrencyId));
+                            }
+
+                            await bccs.InsertWithIds(_b.Id, addIds, 1);
+                            await bccs.DeleteWithIds(_b.Id, delIds);
+                        }
+
+                    }
+
+
+
+
+
+
+                }
+            }
+        }
+
+
+
         public async Task<List<Business>> GetBusinessWithUser(Guid? userId)
         {
             if (userId is not null)
@@ -80,9 +152,18 @@ namespace Businesses_Accounting.Services
 
         public async Task<Business?> FindAsync(int id)
         {
-            return await db.Businesses.Where(x => x.Id == id).Include(x => x.Language).Include(x => x.BusinessFinancialInfos).Include(x=>x.BusinessCurrencyConversions).FirstOrDefaultAsync();
+            return await db.Businesses.Where(x => x.Id == id).Include(x => x.Language).Include(x => x.BusinessFinancialInfos).Include(x => x.BusinessCurrencyConversions).FirstOrDefaultAsync();
         }
 
+        public async Task DeleteBusiness(int id, Guid? userId)
+        {
+            var bus = await db.BusinessUsers.Where(x => x.UserId == userId.Value && x.AccessTypeId == ((int)AccessType.Owner) && x.BusinessId == id).Include(b => b.Business).ToListAsync();
+            if (bus != null && bus.Count > 0)
+            {
+                db.Businesses.Remove(bus.FirstOrDefault().Business);
+                await db.SaveChangesAsync();
+            }
 
+        }
     }
 }

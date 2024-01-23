@@ -1,7 +1,7 @@
 ﻿@model Businesses_Accounting.Models.ViewModels.CreateBusinessViewModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "ویرایش";
 }
 <div style=" grid-column-end: span 3; grid-row-end: span 1;"></div>
 
@@ -19,7 +19,7 @@
         .Items(items =>
         {
             items.AddGroup()
-            .Label("ساخت کسب و کار")//.Layout("<div class'k-columns-2'>")
+            .Label("ویرایش کسب و کار")//.Layout("<div class'k-columns-2'>")
             .Items(i =>
             {
                 i.AddAntiForgeryToken(Html.AntiForgeryToken());

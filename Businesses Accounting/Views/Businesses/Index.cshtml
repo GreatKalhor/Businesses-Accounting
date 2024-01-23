@@ -31,8 +31,7 @@ Html.Kendo().Grid<Businesses_Accounting.Models.Business>()
                              // columns.Bound(model => model.Website);
                                columns.Bound(model => model.Email);
                                columns.Bound(model => model.LogoUrl);
-                               // columns.Bound(model => model.Id).Filterable(false).ClientHeaderTemplate("").ClientTemplate(@"<a href='" + @Url.Action("Edit", "Businesses", new { Id = "#:data.Id#" }) + @"'>Edit</a> | <a href='" + @Url.Action("Details", "Businesses", new { Id = "#:data.Id#" }) + @"'>Details</a>  |  <a href='" + @Url.Action("Delete", "Businesses", new { Id = "#:data.Id#" }) + @"'>Delete</a> |  <a href='" + @Url.Action("Index", "BusinessFiscalYears", new { businessId = "#:data.Id#",  ubis ="ssdg" }) + @"'>سال های مالی</a>  ").Width(230);
-                               columns.Bound(model => model.Id).Filterable(false).ClientHeaderTemplate(" ").ClientTemplate(@"<a href='" + @Url.Action("Edit", "Businesses", new { Id = "#:data.Id#" }) + @"'>Edit</a> |  <a href='" + @Url.Action("Delete", "Businesses", new { Id = "#:data.Id#" }) + @"'>Delete</a> |  <a href='" + @Url.Action("Check", "Dashbord", new { area = "Panel", businessId = "#:data.Id#" }) + @"'>ورود به کسب و کار</a>  ").Width(430);
+                               columns.Bound(model => model.Id).Filterable(false).ClientHeaderTemplate(" ").ClientTemplate(@"<a href='" + @Url.Action("Edit", "Businesses", new { Id = "#:data.Id#" }) + @"'>ویرایش</a> |  <a href='" + @Url.Action("Delete", "Businesses", new { Id = "#:data.Id#" }) + @"'>حذف</a> |  <a href='" + @Url.Action("Check", "Dashbord", new { area = "Panel", businessId = "#:data.Id#" }) + @"'>ورود به کسب و کار</a>  ").Width(430);
                           
                 })
 
