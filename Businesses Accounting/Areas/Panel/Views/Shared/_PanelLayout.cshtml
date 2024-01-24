@@ -225,8 +225,35 @@
             padding-left: 3 px;
         }
     </style>
-
+    <script src="~/js/site.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
+
+
+    <script>
+
+
+
+
+
+
+        function showDialogDelete(id) {
+            appConfirm("آیا مطمئن هستی؟", "حذف", "تایید", "خیر").then(function () {
+                $.ajax({
+                    url: id,
+                    method: "POST",
+                    success: function (result) {
+                        appAlert(result);
+                        location.reload();
+
+                    }
+                });
+            }, function () {
+
+
+            })
+        }
+
+    </script>
 </body>
 
 </html>

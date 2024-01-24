@@ -13,6 +13,8 @@ using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using Businesses_Accounting.Models.ViewModels;
 using static Businesses_Accounting.Resources.Variable;
+using Businesses_Accounting.Helper;
+using Elfie.Serialization;
 
 namespace Businesses_Accounting.Controllers
 {
@@ -21,94 +23,94 @@ namespace Businesses_Accounting.Controllers
     public class ContactsController : GreatController
     {
         private readonly BA_dbContext _context;
+        private Microsoft.AspNetCore.Hosting.IHostingEnvironment Environment;
 
-
-        public ContactsController(BA_dbContext context)
+        public ContactsController(BA_dbContext context, Microsoft.AspNetCore.Hosting.IHostingEnvironment _environment)
         {
+            Environment = _environment;
             _context = context;
         }
 
-        // GET: Contacts
+
         public async Task<IActionResult> Index()
         {
-            var bA_dbContext = _context.Contacts.Include(c => c.Business).Include(c => c.Category);
-            return View(await bA_dbContext.ToListAsync());
+            return View();
         }
         [AcceptVerbs("Post")]
         public ActionResult List(DataSourceRequest request)
         {
-            var userpanel = PanelUser;
-            var result = _context.Contacts.Where(x => x.BusinessId == userpanel.BusinessId);
-            var dsResult = result.ToDataSourceResult(request);
-            return Json(dsResult);
-        }
-        // GET: Contacts/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.Contacts == null)
+            using (ContactServices cs = new ContactServices(_context))
             {
-                return NotFound();
+                var userpanel = PanelUser;
+                var result = cs.GetContactsWithBusinessId(userpanel.BusinessId);
+                var dsResult = result.ToDataSourceResult(request);
+                return Json(dsResult);
             }
-
-            var contact = await _context.Contacts
-                .Include(c => c.Business)
-                .Include(c => c.Category)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (contact == null)
-            {
-                return NotFound();
-            }
-
-            return View(contact);
         }
 
-        // GET: Contacts/Create
         public IActionResult Create()
         {
-            var userpanel = PanelUser;
-            return View(new CreateContactViewModel() { BusinessId = userpanel.BusinessId,CategoryId=_context.BusinessCategories.FirstOrDefault(c=>c.BusinessId==userpanel.BusinessId && c.CategoryType== (int)CategoryType.Contact).Id });
+            using (BusinessCategoryServices bcs = new BusinessCategoryServices())
+            {
+                var userpanel = PanelUser;
+                var ci = bcs.GetCategoriesWithBusinessId(userpanel.BusinessId, CategoryType.Contact).FirstOrDefault()?.Id;
+                return View(new CreateContactViewModel() { BusinessId = userpanel.BusinessId, CategoryId = (ci != null ? ci.Value : 0) });
+
+            }
         }
 
-        // POST: Contacts/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateContactViewModel contact)
         {
-
-
-
-            if (ModelState.IsValid)
+            try
             {
-                var _contact = contact.ToContact();
-                _context.Add(_contact);
-                await _context.SaveChangesAsync();
-                _context.Add(new SubAccount() { BusinessId = contact.BusinessId, ObjetcId = _contact.Id, ObjetcType = ((int)ObjectType.Contact) });
-                return RedirectToAction(nameof(Index));
+
+                if (ModelState.IsValid)
+                {
+                    using (ContactServices cs = new ContactServices(_context))
+                    {
+                        var filenames = FileHelper.SaveFiles(contact.files, Environment, "Contacts");
+                        if (filenames.Count > 0)
+                        {
+                            contact.ImageUrl = filenames[0];
+                        }
+                        contact.BusinessId = PanelUser.BusinessId;
+                        await cs.InsertContactAsync(contact);
+                        return RedirectToAction("Index", "Contacts");
+                    }
+                }
+                return View(contact);
+
             }
-            return View(contact);
+            catch (Exception ex)
+            {
+
+                throw;
+            }
         }
 
-        // GET: Contacts/Edit/5
+
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Contacts == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var contact = await _context.Contacts.FindAsync(id);
-            if (contact == null)
+            using (ContactServices cs = new ContactServices(_context))
             {
-                return NotFound();
+                var contact = await cs.FindAsync(id.Value);
+                if (contact == null || contact.BusinessId != PanelUser.BusinessId)
+                {
+                    return NotFound();
+                }
+                return View(contact);
             }
-            return View(contact);
         }
 
-        // POST: Contacts/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, CreateContactViewModel contact)
@@ -120,21 +122,15 @@ namespace Businesses_Accounting.Controllers
 
             if (ModelState.IsValid)
             {
-                try
+                var filenames = FileHelper.SaveFiles(contact.files, Environment, "Contacts");
+                if (filenames.Count > 0)
                 {
-                    _context.Update(contact.ToContact());
-                    await _context.SaveChangesAsync();
+                    contact.ImageUrl = filenames[0];
                 }
-                catch (DbUpdateConcurrencyException)
+                using (ContactServices cs = new ContactServices(_context))
                 {
-                    if (!ContactExists(contact.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    contact.BusinessId = PanelUser.BusinessId;
+                    await cs.UpdateContactAsync(contact);
                 }
                 return RedirectToAction("Index", "Contacts");
             }
@@ -144,7 +140,7 @@ namespace Businesses_Accounting.Controllers
         // GET: Contacts/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Contacts == null)
+            if (id == null)
             {
                 return NotFound();
             }

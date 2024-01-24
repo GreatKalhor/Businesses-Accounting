@@ -9,6 +9,7 @@
 <p>
     <a asp-action="Create">بانک جدید</a>
 </p>
+
 @(
     Html.Kendo().Grid<Businesses_Accounting.Models.BusinessBanking>()
                            .Name("grid")
@@ -18,7 +19,8 @@
                                columns.Bound(model => model.Note);
                                columns.Bound(model => model.IsActive);
                                columns.Bound(model => model.Id).Filterable(false).ClientHeaderTemplate(" ")
-                               .ClientTemplate(@"<a href='" + @Url.Action("Edit", "BusinessBankings", new { Id = "#:data.Id#" }) + @"'>Edit</a> |  <a href='" + @Url.Action("Delete", "BusinessBankings", new { Id = "#:data.Id#" }) + @"'>Delete</a>  ").Width(430);
+                               //.ClientTemplate(@"<a href='" + @Url.Action("Edit", "BusinessBankings", new { Id = "#:data.Id#" }) + @"'>Edit</a> |  <a href='" + @Url.Action("Delete", "BusinessBankings", new { Id = "#:data.Id#" }) + @"'>Delete</a>  ").Width(430);
+                   .ClientTemplate(@"<a href='" + @Url.Action("Edit", "BusinessBankings", new { Id = "#:data.Id#" }) + @"'>Edit</a> |  <a href='javascript:;' onclick='showDialogDelete(" + @Url.Action("Delete", "BusinessBankings", new { Id = "#:data.Id#" }) + ")'>Delete</a>  ").Width(430);
                            })
 
                            .Pageable()
@@ -33,3 +35,4 @@
                                .Read("List", "BusinessBankings")
                             )
        )
+

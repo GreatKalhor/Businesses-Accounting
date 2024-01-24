@@ -125,11 +125,6 @@ namespace Businesses_Accounting.Services
 
                     }
 
-
-
-
-
-
                 }
             }
         }
@@ -155,7 +150,15 @@ namespace Businesses_Accounting.Services
         {
             return await db.Businesses.Where(x => x.Id == id).Include(x => x.Language).Include(x => x.BusinessFinancialInfos).Include(x => x.BusinessCurrencyConversions).FirstOrDefaultAsync();
         }
-
+        public async Task<Business?> FindAsync(int id, Guid? userId)
+        {
+            var b = await db.Businesses.Where(x => x.Id == id).Include(x => x.BusinessUsers).Include(x => x.Language).Include(x => x.BusinessFinancialInfos).Include(x => x.BusinessCurrencyConversions).FirstOrDefaultAsync();
+            if (b != null && b.BusinessUsers.Any(v => v.UserId == userId))
+            {
+                return b;
+            }
+            else { return null; }
+        }
         public async Task DeleteBusiness(int id, Guid? userId)
         {
             try

@@ -77,6 +77,7 @@ public partial class CreateContactViewModel
 
     [Display(Name = "تصویر")]
     public string? ImageUrl { get; set; } = " ";
+    public IEnumerable<IFormFile> files { get; set; }
 
     [Display(Name = "مشتری")]
     public bool? IsCustomer { get; set; }

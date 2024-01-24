@@ -31,6 +31,7 @@
                 i.Add().Field(f => f.Employee).Editor(e => { e.Hidden(); });
                 i.Add().Field(f => f.IsVendor).Editor(e => { e.Hidden(); });
                 i.Add().Field(f => f.BusinessId).Label(l => l.Text("BusinessId:")).Editor(e => { e.Hidden(); });
+                i.Add().Field(f => f.files).Label(l => l.Text(" ")).EditorTemplateHandler("uploadEditor");
                 i.Add().Field(f => f.Company).Editor(e => { e.TextBox().HtmlAttributes(new { required = "required" }); });
                 i.Add().Field(f => f.TitleC).Editor(e => { e.TextBox(); });
                 i.Add().Field(f => f.LastName).Editor(e => { e.TextBox(); });
@@ -59,6 +60,57 @@
 </div>
 
 <script>
+    function uploadEditor(container, options) {
+        let ofield = options.field;
+        let temphtml = `
+                                        <div id="img${ofield}"></div>
+                                              <div class="k-upload k-upload-sync k-upload-empty" role="application">
+                                              <div class="k-dropzone k-upload-dropzone">
+                                              <div class="k-upload-button-wrap">
+                                              <div class="k-button k-button-md k-rounded-md k-button-solid k-button-solid-base k-upload-button" tabindex="0" role="button"><span class="k-button-text">انتخاب</span>
+                                              </div>
+                                                          <input id="${ofield}" name="${ofield}" type="file"  onchange="onSelect(this)" data-role="upload" aria-label="انتخاب" tabindex="-1" aria-hidden="true" autocomplete="off">
+                                              </div>
+                                              </div>
+                                              </div>
+                                                      <script>kendo.syncReady(function(){jQuery("#${ofield}").kendoUpload({"success":onSelect,"dropZone":".dropZoneElement","multiple":false,"showFileList":true,"validation":{"allowedExtensions":[".jpg",".jpeg",".png",".bmp",".gif"],"minFileSize":1000}});});
+                                function onSelect(e) {
+                let overimg = false;
+                let file;
+                for (var i = 0; i < e.files.length; i++) {
+                    if (i == 0) {
+                        file = e.files[i];
+
+                        if (file) {
+                            var reader = new FileReader();
+
+                            reader.onloadend = function () {
+                                        $("#img${ofield}").html("<div class='image-logo'><img class='image-logo-img' src=" + this.result + " /></div>");
+                            };
+
+                            reader.readAsDataURL(file);
+
+                        }
+                    }
+                    else {
+                        overimg = true;
+
+                    }
+                }
+                if (overimg) {
+                    if (file) {
+                      //  e.files = [...file];
+                    }
+                }
+            }
+
+                         <\/script>`;
+        $(temphtml).appendTo(container)
+        //.kendoUpload();
+
+    }
+
+
     function filterBusinessCategories(e) {
         return kendo.ui.ComboBox.requestData($("#CategoryId"));
     }

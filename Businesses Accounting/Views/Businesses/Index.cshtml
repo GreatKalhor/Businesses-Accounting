@@ -17,7 +17,7 @@ Html.Kendo().Grid<Businesses_Accounting.Models.Business>()
                            {
                                columns.Bound(model => model.LogoUrl).ClientHeaderTemplate(" ").Filterable(false).Sortable(false).ClientTemplate("<div class='image-min-logo'><img class='image-logo-img' src='#:data.LogoUrl#' /></div>").Width(70);
                                columns.Bound(model => model.Name).ClientHeaderTemplate("نام");
-                               columns.Bound(model => model.Id).Filterable(false).ClientHeaderTemplate(" ").ClientTemplate(@"<a href='" + @Url.Action("Edit", "Businesses", new { Id = "#:data.Id#" }) + @"'>ویرایش</a> |  <a href='" + @Url.Action("Delete", "Businesses", new { Id = "#:data.Id#" }) + @"'>حذف</a> |  <a href='" + @Url.Action("Check", "Dashbord", new { area = "Panel", businessId = "#:data.Id#" }) + @"'>ورود به کسب و کار</a>  ").Width(430);
+                               columns.Bound(model => model.Id).Filterable(false).ClientHeaderTemplate(" ").ClientTemplate(@"<a href='" + @Url.Action("Edit", "Businesses", new { Id = "#:data.Id#" }) + @"'>ویرایش</a> |  <a href='javascript:;' onclick='showDialogDelete(`" + @Url.Action("Delete", "Businesses", new { Id = "#:data.Id#" }) + "`)'>حذف</a> |  <a href='" + @Url.Action("Check", "Dashbord", new { area = "Panel", businessId = "#:data.Id#" }) + @"'>ورود به کسب و کار</a>  ").Width(430);
                           
                 })
 

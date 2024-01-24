@@ -80,7 +80,7 @@
             </main>
         </div>
     </div>
-
+    <script src="~/js/site.js"></script>
     <script>
 
         $(document).ready(function () {
@@ -181,8 +181,35 @@
                 });
             };
         });
+
     </script>
 
+
+    <script>
+
+
+
+
+
+
+        function showDialogDelete(id) {
+            appConfirm("آیا مطمئن هستی؟", "حذف", "تایید", "خیر").then(function () {
+                $.ajax({
+                    url: id,
+                    method: "POST",
+                    success: function (result) {
+                        appAlert(result);
+                        location.reload();
+
+                    }
+                });
+            }, function () {
+
+
+            })
+        }
+
+    </script>
     <style>
         body {
             margin: 0px;
@@ -241,8 +268,9 @@
             padding-left: 3 px;
         }
     </style>
-
     @await RenderSectionAsync("Scripts", required: false)
+  
+
 </body>
 
 </html>

@@ -79,22 +79,22 @@ namespace Businesses_Accounting.Controllers
 
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Businesses == null)
+            if (id == null )
             {
                 return NotFound();
             }
 
-            Business? business;
+
             using (BusinessServices bs = new BusinessServices(_context))
             {
-                business = await bs.FindAsync(id.Value);
-            }
-            if (business == null)
-            {
-                return NotFound();
-            }
+                var business = await bs.FindAsync(id.Value);
+                if (business == null)
+                {
+                    return NotFound();
+                }
 
-            return View(new CreateBusinessViewModel(business));
+                return View(new CreateBusinessViewModel(business));
+            }
         }
 
         [HttpPost]
@@ -136,14 +136,14 @@ namespace Businesses_Accounting.Controllers
         }
 
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+       // [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             using (BusinessServices bs = new BusinessServices(_context))
             {
                 await bs.DeleteBusiness(id, CurrentUserId);
             }
-            return RedirectToAction("Index", "Businesses");
+            return Json(" در حال لود مجدد...");
         }
 
 
