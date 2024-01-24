@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Authorization;
 using Businesses_Accounting.Services;
 using Businesses_Accounting.Models.ViewModels;
 using Businesses_Accounting.Resources;
+using Businesses_Accounting.Helper;
 
 namespace Businesses_Accounting.Controllers
 {
@@ -21,9 +22,11 @@ namespace Businesses_Accounting.Controllers
     public class BusinessesController : GreatController
     {
         private readonly BA_dbContext _context;
+        private Microsoft.AspNetCore.Hosting.IHostingEnvironment Environment;
 
-        public BusinessesController(BA_dbContext context)
+        public BusinessesController(BA_dbContext context, Microsoft.AspNetCore.Hosting.IHostingEnvironment _environment)
         {
+            Environment = _environment;
             _context = context;
         }
 
@@ -56,12 +59,18 @@ namespace Businesses_Accounting.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateBusinessViewModel business)
         {
-            var ss=Request;
+
             if (ModelState.IsValid)
             {
                 using (BusinessServices bs = new BusinessServices(_context))
                 {
+                    var filenames = FileHelper.SaveFiles(business.files, Environment, "Business");
+                    if (filenames.Count > 0)
+                    {
+                        business.ImageUrl = filenames[0];
+                    }
                     int id = await bs.InsertBusiness(business, CurrentUserId);
+
                     return RedirectToAction("Check", "Dashbord", new { area = "Panel", businessId = id });
                 }
             }
@@ -96,6 +105,11 @@ namespace Businesses_Accounting.Controllers
             {
                 using (BusinessServices bs = new BusinessServices(_context))
                 {
+                    var filenames = FileHelper.SaveFiles(business.files, Environment, "Business");
+                    if (filenames.Count > 0)
+                    {
+                        business.ImageUrl = filenames[0];
+                    }
                     await bs.UpdateBusiness(business, CurrentUserId);
                 }
                 return RedirectToAction("Index", "Businesses");

@@ -20,7 +20,6 @@ public partial class Currency
         BusinessCurrencyConversions = currency.BusinessCurrencyConversions; 
         ProductPriceLists = currency.ProductPriceLists;
         ServicePriceLists = currency.ServicePriceLists;
-        Businesses = currency.Businesses;
         FixValeus = fixValeus;
     }
     [NotMapped]
@@ -42,6 +41,4 @@ public partial class Currency
     public virtual ICollection<ProductPriceList> ProductPriceLists { get; set; } = new List<ProductPriceList>();
 
     public virtual ICollection<ServicePriceList> ServicePriceLists { get; set; } = new List<ServicePriceList>();
-
-    public virtual ICollection<Business> Businesses { get; set; } = new List<Business>();
 }

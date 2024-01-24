@@ -11,5 +11,7 @@ public partial class BusinessType
 
     public string Name { get; set; }
 
+    public int LanguageId { get; set; }
+
     public virtual ICollection<Business> Businesses { get; set; } = new List<Business>();
 }

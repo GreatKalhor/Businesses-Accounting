@@ -20,6 +20,7 @@ namespace Businesses_Accounting.Models.ViewModels
                 LanguageId = b.LanguageId;
                 LegalName = b.LegalName;
                 TypeId = b.TypeId;
+                ImageUrl = b.LogoUrl;
                 var _BusinessFinancialInfos = b.BusinessFinancialInfos.FirstOrDefault();
                 if (_BusinessFinancialInfos != null)
                 {

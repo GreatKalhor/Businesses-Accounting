@@ -10,8 +10,6 @@ public partial class AspNetUser
     public Guid Id { get; set; }
 
     public string UserName { get; set; }
-    public string FullName { get; set; }
-    public string ImageUrl { get; set; }
 
     public string NormalizedUserName { get; set; }
 
@@ -38,6 +36,10 @@ public partial class AspNetUser
     public bool LockoutEnabled { get; set; }
 
     public int AccessFailedCount { get; set; }
+
+    public string ImageUrl { get; set; }
+
+    public string FullName { get; set; }
 
     public virtual ICollection<AspNetUserClaim> AspNetUserClaims { get; set; } = new List<AspNetUserClaim>();
 

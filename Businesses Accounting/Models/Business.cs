@@ -72,6 +72,4 @@ public partial class Business
     public virtual ICollection<SubAccount> SubAccounts { get; set; } = new List<SubAccount>();
 
     public virtual BusinessType Type { get; set; }
-
-    public virtual ICollection<Currency> Currencies { get; set; } = new List<Currency>();
 }

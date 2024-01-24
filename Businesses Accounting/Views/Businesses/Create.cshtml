@@ -92,7 +92,7 @@
                         var reader = new FileReader();
 
                         reader.onloadend = function () {
-                            $("#img${ofield}").html("<div class=''><img src=" + this.result + " /></div>");
+                                    $("#img${ofield}").html("<div class='image-logo'><img class='image-logo-img' src=" + this.result + " /></div>");
                         };
 
                         reader.readAsDataURL(file);

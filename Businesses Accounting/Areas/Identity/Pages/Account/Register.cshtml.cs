@@ -138,7 +138,7 @@ namespace Businesses_Accounting.Areas.Identity.Pages.Account
                     {
                         var _user = us.GetUser(Input.Email);
                         _user.FullName= Input.FullName;
-                        _user.ImageUrl = "../img/Avatar.svg";
+                        _user.ImageUrl = "/img/Avatar.svg";
                         _user.EmailConfirmed = !_userManager.Options.SignIn.RequireConfirmedAccount;
                         await us.UpdateUser(_user);
 

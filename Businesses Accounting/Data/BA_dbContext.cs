@@ -162,11 +162,11 @@ namespace Businesses_Accounting.Data
             {
                 entity.Property(e => e.Id).ValueGeneratedNever();
                 entity.Property(e => e.Email).HasMaxLength(256);
+                entity.Property(e => e.FullName).HasMaxLength(256);
+                entity.Property(e => e.ImageUrl).HasMaxLength(256);
                 entity.Property(e => e.NormalizedEmail).HasMaxLength(256);
                 entity.Property(e => e.NormalizedUserName).HasMaxLength(256);
                 entity.Property(e => e.UserName).HasMaxLength(256);
-                entity.Property(e => e.ImageUrl).HasMaxLength(256);
-                entity.Property(e => e.FullName).HasMaxLength(256);
 
                 entity.HasMany(d => d.Roles).WithMany(p => p.Users)
                     .UsingEntity<Dictionary<string, object>>(
@@ -242,25 +242,7 @@ namespace Businesses_Accounting.Data
 
                 entity.HasOne(d => d.Type).WithMany(p => p.Businesses)
                     .HasForeignKey(d => d.TypeId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Businesses_BusinessTypes");
-
-                entity.HasMany(d => d.Currencies).WithMany(p => p.Businesses)
-                    .UsingEntity<Dictionary<string, object>>(
-                        "BusinessCurrency",
-                        r => r.HasOne<Currency>().WithMany()
-                            .HasForeignKey("CurrencyId")
-                            .OnDelete(DeleteBehavior.ClientSetNull)
-                            .HasConstraintName("FK_BusinessCurrencies_Currencies"),
-                        l => l.HasOne<Business>().WithMany()
-                            .HasForeignKey("BusinessId")
-                            .OnDelete(DeleteBehavior.ClientSetNull)
-                            .HasConstraintName("FK_BusinessCurrencies_Businesses"),
-                        j =>
-                        {
-                            j.HasKey("BusinessId", "CurrencyId");
-                            j.ToTable("BusinessCurrencies");
-                        });
             });
 
             modelBuilder.Entity<BusinessBanking>(entity =>
@@ -280,7 +262,6 @@ namespace Businesses_Accounting.Data
 
                 entity.HasOne(d => d.Business).WithMany(p => p.BusinessBankings)
                     .HasForeignKey(d => d.BusinessId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_BusinessBanking_Businesses");
 
                 entity.HasOne(d => d.Currency).WithMany(p => p.BusinessBankings)
@@ -327,7 +308,6 @@ namespace Businesses_Accounting.Data
 
                 entity.HasOne(d => d.Business).WithMany(p => p.BusinessCategories)
                     .HasForeignKey(d => d.BusinessId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_BusinessCategories_BusinessCategories");
             });
 
@@ -341,7 +321,6 @@ namespace Businesses_Accounting.Data
 
                 entity.HasOne(d => d.Business).WithMany(p => p.BusinessCurrencyConversions)
                     .HasForeignKey(d => d.BusinessId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_BusinessCurrencyConversion_Businesses");
 
                 entity.HasOne(d => d.Currency).WithMany(p => p.BusinessCurrencyConversions)
@@ -356,7 +335,6 @@ namespace Businesses_Accounting.Data
 
                 entity.HasOne(d => d.Business).WithMany(p => p.BusinessFinancialInfos)
                     .HasForeignKey(d => d.BusinessId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_BusinessFinancialInfo_Businesses");
             });
 
@@ -372,7 +350,6 @@ namespace Businesses_Accounting.Data
 
                 entity.HasOne(d => d.Business).WithMany(p => p.BusinessFiscalYears)
                     .HasForeignKey(d => d.BusinessId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_BusinessFiscalYear_Businesses");
             });
 
@@ -398,7 +375,6 @@ namespace Businesses_Accounting.Data
 
                 entity.HasOne(d => d.Business).WithMany(p => p.BusinessProducts)
                     .HasForeignKey(d => d.BusinessId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_BusinessProducts_Businesses");
 
                 entity.HasOne(d => d.Category).WithMany(p => p.BusinessProducts)
@@ -416,7 +392,6 @@ namespace Businesses_Accounting.Data
 
                 entity.HasOne(d => d.Business).WithMany(p => p.BusinessProjects)
                     .HasForeignKey(d => d.BusinessId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_BusinessProjects_Businesses");
             });
 
@@ -438,7 +413,6 @@ namespace Businesses_Accounting.Data
 
                 entity.HasOne(d => d.Business).WithMany(p => p.BusinessServices)
                     .HasForeignKey(d => d.BusinessId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_BusinessServices_Businesses");
 
                 entity.HasOne(d => d.Category).WithMany(p => p.BusinessServices)
@@ -458,7 +432,6 @@ namespace Businesses_Accounting.Data
             {
                 entity.HasOne(d => d.Business).WithMany(p => p.BusinessUsers)
                     .HasForeignKey(d => d.BusinessId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_BusinessUsers_Businesses");
 
                 entity.HasOne(d => d.User).WithMany(p => p.BusinessUsers)
@@ -481,7 +454,6 @@ namespace Businesses_Accounting.Data
 
                 entity.HasOne(d => d.Business).WithMany(p => p.Contacts)
                     .HasForeignKey(d => d.BusinessId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Contacts_Businesses");
 
                 entity.HasOne(d => d.Category).WithMany(p => p.Contacts)
@@ -588,7 +560,6 @@ namespace Businesses_Accounting.Data
 
                 entity.HasOne(d => d.BusinessFiscalYear).WithMany(p => p.Documents)
                     .HasForeignKey(d => d.BusinessFiscalYearId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Documents_BusinessFiscalYear");
 
                 entity.HasOne(d => d.Project).WithMany(p => p.Documents)
@@ -635,7 +606,6 @@ namespace Businesses_Accounting.Data
 
                 entity.HasOne(d => d.Business).WithMany(p => p.Salesmen)
                     .HasForeignKey(d => d.BusinessId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Salesmen_Businesses");
             });
 
@@ -695,7 +665,8 @@ namespace Businesses_Accounting.Data
 
                 entity.HasOne(d => d.Business).WithMany(p => p.SubAccounts)
                     .HasForeignKey(d => d.BusinessId)
-                    .HasConstraintName("FK_SubAccount_Businesses");
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .HasConstraintName("FK_SubAccounts_Businesses");
             });
 
             OnModelCreatingPartial(modelBuilder);
@@ -706,7 +677,7 @@ namespace Businesses_Accounting.Data
 }
 
 
-namespace Businesses_Accounting
+    namespace Businesses_Accounting
 {
     public class CurrentUser
     {

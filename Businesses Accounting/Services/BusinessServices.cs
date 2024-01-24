@@ -40,7 +40,7 @@ namespace Businesses_Accounting.Services
             int id = 0;
             if (userId is not null)
             {
-                var _b = new Business() { Name = business.Name, LanguageId = business.LanguageId, LegalName = business.LegalName, TypeId = business.TypeId };
+                var _b = new Business() { Name = business.Name, LanguageId = business.LanguageId, LegalName = business.LegalName, TypeId = business.TypeId, LogoUrl = business.ImageUrl };
                 db.Add(_b);
                 await db.SaveChangesAsync();
                 if (_b.Id > 0)
@@ -77,6 +77,7 @@ namespace Businesses_Accounting.Services
                     _b.LanguageId = business.LanguageId;
                     _b.LegalName = business.LegalName;
                     _b.TypeId = business.TypeId;
+                    _b.LogoUrl = business.ImageUrl;
                     db.Businesses.Update(_b);
                     await db.SaveChangesAsync();
 
@@ -157,11 +158,17 @@ namespace Businesses_Accounting.Services
 
         public async Task DeleteBusiness(int id, Guid? userId)
         {
-            var bus = await db.BusinessUsers.Where(x => x.UserId == userId.Value && x.AccessTypeId == ((int)AccessType.Owner) && x.BusinessId == id).Include(b => b.Business).ToListAsync();
-            if (bus != null && bus.Count > 0)
+            try
             {
-                db.Businesses.Remove(bus.FirstOrDefault().Business);
-                await db.SaveChangesAsync();
+                var bus = await db.BusinessUsers.Where(x => x.UserId == userId.Value && x.AccessTypeId == ((int)AccessType.Owner) && x.BusinessId == id).Include(b => b.Business).ToListAsync();
+                if (bus != null && bus.Count > 0)
+                {
+                    db.Businesses.Remove(bus.FirstOrDefault().Business);
+                    await db.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex)
+            {
             }
 
         }

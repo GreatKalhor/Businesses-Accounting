@@ -70,6 +70,7 @@
     <Folder Include="Areas\Identity\Pages\Shared\" />
     <Folder Include="Areas\Panel\Data\" />
     <Folder Include="Areas\Panel\Models\" />
+    <Folder Include="Utilities\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration" Version="7.0.11" />
