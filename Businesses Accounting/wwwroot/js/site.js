@@ -2,7 +2,7 @@
 // for details on configuring this project to bundle and minify static web assets.
 
 // Write your JavaScript code.
-function appAlert(content, title,btntext) {
+function appAlert(content, title = ' ', btntext = 'تایید') {
     $("<div></div>").kendoAlert({
         title: title,
         content: content,
@@ -85,4 +85,13 @@ function getImageEditor(fieldName, imageUrl) {
          <\/script>`;
     return temphtml;
 
+}
+
+function getGridImageBox(src) {
+    let ans = `<div class='image-min-logo'>`;
+    if (src) {
+        ans += `<img class='image-logo-img' src='${src}#' />`;
+    }
+    ans += `</div>`;
+    return ans
 }

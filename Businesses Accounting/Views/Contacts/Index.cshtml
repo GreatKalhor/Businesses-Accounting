@@ -14,7 +14,7 @@
                            .Name("grid")
                            .Columns(columns =>
                            {
-                               columns.Bound(model => model.ImageUrl).ClientHeaderTemplate(" ").Filterable(false).Sortable(false).ClientTemplate("<div class='image-min-logo'><img class='image-logo-img' src='#:data.ImageUrl#' /></div>").Width(70);
+                               columns.Bound(model => model.ImageUrl).ClientHeaderTemplate(" ").Filterable(false).Sortable(false).ClientTemplate("#=getGridImageBox(data.ImageUrl)#").Width(70);
                                columns.Bound(model => model.DisplayName);
                                columns.Bound(model => model.Company);
                                columns.Bound(model => model.IsActive);
