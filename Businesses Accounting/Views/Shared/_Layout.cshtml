@@ -74,13 +74,13 @@
                 <div class="k-d-flex-col ">
 
                     <div id="dashboard-tilelayout" name="dashboard-tilelayout" data-role="tilelayout" class="k-widget k-tilelayout" role="list" >
+    <script src="~/js/site.js"></script>
                         @RenderBody()
                     </div>
                 </div>
             </main>
         </div>
     </div>
-    <script src="~/js/site.js"></script>
     <script>
 
         $(document).ready(function () {
@@ -185,31 +185,7 @@
     </script>
 
 
-    <script>
-
-
-
-
-
-
-        function showDialogDelete(id) {
-            appConfirm("آیا مطمئن هستی؟", "حذف", "تایید", "خیر").then(function () {
-                $.ajax({
-                    url: id,
-                    method: "POST",
-                    success: function (result) {
-                        appAlert(result);
-                        location.reload();
-
-                    }
-                });
-            }, function () {
-
-
-            })
-        }
-
-    </script>
+   
     <style>
         body {
             margin: 0px;

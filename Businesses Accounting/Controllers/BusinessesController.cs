@@ -117,33 +117,14 @@ namespace Businesses_Accounting.Controllers
             return View(business);
         }
 
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            using (BusinessServices bs = new BusinessServices(_context))
-            {
-                var business = await bs.FindAsync(id.Value);
-                if (business == null)
-                {
-                    return NotFound();
-                }
-                return View(business);
-            }
-        }
-
         [HttpPost, ActionName("Delete")]
-       // [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             using (BusinessServices bs = new BusinessServices(_context))
             {
                 await bs.DeleteBusiness(id, CurrentUserId);
             }
-            return Json(" در حال لود مجدد...");
+            return Json("<p><span>عملیات با موفقیت انجام شد</span></p><p><span> در حال لود مجدد...</span>");
         }
 
 

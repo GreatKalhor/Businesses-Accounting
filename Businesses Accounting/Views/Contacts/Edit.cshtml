@@ -31,10 +31,11 @@
                 i.Add().Field(f => f.Employee).Editor(e => { e.Hidden(); });
                 i.Add().Field(f => f.IsVendor).Editor(e => { e.Hidden(); });
                 i.Add().Field(f => f.BusinessId).Label(l => l.Text("BusinessId:")).Editor(e => { e.Hidden(); });
+                i.Add().Field(f => f.files).Label(l => l.Text(" ")).EditorTemplateHandler("uploadEditor");
                 i.Add().Field(f => f.Company).Editor(e => { e.TextBox().HtmlAttributes(new { required = "required" }); });
                 i.Add().Field(f => f.TitleC).Editor(e => { e.TextBox(); });
-                i.Add().Field(f => f.LastName).Editor(e => { e.TextBox(); });
                 i.Add().Field(f => f.FirstName).Editor(e => { e.TextBox(); });
+                i.Add().Field(f => f.LastName).Editor(e => { e.TextBox(); });
                 i.Add().Field(f => f.DisplayName).Editor(e => { e.TextBox(); });
                 i.Add().Field(f => f.CategoryId).Editor(e => { e.ComboBox().Filter(FilterType.Contains).MinLength(3).Placeholder("انتخاب کنید...").DataTextField("Title").DataValueField("Id").HtmlAttributes(new { style = "width:100%" }).Height(520).DataSource(source => { source.Read(read => { read.Action("Items_BusinessCategories", "Basic").Data("filterBusinessCategories"); }).ServerFiltering(true); }); });
                 i.Add().Field(f => f.Type).Editor(e =>
@@ -45,20 +46,28 @@
             .BindTo(Model.Type.Items).Events(e => e.Select("onCheckBoxGroupSelect"));
             });
             });
-            items.AddGroup()
-            .Label("تنظیمات مالی")//.Layout("<div class'k-columns-2'>")
+          @*   items.AddGroup()
+            //.Label("تنظیمات مالی")//.Layout("<div class'k-columns-2'>")
             .Items(i =>
             {
 
                 i.Add().Field(f => f.IsActive).Editor(e => { e.Switch().Messages(c => c.Checked("فعال").Unchecked("غیر فعال")); });
 
-            });
+            }); *@
         })//.HtmlAttributes(new {@class="k-columns-2"})
           //  .Events(ev => ev.ValidateField("onFormValidateField").Clear("onFormClear"))
         )
 </div>
 
 <script>
+    function uploadEditor(container, options) {
+
+        let ofield = options.field;
+        let imageurl = options.model.ImageUrl;
+        $(getImageEditor(ofield, imageurl)).appendTo(container)
+        //.kendoUpload();
+    
+    }
     function filterBusinessCategories(e) {
         return kendo.ui.ComboBox.requestData($("#CategoryId"));
     }
@@ -100,7 +109,20 @@
         let el = document.getElementById(hItemid);
         el.value = selected;
     }
-
+    function settypevalue() {
+        var newValue = []
+    @{
+        var txt = "";
+        var listitems = Model.Type.CheckBoxGroupValue;
+        foreach (var item in listitems)
+        {
+            txt += $"newValue.push({item});";
+        }
+    }
+    @Html.Raw(txt)
+                var checkBoxGroup = $("#Type").data("kendoCheckBoxGroup");
+        checkBoxGroup.value(newValue);
+    }
     function onFormSubmit(e) {
         e.preventDefault();
         $("#validation-success").html("<div class='k-messagebox k-messagebox-success'>Form data is valid!</div>");
@@ -109,6 +131,9 @@
     function onFormClear(e) {
         $("#validation-success").html("");
     }
+    $(document).ready(function () { 
+        settypevalue();
+    });
 </script>
 
 <div>

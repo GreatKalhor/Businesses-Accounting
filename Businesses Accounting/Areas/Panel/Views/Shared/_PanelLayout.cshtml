@@ -236,22 +236,7 @@
 
 
 
-        function showDialogDelete(id) {
-            appConfirm("آیا مطمئن هستی؟", "حذف", "تایید", "خیر").then(function () {
-                $.ajax({
-                    url: id,
-                    method: "POST",
-                    success: function (result) {
-                        appAlert(result);
-                        location.reload();
-
-                    }
-                });
-            }, function () {
-
-
-            })
-        }
+     
 
     </script>
 </body>

@@ -9,10 +9,12 @@ namespace Businesses_Accounting.Models.ViewModels
         public CreateBusinessViewModel()
         {
             CurrenciesIds = new List<int>();
+            files = new List<IFormFile>();
         }
         public CreateBusinessViewModel(Business b)
         {
             CurrenciesIds = new List<int>();
+            files = new List<IFormFile>();
             if (b is not null)
             {
                 Name = b.Name;

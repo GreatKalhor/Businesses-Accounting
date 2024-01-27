@@ -8,46 +8,28 @@ namespace Businesses_Accounting.Models.ViewModels;
 
 public partial class CreateContactViewModel
 {
+
     public CreateContactViewModel()
     {
-        Type = new CheckBoxGroupViewModel()
-        {
-            Items = new List<Kendo.Mvc.UI.IInputGroupItem>()
-        {
-            new InputGroupItemModel ()
-                {
-                    Label = "مشتری",
-                    Enabled = true,
-                    Encoded = false,
-                // CssClass = "blue",
-                    Value = "1"
-                },
-            new InputGroupItemModel ()
-                {
-                    Label = "تامین کننده",
-                    Enabled = true,
-                    Encoded = false,
-                   // CssClass = "blue",
-                    Value = "2"
-                },
-           new InputGroupItemModel ()
+        files=new List<IFormFile>();
+    }
+    public CreateContactViewModel(Contact contact)
     {
-        Label = "سهامدار",
-        Enabled = true,
-        Encoded = false,
-       // CssClass = "blue",
-        Value = "3"
-    },new InputGroupItemModel ()
-    {
-        Label = "کارمند",
-        Enabled = true,
-        Encoded = false,
-       // CssClass = "blue",
-        Value = "4"
-    },
-        },
-            CheckBoxGroupValue = new string[] { "1", "2", "3", "4" }
-        };
+        files = new List<IFormFile>();
+        this.Id = contact.Id;
+        this.BusinessId = contact.BusinessId;
+        this.IsActive = contact.IsActive;
+        this.Company = contact.Company;
+        this.TitleC = contact.Title;
+        this.FirstName = contact.FirstName;
+        this.LastName = contact.LastName;
+        this.DisplayName = contact.DisplayName;
+        this.CategoryId = contact.CategoryId;
+        this.ImageUrl = contact.ImageUrl;
+        this.IsCustomer = contact.IsCustomer;
+        this.IsVendor = contact.IsVendor;
+        this.IsStockholder = contact.IsStockholder;
+        this.Employee = contact.Employee;
     }
     public int Id { get; set; }
 
@@ -92,7 +74,74 @@ public partial class CreateContactViewModel
     public bool? Employee { get; set; }
 
     [Display(Name = "نوع")]
-    public CheckBoxGroupViewModel? Type { get; set; }
+    public CheckBoxGroupViewModel? Type
+    {
+        get
+        {
+
+            var ans = new CheckBoxGroupViewModel()
+            {
+                Items = new List<Kendo.Mvc.UI.IInputGroupItem>()
+                {
+                        new InputGroupItemModel ()
+                        {
+                            Label = "مشتری",
+                            Enabled = true,
+                            Encoded = false,
+                        // CssClass = "blue",
+                            Value = "1"
+                        },
+                        new InputGroupItemModel ()
+                        {
+                            Label = "تامین کننده",
+                            Enabled = true,
+                            Encoded = false,
+                           // CssClass = "blue",
+                            Value = "2"
+                        },
+                        new InputGroupItemModel ()
+                        {
+                            Label = "سهامدار",
+                            Enabled = true,
+                            Encoded = false,
+                           // CssClass = "blue",
+                            Value = "3"
+                        },
+                        new InputGroupItemModel ()
+                        {
+                            Label = "کارمند",
+                            Enabled = true,
+                            Encoded = false,
+                           // CssClass = "blue",
+                            Value = "4"
+                        },
+                },
+                CheckBoxGroupValue = new string[] {}
+
+
+
+            };
+            List<string> strings = new List<string>();
+            if (this.IsCustomer != null ? this.IsCustomer.Value : false)
+            {
+                strings.Add("1");
+            }
+            if (this.IsVendor != null ? this.IsVendor.Value : false)
+            {
+                strings.Add("2");
+            }
+            if (this.IsStockholder != null ? this.IsStockholder.Value : false)
+            {
+                strings.Add("3");
+            }
+            if (this.Employee != null ? this.Employee.Value : false)
+            {
+                strings.Add("4");
+            }
+            ans .CheckBoxGroupValue=strings.ToArray ();
+            return ans;
+        }
+    }
 
     public Contact ToContact()
     {

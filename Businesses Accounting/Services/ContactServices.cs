@@ -46,8 +46,8 @@ namespace Businesses_Accounting.Services
         }
         public async Task UpdateContactAsync(CreateContactViewModel contact)
         {
-            var _c = await FindAsync(contact.Id);
-            if (_c != null && _c.BusinessId == contact.BusinessId)
+            var _c = db.Contacts.Where(x => x.Id == contact.Id && x.BusinessId == contact.BusinessId);
+            if (_c != null)
             {
                 db.Update(contact.ToContact());
                 await db.SaveChangesAsync();

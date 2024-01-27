@@ -10,15 +10,16 @@
     <a asp-action="Create">شخص جدید</a>
 </p>
 @(
-    Html.Kendo().Grid<Businesses_Accounting.Models.Contact>()
+    Html.Kendo().Grid<Businesses_Accounting.Models.ViewModels.CreateContactViewModel>()
                            .Name("grid")
                            .Columns(columns =>
                            {
+                               columns.Bound(model => model.ImageUrl).ClientHeaderTemplate(" ").Filterable(false).Sortable(false).ClientTemplate("<div class='image-min-logo'><img class='image-logo-img' src='#:data.ImageUrl#' /></div>").Width(70);
                                columns.Bound(model => model.DisplayName);
                                columns.Bound(model => model.Company);
                                columns.Bound(model => model.IsActive);
                                columns.Bound(model => model.Id).Filterable(false).ClientHeaderTemplate(" ")
-                               .ClientTemplate(@"<a href='" + @Url.Action("Edit", "Contacts", new { Id = "#:data.Id#" }) + @"'>Edit</a> |  <a href='" + @Url.Action("Delete", "Contacts", new { Id = "#:data.Id#" }) + @"'>Delete</a>  ").Width(430);
+                               .ClientTemplate(@"<a href='" + @Url.Action("Edit", "Contacts", new { Id = "#:data.Id#" }) + @"'>ویرایش</a> |  <a href='javascript:;' onclick='showDialogDelete(`" + @Url.Action("Delete", "Contacts", new { Id = "#:data.Id#" }) + "`,`آیا از حذف شخص #:data.DisplayName# مطمئن هستی؟`,`حذف شخص`)'>حذف</a>  ").Width(430);
                 })
 
                            .Pageable()
