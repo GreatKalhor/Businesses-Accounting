@@ -10,6 +10,8 @@
         .DataValueField("Value")
         .DataTextField("Text")
         .LoadOnDemand(true)
+        .AutoClose(true)
+        .Placeholder("انتخاب کنید")
         .DataSource(d => d
         .Read(r => r.Action("ReadAccountsDropDownTree", "Basic"))
         .Model(m => m.Id("Value").HasChildren("HasChildren").Children("Items"))
@@ -42,5 +44,4 @@
         .HtmlAttributes(new { style = "width:100%" })
         )
 </div>
-
 

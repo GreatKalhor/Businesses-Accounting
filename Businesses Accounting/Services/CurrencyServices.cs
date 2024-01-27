@@ -32,6 +32,16 @@ namespace Businesses_Accounting.Services
             }
             return GetBusinessCurrencies(businessid, mainCurrencyId);
         }
+        public int GetMainCurrencyId(int businessid)
+        {
+            int mainCurrencyId = 0;
+            using (BusinessFinancialInfoServices bfs = new BusinessFinancialInfoServices(db))
+            {
+                var bf = bfs.FindWithBusinessId(businessid);
+                if (bf != null) { mainCurrencyId = bf.MainCurrencyId; }
+            }
+            return mainCurrencyId;
+        }
         public List<Currency> GetAll()
         {
             return db.Currencies.ToList();

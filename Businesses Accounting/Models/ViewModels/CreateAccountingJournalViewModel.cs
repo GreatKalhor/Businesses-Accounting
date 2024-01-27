@@ -3,9 +3,28 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Text.RegularExpressions;
 
 namespace Businesses_Accounting.Models;
+public class AccountValidationAttribute : ValidationAttribute  //, IClientModelValidator
+{
+    public override bool IsValid(object value)
+    {
 
+        if (value == null) {  return false; }
+        var accountId = (int)value;
+        if (accountId < 1)
+        {
+            return false;
+        }
+        return true;
+    }
+
+    //public IEnumerable<ModelClientValidationRule> GetClientValidationRules(ClientModelValidationContext context)
+    //{
+    //	yield return new ModelClientValidationRule("productnamevalidation", ErrorMessage);
+    //}
+}
 public partial class CreateAccountingJournalViewModel
 {
     public int? Id { get; set; }
@@ -13,7 +32,9 @@ public partial class CreateAccountingJournalViewModel
     public int? DocumentId { get; set; }
     [UIHint("AccountEditor")]
     [Display(Name = "حساب")]
-    public int? AccountId { get; set; } = 1;
+    [Required]
+    [AccountValidationAttribute]
+    public int? AccountId { get; set; }
     public string Accounttxt { get; set; }
 
     public int? SubAccountId { get; set; }
@@ -40,6 +61,6 @@ public partial class CreateAccountingJournalViewModel
     public virtual Document Document { get; set; }
 
     public virtual SubAccount SubAccountNavigation { get; set; }
-    
+
 
 }

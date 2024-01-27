@@ -51,7 +51,7 @@ namespace Businesses_Accounting.Controllers
                     using (AccountServices _as = new AccountServices(_context))
                     {
                         model.Accounttxt = _as.GetAccountsTextFromParents(model.AccountId.Value);
-                    } 
+                    }
                 }
                 model.Id = i;
                 model.DocumentId = i;
@@ -89,7 +89,7 @@ namespace Businesses_Accounting.Controllers
                     using (AccountServices _as = new AccountServices(_context))
                     {
                         model.Accounttxt = _as.GetAccountsTextFromParents(model.AccountId.Value);
-                    } 
+                    }
                 }
                 model.Id = i;
                 model.DocumentId = i;
@@ -156,14 +156,22 @@ namespace Businesses_Accounting.Controllers
                 };
                 _context.Add(d);
                 await _context.SaveChangesAsync();
-                var c = _context.Currencies.Where(x => x.Name.Contains("IRR")).FirstOrDefault();
-                foreach (var item in document.AccountingJournals)
+                using (CurrencyServices cs = new CurrencyServices(_context))
                 {
-                    item.DocumentId = d.Id;
-                    item.CurrencyId = c.Id;
-                    _context.Add(item);
+                    int minacurrencyId = cs.GetMainCurrencyId(PanelUser.BusinessId);
+                    foreach (var item in document.AccountingJournals)
+                    {
+                        item.DocumentId = d.Id;
+                        item.CurrencyId = minacurrencyId;
+                        if (item.SubAccountId == 0)
+                        {
+                            item.SubAccountId = null;
+                        }
+                        _context.Add(item);
+                    }
                 }
                 await _context.SaveChangesAsync();
+
                 return RedirectToAction("Index", "Documents");
             }
             return View(document);
