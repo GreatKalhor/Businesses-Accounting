@@ -16,7 +16,7 @@
                            {
                                columns.Bound(model => model.Name);
                                columns.Bound(model => model.Note);
-                               columns.Bound(model => model.IsActive);
+                            //   columns.Bound(model => model.IsActive);
                                columns.Bound(model => model.Id).Filterable(false).ClientHeaderTemplate(" ")
                                .ClientTemplate(@"<a href='" + @Url.Action("Edit", "BusinessServices", new { Id = "#:data.Id#" }) + @"'>Edit</a> |  <a href='" + @Url.Action("Delete", "BusinessServices", new { Id = "#:data.Id#" }) + @"'>Delete</a>  ").Width(430);
                            })
