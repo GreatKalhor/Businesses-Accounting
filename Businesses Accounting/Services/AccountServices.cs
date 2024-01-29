@@ -18,6 +18,10 @@ namespace Businesses_Accounting.Services
         {
             return db.Accounts.Where(c => c.ParentId == null).Include(z => z.InverseParent).ThenInclude(z => z.InverseParent).ThenInclude(z => z.InverseParent).ThenInclude(z => z.InverseParent).Select(x => new ItemViewModel(x)).ToList();
         }
+        public List<ItemViewModel> GetAccountsForTreeflat()
+        {
+            return db.Accounts.Select(x => new ItemViewModel(x)).ToList();
+        }
         public string GetAccountsTextFromParents(int id)
         {
             string ans = "";

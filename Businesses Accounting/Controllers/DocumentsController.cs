@@ -38,9 +38,10 @@ namespace Businesses_Accounting.Controllers
             var dsResult = result.ToDataSourceResult(request);
             return Json(dsResult);
         }
-        [AcceptVerbs("Post")]
+        [AcceptVerbs("Get", "Post")]
         public ActionResult Editing_Create([DataSourceRequest] DataSourceRequest request, IEnumerable<CreateAccountingJournalViewModel> models)
         {
+            var ssss = Request;
             var _results = new List<CreateAccountingJournalViewModel>(models);
             var results = new List<CreateAccountingJournalViewModel>();
             for (int i = 0; i < _results.Count; i++)
@@ -61,7 +62,7 @@ namespace Businesses_Accounting.Controllers
             }
             return Json(results.ToDataSourceResult(request, ModelState));
         }
-
+        [AcceptVerbs("Get", "Post")]
         public ActionResult Editing_Seva([FromBody] IEnumerable<CreateAccountingJournalViewModel> models)
         {
             var results = new List<CreateAccountingJournalViewModel>(models);
@@ -70,13 +71,13 @@ namespace Businesses_Accounting.Controllers
             // results.Add(accountingJournal); 
             return Json("ok");
         }
-        [AcceptVerbs("Post")]
+        [AcceptVerbs("Get", "Post")]
         public ActionResult Editing_Read([DataSourceRequest] DataSourceRequest request, IEnumerable<CreateAccountingJournalViewModel> accountingJournal)
         {
             var results = new List<CreateAccountingJournalViewModel>(accountingJournal);
             return Json(results.ToDataSourceResult(request, ModelState));
         }
-        [AcceptVerbs("Post")]
+        [AcceptVerbs("Get", "Post")]
         public ActionResult Editing_Update([DataSourceRequest] DataSourceRequest request, IEnumerable<CreateAccountingJournalViewModel> models)
         {
             var _results = new List<CreateAccountingJournalViewModel>(models);
@@ -99,7 +100,7 @@ namespace Businesses_Accounting.Controllers
             }
             return Json(results.ToDataSourceResult(request, ModelState));
         }
-        [AcceptVerbs("Post")]
+        [AcceptVerbs("Get", "Post")]
         public ActionResult Editing_Destroy([DataSourceRequest] DataSourceRequest request, CreateAccountingJournalViewModel accountingJournal)
         {
             var results = new List<CreateAccountingJournalViewModel>();
@@ -161,13 +162,16 @@ namespace Businesses_Accounting.Controllers
                     int minacurrencyId = cs.GetMainCurrencyId(PanelUser.BusinessId);
                     foreach (var item in document.AccountingJournals)
                     {
-                        item.DocumentId = d.Id;
-                        item.CurrencyId = minacurrencyId;
-                        if (item.SubAccountId == 0)
+                        if (item.AccountId > 0 && (item.Debit > 0 || item.Credit > 0))
                         {
-                            item.SubAccountId = null;
+                            item.DocumentId = d.Id;
+                            item.CurrencyId = minacurrencyId;
+                            if (item.SubAccountId == 0)
+                            {
+                                item.SubAccountId = null;
+                            }
+                            _context.Add(item);
                         }
-                        _context.Add(item);
                     }
                 }
                 await _context.SaveChangesAsync();
@@ -250,21 +254,21 @@ namespace Businesses_Accounting.Controllers
 
         // POST: Documents/Delete/5
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Documents == null)
-            {
-                return Problem("Entity set 'BA_dbContext.Documents'  is null.");
-            }
-            var document = await _context.Documents.FindAsync(id);
+           
+            var document = await _context.Documents.Where(x => x.Id == id).FirstOrDefaultAsync();
             if (document != null)
             {
+                var ajs = _context.AccountingJournals.Where(a => a.DocumentId == document.Id).ToList();
+                foreach (var item in ajs)
+                {
+                    _context.AccountingJournals.Remove(item);
+                }
                 _context.Documents.Remove(document);
-            }
-
             await _context.SaveChangesAsync();
-            return RedirectToAction("Index", "Documents");
+            }
+            return Json("<p><span>عملیات با موفقیت انجام شد</span></p><p><span> در حال لود مجدد...</span>");
         }
 
         private bool DocumentExists(int id)

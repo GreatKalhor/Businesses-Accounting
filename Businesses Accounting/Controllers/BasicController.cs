@@ -27,6 +27,20 @@ namespace Businesses_Accounting.Controllers
                 return Json(_as.GetAccountsForTree());
             }
         }
+        public JsonResult AccountsDropDownTree(int? id)
+        {
+            using (AccountServices _as = new AccountServices(_context))
+            {
+                return Json(_as.GetAccountsForTreeflat());
+            }
+        }
+        public ActionResult AccountsText(int? id)
+        {
+            using (AccountServices _as = new AccountServices(_context))
+            {
+                return Json(id != null ? _as.GetAccountsTextFromParents(id.Value) : "");
+            }
+        }
         public JsonResult Items_GetLanguages(string text)
         {
             using (LanguageServices ls = new LanguageServices(_context))
@@ -65,7 +79,7 @@ namespace Businesses_Accounting.Controllers
             using (BusinessTypeServices bts = new BusinessTypeServices(_context))
             {
                 var businessTypes = bts.GetAll();
-                return Json(businessTypes.Where(p => p.Name.Contains(text ?? "")).ToList()); 
+                return Json(businessTypes.Where(p => p.Name.Contains(text ?? "")).ToList());
             }
         }
         public JsonResult Items_BusinessCategories(string text)

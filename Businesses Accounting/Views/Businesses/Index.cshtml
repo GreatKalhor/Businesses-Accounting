@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "کسب وکار های من";
 }
-
+<div style=" grid-column-end: span 4; grid-row-end: span 1;">
 <p>
     <a asp-action="Create">کسب و کار جدید</a>
 </p>
@@ -33,4 +33,4 @@ Html.Kendo().Grid<Businesses_Accounting.Models.Business>()
                                .Read("List", "Businesses")
                             )
        )
-  
+</div>

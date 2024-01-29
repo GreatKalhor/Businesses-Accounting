@@ -4,8 +4,8 @@
     ViewData["Title"] = "شخص جدید";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<div style=" grid-column-end: span 3; grid-row-end: span 1;"></div>
 
+<div style=" grid-column-end: span 2; grid-row-end: span 1;">
 <div class="demo-section">
     <div id="validation-success"></div>
     @(
@@ -59,7 +59,7 @@
           //  .Events(ev => ev.ValidateField("onFormValidateField").Clear("onFormClear"))
         )
 </div>
-
+</div>
 <script>
     function uploadEditor(container, options) {
         let ofield = options.field;

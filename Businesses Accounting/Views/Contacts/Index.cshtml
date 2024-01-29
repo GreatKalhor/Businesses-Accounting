@@ -4,7 +4,7 @@
     ViewData["Title"] = "اشخاص";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+<div style=" grid-column-end: span 4; grid-row-end: span 1;">
 
 <p>
     <a asp-action="Create">شخص جدید</a>
@@ -34,3 +34,4 @@
                                .Read("List", "Contacts")
                             )
        )
+        </div>

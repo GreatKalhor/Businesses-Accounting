@@ -22,7 +22,7 @@ namespace Businesses_Accounting.Models.ViewModels
             {
                 Items = new List<ItemViewModel>(x.InverseParent.Select(v => new ItemViewModel(v)));
             }
-            ParentId = x.ParentId;
+            ParentId = x.ParentId!=null?x.ParentId:0;
         }
       
         public int Value { get; set; }
@@ -32,6 +32,7 @@ namespace Businesses_Accounting.Models.ViewModels
         public int?  ParentId { get; set; }
 
         public bool HasChildren { get; set; }
+        public bool expanded { get; set; }
 
         public IEnumerable<ItemViewModel> Items { get; set; }   
     }
