@@ -17,7 +17,7 @@
                                columns.Bound(model => model.DocumentDate);
                                columns.Bound(model => model.Description);
                                columns.Bound(model => model.Id).Filterable(false).ClientHeaderTemplate(" ")
-            .ClientTemplate(@"<a href='" + @Url.Action("Edit", "Documents", new { Id = "#:data.Id#" }) + @"'>Edit</a> |  <a href='javascript:;' onclick='showDialogDelete(`" + @Url.Action("Delete", "Documents", new { Id = "#:data.Id#" }) + "`,`آیا از حذف این سند مطمئن هستی؟`,`با این کار تمام تراکنش های این سند حذف میشود`)'>حذف</a>   ").Width(430);
+            .ClientTemplate(@"<a href='" + @Url.Action("Edit", "Documents", new { Id = "#:data.Id#" }) + @"'>ویرایش</a> |  <a href='javascript:;' onclick='showDialogDelete(`" + @Url.Action("Delete", "Documents", new { Id = "#:data.Id#" }) + "`,`آیا از حذف این سند مطمئن هستی؟`,`با این کار تمام تراکنش های این سند حذف میشود`)'>حذف</a>   ").Width(430);
                            })
 
                            .Pageable()

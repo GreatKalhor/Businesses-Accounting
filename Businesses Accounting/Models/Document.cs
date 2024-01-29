@@ -2,6 +2,7 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Businesses_Accounting.Models;
 
@@ -18,9 +19,9 @@ public partial class Document
     public DateTime InsertDate { get; set; }
 
     public int? ProjectId { get; set; }
-
+    [Display(Name = "توضیحات")]
     public string Description { get; set; }
-
+    [Display(Name = "تاریخ سند")]
     public DateTime DocumentDate { get; set; }
 
     public int Amount { get; set; }

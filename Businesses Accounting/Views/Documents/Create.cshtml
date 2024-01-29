@@ -1,8 +1,15 @@
 ﻿@model Businesses_Accounting.Models.Document
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "سند جدید";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    List<AccountingJournal> mlist = new List<AccountingJournal>();
+    foreach (var item in Model.AccountingJournals)
+    {
+        item.Document = null;
+        mlist.Add(item);
+    }
+    var ajsmodel = JsonConvert.SerializeObject(mlist);
 }
 
 <div style=" grid-column-end: span 4; grid-row-end: span 1;">
@@ -189,7 +196,7 @@
 
 
 <script>
-
+    const journals = @(Html.Raw(ajsmodel));
     let flatData;
     async function getdata() {
 
@@ -202,13 +209,18 @@
         flatData = await myresp.json();
     }
     getdata();
-    function processTable(data, idField, foreignKey, rootLevel) {
+    function processTable(data, idField, foreignKey, rootLevel, val) {
         var hash = {};
 
         for (var i = 0; i < data.length; i++) {
             var item = data[i];
-            item.expanded = true;
             var id = item[idField];
+            if (val) {
+                if (val == id) {
+                    item.selected = true;
+                }
+            }
+            item.expanded = true;
             var parentId = item[foreignKey];
 
             hash[id] = hash[id] || [];
@@ -272,7 +284,31 @@
         }
         return true;
     }
-    function addNewRow() {
+    function addNewRow(journal) {
+        let journalAccountId = 0;
+        let journalDescription = '';
+        let journalDebit = 0;
+        let journalCredit = 0;
+        let journalId = 0;
+        let journalDocumentId = 0;
+        let journalSubAccountId = 0;
+        let journalSubAccount = '';
+        if (journal.AccountId) {
+            journalAccountId = journal.AccountId;
+            if (journal.Description != null)
+                journalDescription = journal.Description;
+            journalDebit = journal.Debit;
+            journalCredit = journal.Credit;
+            journalId = journal.Id;
+            journalDocumentId = journal.DocumentId;
+            journalSubAccountId = journal.SubAccountId;
+            journalSubAccount = journal.SubAccount;
+
+        }
+
+
+
+
         let filedname = "AccountingJournals[" + (counter - 1) + "]";
         var mdiv = document.getElementById('ajsdata');
         table.row
@@ -280,31 +316,35 @@
                 counter,
                 `<div class='gw-200'><input data-val='true' id='${filedname}.AccountIdShow' name='${filedname}.AccountIdShow' type='hidden'  value=''></div>`,
                 `<div class='gw-200'><span id="${filedname}.AccounttxtShow"></span></div>`,
-                `<div class='gw-200'><input data-val='true' id='${filedname}.Description' name='${filedname}.Description'   value=''></div>`,
+                `<div class='gw-200'><input data-val='true' id='${filedname}.Description' name='${filedname}.Description'   value='${journalDescription}'></div>`,
                 // counter + '.4',
-                `<div class='gw-180'><input data-val='true' id='${filedname}.Debit' name='${filedname}.Debit'  maxlength="15"  onkeypress="return isNumber(event,'${filedname}.Debit','${filedname}.Credit')" value='0'></div>`,
-                `<div class='gw-180'><input data-val='true' id='${filedname}.Credit' name='${filedname}.Credit'  maxlength="15"  onkeypress="return isNumber(event,'${filedname}.Credit','${filedname}.Debit')" value='0'></div>`,
+                `<div class='gw-180'><input data-val='true' id='${filedname}.Debit' name='${filedname}.Debit'  maxlength="15"  onkeypress="return isNumber(event,'${filedname}.Debit','${filedname}.Credit')" value='${journalDebit}'></div>`,
+                `<div class='gw-180'><input data-val='true' id='${filedname}.Credit' name='${filedname}.Credit'  maxlength="15"  onkeypress="return isNumber(event,'${filedname}.Credit','${filedname}.Debit')" value='${journalCredit}'></div>`,
                 //`<div class='gw-180'><input data-val='true' id='${filedname}.Amount' name='${filedname}.Amount'  maxlength="15"  onkeypress="return isNumber(event)" value=''></div>`,
-                '<button onclick="delRow(this)">حذف</button>'
+                '<button onclick="delRow(this)" class="btn btn-danger">حذف</button>'
             ])
             .draw(false);
 
-        let ss = `<div class='gw-200'><input data-val='true' id='${filedname}.Id' name='${filedname}.Id' type='hidden'  value='0'>
-                        <input data-val='true' id='${filedname}.Accounttxt' name='${filedname}.Accounttxt' type='hidden' value=''>
-                    <input data-val='true' id='${filedname}.AccountId' name='${filedname}.AccountId' type='hidden'  value='0'>
-                    <input data-val='true' id='${filedname}.DocumentId' name='${filedname}.DocumentId' type='hidden'  value='0'>
-                    <input data-val='true' id='${filedname}.SubAccountId' name='${filedname}.SubAccountId' type='hidden'  value='0'>
-                    <input data-val='true' id='${filedname}.SubAccount' name='${filedname}.SubAccount' type='hidden'  value=''></div>`;
+        let ss = `<div class='gw-200'><input data-val='true' id='${filedname}.Id' name='${filedname}.Id' type='hidden'  value='${journalId}'>
+                                                        <input data-val='true' id='${filedname}.Accounttxt' name='${filedname}.Accounttxt' type='hidden' value=''>
+                                                    <input data-val='true' id='${filedname}.AccountId' name='${filedname}.AccountId' type='hidden'  value='${journalAccountId}'>
+                                                        <input data-val='true' id='${filedname}.DocumentId' name='${filedname}.DocumentId' type='hidden'  value='${journalDocumentId}'>
+                                                        <input data-val='true' id='${filedname}.SubAccountId' name='${filedname}.SubAccountId' type='hidden'  value='${journalSubAccountId}'>
+                                                        <input data-val='true' id='${filedname}.SubAccount' name='${filedname}.SubAccount' type='hidden'  value='${journalSubAccount}'></div>`;
         mdiv.innerHTML = mdiv.innerHTML + ss;
 
         $(document.getElementById(filedname + ".AccountIdShow")).kendoDropDownTree({
             placeholder: "انتخاب کنید",
-            dataSource: processTable(flatData, "Value", "ParentId", 0),
+            dataSource: processTable(flatData, "Value", "ParentId", 0, journalAccountId),
             //height: "auto",
             // loadOnDemand: false,
             dataTextField: "Text",
+            value: 1,
             change: mymet
         });
+        var dropowntree = $(document.getElementById(filedname + ".AccountIdShow")).data("kendoDropDownTree");
+        setTimeout(() => { dropowntree.trigger("change"); }, 10)
+
         $(document.getElementById(filedname + ".Description")).kendoTextBox({
 
             placeholder: ""
@@ -335,5 +375,20 @@
     let counter = 1;
 
     document.querySelector('#addRow').addEventListener('click', addNewRow);
+    function loaded() {
+        setTimeout(() => {
+            if (flatData) {
+                for (var i = 0; i < journals.length; i++) {
+                    addNewRow(journals[i])
+                }
+            } else {
+                loaded()
+            }
+        }, 100)
+
+    }
+    $(document).ready(function () {
+        loaded();
+    });
 
 </script>

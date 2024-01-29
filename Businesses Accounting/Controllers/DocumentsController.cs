@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using Businesses_Accounting.Services;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
+using NuGet.Packaging.Signing;
 
 namespace Businesses_Accounting.Controllers
 {
@@ -189,7 +190,7 @@ namespace Businesses_Accounting.Controllers
                 return NotFound();
             }
 
-            var document = await _context.Documents.FindAsync(id);
+            var document = await _context.Documents.Where(c => c.Id == id.Value).Include(x => x.AccountingJournals).FirstOrDefaultAsync();
             if (document == null)
             {
                 return NotFound();
@@ -202,7 +203,7 @@ namespace Businesses_Accounting.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,BusinessFiscalYearId,Number,Reference,InsertDate,ProjectId,Description,DocumentDate,Amount")] Document document)
+        public async Task<IActionResult> Edit(int id, Document document)
         {
             if (id != document.Id)
             {
@@ -213,19 +214,78 @@ namespace Businesses_Accounting.Controllers
             {
                 try
                 {
-                    _context.Update(document);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!DocumentExists(document.Id))
+                    var accountingJournals = _context.AccountingJournals.Where(x => x.DocumentId == document.Id);
+                    List<AccountingJournal> fordel = new List<AccountingJournal>();
+                    List<AccountingJournal> forup = new List<AccountingJournal>();
+                    List<AccountingJournal> foradd = new List<AccountingJournal>();
+
+                    if (document.AccountingJournals.Any())
                     {
-                        return NotFound();
+                        var jids = document.AccountingJournals.Select(x => x.Id);
+                        fordel.AddRange(accountingJournals.Where(x => !jids.Contains(x.Id)));
+                        foradd.AddRange(document.AccountingJournals.Where(x => x.Id == 0));
+                        using (CurrencyServices cs = new CurrencyServices(_context))
+                        {
+                            int minacurrencyId = cs.GetMainCurrencyId(PanelUser.BusinessId);
+                            var collection = document.AccountingJournals.Where(x => x.Id != 0);
+                            foreach (var item in collection)
+                            {
+                                if (item.CurrencyId == 0)
+                                {
+                                    item.CurrencyId = minacurrencyId;
+                                }
+                                if (item.SubAccountId==0)
+                                {
+                                    item.SubAccountId = null;
+                                }
+                                if (item.Debit==0 &&item.Credit==0)
+                                {
+                                    fordel.Add(item);
+                                }
+                                else
+                                {
+
+                                forup.Add(item);
+                                }
+                            }
+                            if (fordel.Count > 0)
+                            {
+                                _context.RemoveRange(fordel);
+                            }
+                            if (forup.Count > 0)
+                            {
+                                _context.UpdateRange(forup);
+                            }
+                            foreach (var item in foradd)
+                            {
+                                if (item.AccountId > 0 && (item.Debit > 0 || item.Credit > 0))
+                                {
+                                    item.DocumentId = document.Id;
+                                    item.CurrencyId = minacurrencyId;
+                                    if (item.SubAccountId == 0)
+                                    {
+                                        item.SubAccountId = null;
+                                    }
+                                    _context.Add(item);
+                                }
+                            }
+                        }
                     }
                     else
                     {
-                        throw;
+                        if (accountingJournals.Any())
+                        {
+                            _context.RemoveRange(accountingJournals);
+                        }
                     }
+                    
+                    _context.Documents.Update(document);
+
+                    await _context.SaveChangesAsync();
+                }
+                catch (Exception ex)
+                {
+
                 }
                 return RedirectToAction("Index", "Documents");
             }
@@ -256,7 +316,7 @@ namespace Businesses_Accounting.Controllers
         [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-           
+
             var document = await _context.Documents.Where(x => x.Id == id).FirstOrDefaultAsync();
             if (document != null)
             {
@@ -266,7 +326,7 @@ namespace Businesses_Accounting.Controllers
                     _context.AccountingJournals.Remove(item);
                 }
                 _context.Documents.Remove(document);
-            await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
             }
             return Json("<p><span>عملیات با موفقیت انجام شد</span></p><p><span> در حال لود مجدد...</span>");
         }
