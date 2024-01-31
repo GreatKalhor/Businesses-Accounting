@@ -12,7 +12,6 @@ public partial class Account
     public string Name { get; set; }
 
     public int? ParentId { get; set; }
-
     public int SubAccountId { get; set; }
     public bool HasChildren { get { return InverseParent.Count() > 0; } }
 

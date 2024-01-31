@@ -3,14 +3,14 @@
 @{
     ViewData["Title"] = "ویرایش";
 }
-<div style=" grid-column-end: span 3; grid-row-end: span 1;">
+<div class="g-col-3 g-col-sm-4">
 
 <div class="demo-section">
     <div id="validation-success"></div>
-    @(
-        Html.Kendo().Form<Businesses_Accounting.Models.ViewModels.CreateBusinessViewModel>()
+        @(
+            Html.Kendo().Form<Businesses_Accounting.Models.ViewModels.CreateBusinessViewModel>()
             .Name("formExample")
-            .HtmlAttributes(new { action = "Create", method = "POST" })
+            .HtmlAttributes(new { action = "Edit", method = "POST" })
             .Validatable(v =>
             {
                 v.ValidateOnBlur(true);
@@ -22,46 +22,45 @@
                 .Label("لوگوی کسب و کار")//.Layout("<div class'k-columns-2'>")
                 .Items(i =>
                 {
-                    i.Add().Field(f => f.ImageUrl).Editor(e => e.Hidden());
                     i.Add().Field(f => f.files).Label(l => l.Text(" ")).EditorTemplateHandler("uploadEditor");
-            });
-            items.AddGroup()
+                });
+                items.AddGroup()
             .Label("ویرایش کسب و کار")//.Layout("<div class'k-columns-2'>")
-            .Items(i =>
-            {
-                i.AddAntiForgeryToken(Html.AntiForgeryToken());
-                i.Add().Field(f => f.Id).Label(l => l.Text("Id:")).Editor(e => { e.Hidden(); });
-                i.Add().Field(f => f.Name).Editor(e => { e.TextBox(); });
-                i.Add().Field(f => f.LanguageId).Editor(e => { e.ComboBox().Filter(FilterType.Contains).MinLength(3).Placeholder("انتخاب کنید...").DataTextField("Name").DataValueField("Id").HtmlAttributes(new { style = "width:100%" }).Height(520).DataSource(source => { source.Read(read => { read.Action("Items_GetLanguages", "Basic").Data("filterLanguages"); }).ServerFiltering(true); }); });
-                i.Add().Field(f => f.LegalName).Editor(e => { e.TextBox(); });
-                i.Add().Field(f => f.TypeId).Editor(e => { e.ComboBox().Filter(FilterType.Contains).MinLength(3).Placeholder("انتخاب کنید...").DataTextField("Name").DataValueField("Id").HtmlAttributes(new { style = "width:100%" }).Height(520).DataSource(source => { source.Read(read => { read.Action("Items_GetBusinessTypes", "Basic").Data("filterBusinessTypes"); }).ServerFiltering(true); }); });
-            });
-            items.AddGroup()
-            .Label("تنظیمات مالی")//.Layout("<div class'k-columns-2'>")
-            .Items(i =>
-            {
+                .Items(i =>
+                {
+                    i.AddAntiForgeryToken(Html.AntiForgeryToken());
+                    i.Add().Field(f => f.Id).Label(l => l.Text("Id:")).Editor(e => { e.Hidden(); });
+                    i.Add().Field(f => f.Name).Editor(e => { e.TextBox(); });
+                    //    i.Add().Field(f => f.LanguageId).Editor(e => { e.ComboBox().Filter(FilterType.Contains).MinLength(3).Placeholder("انتخاب کنید...").DataTextField("Name").DataValueField("Id").HtmlAttributes(new { style = "width:100%" }).Height(520).DataSource(source => { source.Read(read => { read.Action("Items_GetLanguages", "Basic").Data("filterLanguages"); }).ServerFiltering(true); }); });
+                    //    i.Add().Field(f => f.LegalName).Editor(e => { e.TextBox(); });
+                    i.Add().Field(f => f.TypeId).Editor(e => { e.ComboBox().Filter(FilterType.Contains).MinLength(3).Placeholder("انتخاب کنید...").DataTextField("Name").DataValueField("Id").HtmlAttributes(new { style = "width:100%" }).Height(520).DataSource(source => { source.Read(read => { read.Action("Items_GetBusinessTypes", "Basic").Data("filterBusinessTypes"); }).ServerFiltering(true); }); });
+                    //      });
+                    //      items.AddGroup()
+                    //         .Label("تنظیمات مالی")//.Layout("<div class'k-columns-2'>")
+                    //         .Items(i =>
+                    //         {
+                    //
+                    //             i.Add().Field(f => f.HasMultiCurrency).Editor(e => { e.Switch().Messages(c => c.Checked("بله").Unchecked("خیر")); });
+                    //             i.Add().Field(f => f.HasWarehouseManagement).Editor(e => { e.Switch().Messages(c => c.Checked("بله").Unchecked("خیر")); });
+                    //
+                    //         });
+                    //   items.AddGroup().Label(" ")
+                    // .Items(i =>
+                    //     {
 
-                i.Add().Field(f => f.HasMultiCurrency).Editor(e => { e.Switch().Messages(c => c.Checked("بله").Unchecked("خیر")); });
-                i.Add().Field(f => f.HasWarehouseManagement).Editor(e => { e.Switch().Messages(c => c.Checked("بله").Unchecked("خیر")); });
-
-            });
-            items.AddGroup().Label(" ")
-            .Items(i =>
-            {
-
-                i.Add().Field(f => f.MainCurrencyId).Editor(e => { e.ComboBox().Filter(FilterType.Contains).MinLength(3).Placeholder("انتخاب کنید...").DataTextField("Name").DataValueField("Id").HtmlAttributes(new { style = "width:100%" }).Height(520).DataSource(source => { source.Read(read => { read.Action("Items_GetCurrency", "Basic").Data("filterCurrency"); }).ServerFiltering(true); }); });
-                i.Add().Field(f => f.CurrenciesIds).Label(l => l.Optional(true)).Editor(e => { e.MultiSelect().AutoClose(false).Placeholder("Please select your favourite sport...").DownArrow(true).NoDataTemplateId("noDataTemplate").DataTextField("Text").Height(520).DataValueField("Value").Filter("contains").DataSource(source => { source.Read(read => { read.Action("Items_GetCurrencies", "Basic").Data("filterCurrencies"); }); }); });
-                i.Add().Field(f => f.InventoryAccountingSystem).Editor(e => { e.ComboBox().Filter(FilterType.Contains).MinLength(3).Placeholder("انتخاب کنید...").DataTextField("Text").DataValueField("Value").HtmlAttributes(new { style = "width:100%" }).Height(520).DataSource(source => { source.Read(read => { read.Action("Items_GetInventoryAccountingSystemTypes", "Basic").Data("filterInventoryAccountingSystems"); }).ServerFiltering(true); }); });
-                i.Add().Field(f => f.ValueAddedTaxRate).Editor(e => { e.TextBox().Placeholder("TextBox"); });
-            });
-            items.AddGroup().Label(" ")
-            .Items(i =>
-            {
-                i.Add().Field(f => f.CalendarId).Editor(e => { e.ComboBox().Filter(FilterType.Contains).MinLength(3).Placeholder("انتخاب کنید...").DataTextField("Text").DataValueField("Value").HtmlAttributes(new { style = "width:100%" }).Height(520).DataSource(source => { source.Read(read => { read.Action("Items_GetCalendars", "Basic").Data("filterCalendarsTypes"); }).ServerFiltering(true); }); });
-            });
-        })//.HtmlAttributes(new {@class="k-columns-2"})
-          //  .Events(ev => ev.ValidateField("onFormValidateField").Clear("onFormClear"))
-        )
+                    i.Add().Field(f => f.MainCurrencyId).Editor(e => { e.ComboBox().Filter(FilterType.Contains).MinLength(3).Placeholder("انتخاب کنید...").DataTextField("Name").DataValueField("Id").HtmlAttributes(new { style = "width:100%" }).Height(520).DataSource(source => { source.Read(read => { read.Action("Items_GetCurrency", "Basic").Data("filterCurrency"); }).ServerFiltering(true); }); });
+                    //   i.Add().Field(f => f.CurrenciesIds).Label(l => l.Optional(true)).Editor(e => { e.MultiSelect().AutoClose(false).Placeholder("Please select your favourite sport...").DownArrow(true).NoDataTemplateId("noDataTemplate").DataTextField("Text").Height(520).DataValueField("Value").Filter("contains").DataSource(source => { source.Read(read => { read.Action("Items_GetCurrencies", "Basic").Data("filterCurrencies"); }); }); });
+                    //   i.Add().Field(f => f.InventoryAccountingSystem).Editor(e => { e.ComboBox().Filter(FilterType.Contains).MinLength(3).Placeholder("انتخاب کنید...").DataTextField("Text").DataValueField("Value").HtmlAttributes(new { style = "width:100%" }).Height(520).DataSource(source => { source.Read(read => { read.Action("Items_GetInventoryAccountingSystemTypes", "Basic").Data("filterInventoryAccountingSystems"); }).ServerFiltering(true); }); });
+                    i.Add().Field(f => f.ValueAddedTaxRate).Editor(e => { e.TextBox().Placeholder("TextBox"); });
+                });
+                //  items.AddGroup().Label(" ")
+                //  .Items(i =>
+                //  {
+                //      i.Add().Field(f => f.CalendarId).Editor(e => { e.ComboBox().Filter(FilterType.Contains).MinLength(3).Placeholder("انتخاب کنید...").DataTextField("Text").DataValueField("Value").HtmlAttributes(new { style = "width:100%" }).Height(520).DataSource(source => { source.Read(read => { read.Action("Items_GetCalendars", "Basic").Data("filterCalendarsTypes"); }).ServerFiltering(true); }); });
+                //  });
+            })//.HtmlAttributes(new {@class="k-columns-2"})
+              //  .Events(ev => ev.ValidateField("onFormValidateField").Clear("onFormClear"))
+            )
 </div>
 
 <script>
@@ -73,24 +72,24 @@
         //.kendoUpload();
 
     }
-    function filterLanguages(e) {
-        return kendo.ui.ComboBox.requestData($("#LanguageId"));
-    }
+    // function filterLanguages(e) {
+    //     return kendo.ui.ComboBox.requestData($("#LanguageId"));
+    // }
     function filterBusinessTypes(e) {
         return kendo.ui.ComboBox.requestData($("#TypeId"));
     }
     function filterCurrency(e) {
         return kendo.ui.ComboBox.requestData($("#MainCurrencyId"));
     } 
-    function filterCurrencies(e) {
-        return kendo.ui.MultiSelect.requestData($("#CurrenciesIds"));
-    }
-    function filterCalendarsTypes(e) {
-        return kendo.ui.ComboBox.requestData($("#CalendarId"));
-    }
-    function filterInventoryAccountingSystems(e) {
-        return kendo.ui.ComboBox.requestData($("#InventoryAccountingSystem"));
-    }
+    // function filterCurrencies(e) {
+    //     return kendo.ui.MultiSelect.requestData($("#CurrenciesIds"));
+    // }
+    // function filterCalendarsTypes(e) {
+    //     return kendo.ui.ComboBox.requestData($("#CalendarId"));
+    // }
+    // function filterInventoryAccountingSystems(e) {
+    //     return kendo.ui.ComboBox.requestData($("#InventoryAccountingSystem"));
+    // }
     function onFormValidateField(e) {
         $("#validation-success").html("");
     }

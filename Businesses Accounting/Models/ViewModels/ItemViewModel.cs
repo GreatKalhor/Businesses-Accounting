@@ -10,30 +10,31 @@ namespace Businesses_Accounting.Models.ViewModels
     {
         public ItemViewModel()
         {
-                
+
         }
-        public ItemViewModel(Account x)
+
+        public ItemViewModel(Account x, bool isFlat = false)
         {
             Value = x.Id;
             Text = x.Name;
-            bool _hasChildren= x.InverseParent.Count() > 0;
+            bool _hasChildren = x.InverseParent.Count() > 0;
             HasChildren = _hasChildren;
-            if (_hasChildren)
+            if (_hasChildren && !isFlat)
             {
                 Items = new List<ItemViewModel>(x.InverseParent.Select(v => new ItemViewModel(v)));
             }
-            ParentId = x.ParentId!=null?x.ParentId:0;
+            ParentId = x.ParentId != null ? x.ParentId : 0;
         }
-      
         public int Value { get; set; }
 
         public string Text { get; set; }
 
-        public int?  ParentId { get; set; }
+        public int? ParentId { get; set; }
 
         public bool HasChildren { get; set; }
         public bool expanded { get; set; }
 
-        public IEnumerable<ItemViewModel> Items { get; set; }   
+
+        public IEnumerable<ItemViewModel> Items { get; set; }
     }
 }

@@ -43,12 +43,12 @@ namespace Businesses_Accounting.Models.ViewModels
 
         }
         public int Id { get; set; }
-        [Display(Name = "نام کسب و کار")]
+        [Display(Name = "نام")]
         public string Name { get; set; }
         [Display(Name = "زبان")]
         public int LanguageId { get; set; } = 1;
         [Display(Name = "نام قانونی")]
-        public string LegalName { get; set; }
+        public string LegalName { get; set; } = " ";
         [Display(Name = "نوع کسب و کار")]
         public int TypeId { get; set; } = 1;
         [Display(Name = "سیستم حسابداری انبار")]

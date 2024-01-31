@@ -363,8 +363,8 @@ INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'دار�
 INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'بدهی ها',NULL,2)
 INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'حقوق صاحبان سهام',NULL,3)
 INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'خرید',NULL,4)
-INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'فروش',NULL,5)
-INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'درآمد',NULL,6)
+INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'فروش',NULL,5)--5
+INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'درآمد',NULL,6)--6
 INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'هزینه ها',NULL,7)
 INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'سایر حساب ها',NULL,8)
 END
@@ -377,21 +377,21 @@ BEGIN
 INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'دارایی های جاری', 1,1)
 INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'دارایی های غیر جاری', 1,1)
 INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'بدهیهای جاری', 2,2)
-INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'بدهیهای غیر جاری', 2,2)
-INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'حقوق صاحبان سهام',3,3)
+INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'بدهیهای غیر جاری', 2,2)--12
+INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'حقوق صاحبان سهام',3,3)--13
 INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'خرید کالا',4 ,4)
 INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'برگشت از خرید',4 ,4)
-INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'تخفیفات نقدی خرید',4 ,4)
+INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'تخفیفات نقدی خرید',4 ,4)--16
 INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'فروش کالا',5 ,5)
 INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'برگشت از فروش', 5,5)
 INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'تخفیفات نقدی فروش',5 ,5)
 INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'درآمد های عملیاتی', 6,6)
 INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'درآمد های غیر عملیاتی',6 ,6)
 INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'هزینه های پرسنلی',7 ,7)
-INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'هزینه های عملیاتی',7 ,7)
-INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'هزینه های استهلاک',7 ,7)
-INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'هزینه های غیرعملیاتی', 7,7)
-INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'هزینه های بازاریابی و توزیع و فروش', 7,7)
+INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'هزینه های عملیاتی',7 ,7)--23
+INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'هزینه های استهلاک',7 ,7)--24
+INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'هزینه های غیرعملیاتی', 7,7)--25
+INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'هزینه های بازاریابی و توزیع و فروش', 7,7)--26
 END
 GO
 
@@ -400,16 +400,16 @@ GO
 IF NOT EXISTS ( SELECT * FROM [dbo].[Accounts] WHERE  [Id]>26 AND [Id]<81)
 BEGIN
 INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'موجودی نقد و بانک', 9,1)
-INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'سرمایه گذاری های کوتاه مدت', 9,1)
-INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'حساب های دریافتنی', 9,1)
-INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'سایر حساب های دریافتنی', 9,1)
-INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'پیش پرداخت ها', 9,1)
-INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'موجودی کالا', 9,1)
-INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'ملزومات', 9,1)
+INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'سرمایه گذاری های کوتاه مدت', 9,1)--28
+INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'حساب های دریافتنی', 9,1)--29
+INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'سایر حساب های دریافتنی', 9,1)--30
+INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'پیش پرداخت ها', 9,1)--31
+INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'موجودی کالا', 9,1)--32
+INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'ملزومات', 9,1)--33
 INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'دارایی های ثابت', 10,1)
 INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'استهلاک انباشته', 10,1)
-INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'سپرده های بلندمدت', 10,1)
-INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'سایر دارائی ها', 10,1)
+INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'سپرده های بلندمدت', 10,1)--36
+INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'سایر دارائی ها', 10,1)--37
 INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'حساب ها و اسناد پرداختنی',11 ,2)
 INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'ذخیره مالیات بر درآمد پرداختنی', 11,2)
 INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'مالیات بر درآمد پرداختنی', 11,2)
@@ -434,7 +434,7 @@ INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'سای�
 INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'درآمد تسعیر ارز', 21,6)
 INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'سود فروش اقساطی',21 ,6)
 INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'هزینه حقوق و دستمزد', 22,7)
-INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'سایر هزینه های کارکنان', 22,7)
+INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'سایر هزینه های کارکنان', 22,7)--62
 INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'خرید خدمات', 23,7)
 INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'برگشت از فروش خدمات', 23,7)
 INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'هزینه حمل کالا',23 ,7)
@@ -520,3 +520,5 @@ INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'کار�
 INSERT INTO [dbo].[Accounts]([Name],[ParentId],[SubAccountId]) VALUES (N'جرائم دیرکرد بانکی',74 ,7)
 END
 GO
+
+DELETE FROM [dbo].[Accounts] WHERE Id in (5,6,12,13,16,17,18,19,20,21,23,24,25,26,28,29,30,31,32,33,36,37,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,85,86,87,88,89,90,91,92,93,101,102,103,114,115,129,130,131,132,133,134,135)

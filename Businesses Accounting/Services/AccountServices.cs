@@ -16,11 +16,11 @@ namespace Businesses_Accounting.Services
         }
         public List<ItemViewModel> GetAccountsForTree()
         {
-            return db.Accounts.Where(c => c.ParentId == null).Include(z => z.InverseParent).ThenInclude(z => z.InverseParent).ThenInclude(z => z.InverseParent).ThenInclude(z => z.InverseParent).Select(x => new ItemViewModel(x)).ToList();
+            return db.Accounts.Where(c => c.ParentId == null).Include(z => z.InverseParent).ThenInclude(z => z.InverseParent).ThenInclude(z => z.InverseParent).ThenInclude(z => z.InverseParent).Select(x => new ItemViewModel(x, false)).ToList();
         }
         public List<ItemViewModel> GetAccountsForTreeflat()
         {
-            return db.Accounts.Select(x => new ItemViewModel(x)).ToList();
+            return db.Accounts.Include(z => z.InverseParent).ThenInclude(z => z.InverseParent).ThenInclude(z => z.InverseParent).ThenInclude(z => z.InverseParent).Select(x => new ItemViewModel(x, true)).ToList();
         }
         public string GetAccountsTextFromParents(int id)
         {

@@ -95,3 +95,50 @@ function getGridImageBox(src) {
     ans += `</div>`;
     return ans
 }
+function processTable(data, idField, foreignKey, rootLevel, val) {
+    var hash = {};
+
+    for (var i = 0; i < data.length; i++) {
+        var item = data[i];
+        var id = item[idField];
+        item.selected = false;
+        if (val) {
+            if (val == id) {
+                item.selected = true;
+            }
+        }
+        item.expanded = true;
+        var parentId = item[foreignKey];
+
+        hash[id] = hash[id] || [];
+        hash[parentId] = hash[parentId] || [];
+
+        item.items = hash[id];
+        hash[parentId].push(item);
+    }
+
+    return hash[rootLevel];
+}
+
+function isNumberkendo(evt, el, sidel) {
+
+    evt = (evt) ? evt : window.event;
+    var charCode = (evt.which) ? evt.which : evt.keyCode;
+    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+        return false;
+    }
+    if (sidel) {
+        let sel = document.getElementById(sidel);
+        var textbox = $(sel).data("kendoTextBox");
+        textbox.value("0");
+    }
+    if (el) {
+        let eel = document.getElementById(el);
+        var textboxel = $(eel).data("kendoTextBox");
+        let val = textboxel.value();
+        if (val == "0") {
+            textboxel.value("");
+        }
+    }
+    return true;
+}
