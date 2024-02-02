@@ -1,4 +1,5 @@
 ﻿using Businesses_Accounting.Data;
+using Businesses_Accounting.Models;
 using Businesses_Accounting.Models.ViewModels;
 using Businesses_Accounting.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis.Host;
 using Microsoft.EntityFrameworkCore;
 using static Businesses_Accounting.Resources.Variable;
+using static System.Net.Mime.MediaTypeNames;
 using LanguageServices = Businesses_Accounting.Services.LanguageServices;
 
 namespace Businesses_Accounting.Controllers
@@ -72,6 +74,14 @@ namespace Businesses_Accounting.Controllers
             {
                 var currencies = cs.GetAll();
                 return Json(new SelectList(currencies, "Id", "Name"));
+            }
+        }
+        public JsonResult Items_GetContacts()
+        {
+            using (ContactServices cs = new ContactServices(_context))
+            {
+                var currencies = cs.GetContactsWithBusinessId(PanelUser.BusinessId);
+                return Json(currencies.ToList());
             }
         }
         public JsonResult Items_GetBusinessTypes(string text)

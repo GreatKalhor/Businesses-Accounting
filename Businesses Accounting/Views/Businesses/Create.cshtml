@@ -4,64 +4,131 @@
     ViewData["Title"] = "کسب و کار جدید";
 }
   
+        <div class="g-col-4 g-col-sm-4">
+            <form asp-action="Create">
+
+                @Html.HiddenFor(x => x.Id)
+                @Html.HiddenFor(x => x.LanguageId)
+                @Html.HiddenFor(x => x.LegalName)
+                @Html.HiddenFor(x => x.InventoryAccountingSystem)
+                @Html.HiddenFor(x => x.HasMultiCurrency)
+                @Html.HiddenFor(x => x.HasWarehouseManagement)
+                @Html.HiddenFor(x => x.CalendarId)
+
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class=" g-grid-2 g-grid-sm-1">
+                    <div id="filesbox" class="form-group pt-2">
+                        <input asp-for="files" class="form-control" />
+                    </div>
+                    <div class="group pt-3">
+                        <div class="form-group mb-1">
+                            <label asp-for="Name" class="control-label"></label>
+                            @(Html.Kendo().TextBoxFor(m => m.Name)
+                                .HtmlAttributes(new { style = "width:100%", onchange = "autoOtherFild(this,`LegalName`)" })
+                                )
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-1">
+                            <label asp-for="TypeId" class="control-label"></label>
+                            @(Html.Kendo().ComboBoxFor(x => x.TypeId).Filter(FilterType.Contains).MinLength(3).Placeholder("انتخاب کنید...").DataTextField("Name").DataValueField("Id").HtmlAttributes(new { style = "width:100%" }).Height(520).DataSource(source => { source.Read(read => { read.Action("Items_GetBusinessTypes", "Basic").Data("filterBusinessTypes"); }).ServerFiltering(true); })
+                                )
+                            <span asp-validation-for="TypeId" class="text-danger"></span>
+                        </div>
+
+
+
+
+                        <div class="form-group mb-1">
+                            <label asp-for="MainCurrencyId" class="control-label"></label>
+                            @(Html.Kendo().ComboBoxFor(x => x.MainCurrencyId).Filter(FilterType.Contains).MinLength(3).Placeholder("انتخاب کنید...").DataTextField("Name").DataValueField("Id").HtmlAttributes(new { style = "width:100%" }).Height(520).DataSource(source => { source.Read(read => { read.Action("Items_GetCurrency", "Basic").Data("filterCurrency"); }).ServerFiltering(true); })
+                                )
+                            <span asp-validation-for="MainCurrencyId" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="ValueAddedTaxRate" class="control-label"></label>
+                            @(Html.Kendo().TextBoxFor(m => m.ValueAddedTaxRate)
+                                .HtmlAttributes(new { style = "width:100%", onkeypress = "return isNumberkendo(event,'Number')" })
+                                )
+                            <span asp-validation-for="ValueAddedTaxRate" class="text-danger"></span>
+                        </div>
+
+
+                    </div>
+
+
+
+                </div>
+
+                <div class="form-group mt-2">
+                    <input type="submit" value="ذخیره" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
 <div class="g-col-3 g-col-sm-4">
 
 <div class="demo-section">
     <div id="validation-success"></div>
-    @(
-        Html.Kendo().Form<Businesses_Accounting.Models.ViewModels.CreateBusinessViewModel>()
-        .Name("formExample")
-        .HtmlAttributes(new { action = "Create", method = "POST" })
-        .Validatable(v =>
-        {
-            v.ValidateOnBlur(true);
-            v.ValidationSummary(vs => vs.Enable(true));
-        })
+
+
+
+
+
+
+   @*  @( *@
+   @*   //   Html.Kendo().Form<Businesses_Accounting.Models.ViewModels.CreateBusinessViewModel>()
+     //   .Name("formExample")
+     //   .HtmlAttributes(new { action = "Create", method = "POST" })
+     //   .Validatable(v =>
+     //   {
+     //       v.ValidateOnBlur(true);
+     //       v.ValidationSummary(vs => vs.Enable(true));
+     //   })
       // .Items(items =>
       //  {
      //       items.AddGroup()
      //       .Label("لوگوی کسب و کار")//.Layout("<div class'k-columns-2'>")
-       .Items(i =>
-       {
-                i.Add().Field(f => f.files).Label(l => l.Text("لوگوی کسب و کار")).EditorTemplateHandler("uploadEditor");
+    //  .Items(i =>
+    //  {
+      //          i.Add().Field(f => f.files).Label(l => l.Text("لوگوی کسب و کار")).EditorTemplateHandler("uploadEditor");
    //     });
          //   items.AddGroup()
        //     .Label("اطلاعات کسب و کار")//.Layout("<div class'k-columns-2'>")
         //    .Items(i =>
        //     {
-                i.AddAntiForgeryToken(Html.AntiForgeryToken());
-                i.Add().Field(f => f.Id).Label(l => l.Text("Id:")).Editor(e => { e.Hidden(); });
-                i.Add().Field(f => f.Name).Editor(e => { e.TextBox(); });
-                    i.Add().Field(f => f.LanguageId).Editor(e => { e.Hidden(); });//.Editor(e => { e.ComboBox().Filter(FilterType.Contains).MinLength(3).Placeholder("انتخاب کنید...").DataTextField("Name").DataValueField("Id").HtmlAttributes(new { style = "width:100%" }).Height(520).DataSource(source => { source.Read(read => { read.Action("Items_GetLanguages", "Basic").Data("filterLanguages"); }).ServerFiltering(true); }); });
-                    i.Add().Field(f => f.LegalName).Editor(e => { e.Hidden(); });//.Editor(e => { e.TextBox(); });
-                i.Add().Field(f => f.TypeId).Editor(e => { e.ComboBox().Filter(FilterType.Contains).MinLength(3).Placeholder("انتخاب کنید...").DataTextField("Name").DataValueField("Id").HtmlAttributes(new { style = "width:100%" }).Height(520).DataSource(source => { source.Read(read => { read.Action("Items_GetBusinessTypes", "Basic").Data("filterBusinessTypes"); }).ServerFiltering(true); }); });
+     //           i.AddAntiForgeryToken(Html.AntiForgeryToken());
+     //           i.Add().Field(f => f.Id).Label(l => l.Text("Id:")).Editor(e => { e.Hidden(); });
+     //           i.Add().Field(f => f.LegalName).Editor(e => { e.TextBox(); });
+     //               i.Add().Field(f => f.LanguageId).Editor(e => { e.Hidden(); });//.Editor(e => { e.ComboBox().Filter(FilterType.Contains).MinLength(3).Placeholder("انتخاب کنید...").DataTextField("Name").DataValueField("Id").HtmlAttributes(new { style = "width:100%" }).Height(520).DataSource(source => { source.Read(read => { read.Action("Items_GetLanguages", "Basic").Data("filterLanguages"); }).ServerFiltering(true); }); });
+     //               i.Add().Field(f => f.Name).Editor(e => { e.Hidden(); });//.Editor(e => { e.TextBox(); });
+     //           i.Add().Field(f => f.TypeId).Editor(e => { e.ComboBox().Filter(FilterType.Contains).MinLength(3).Placeholder("انتخاب کنید...").DataTextField("Name").DataValueField("Id").HtmlAttributes(new { style = "width:100%" }).Height(520).DataSource(source => { source.Read(read => { read.Action("Items_GetBusinessTypes", "Basic").Data("filterBusinessTypes"); }).ServerFiltering(true); }); });
       //      });
    //      items.AddGroup()
    //         .Label("تنظیمات مالی")//.Layout("<div class'k-columns-2'>")
    //         .Items(i =>
    //         {
    //
-                    i.Add().Field(f => f.HasMultiCurrency).Editor(e => { e.Hidden(); });//.Editor(e => { e.Switch().Messages(c => c.Checked("بله").Unchecked("خیر")); });
-                    i.Add().Field(f => f.HasWarehouseManagement).Editor(e => { e.Hidden(); });//.Editor(e => { e.Switch().Messages(c => c.Checked("بله").Unchecked("خیر")); });
+   //                i.Add().Field(f => f.HasMultiCurrency).Editor(e => { e.Hidden(); });//.Editor(e => { e.Switch().Messages(c => c.Checked("بله").Unchecked("خیر")); });
+   //                i.Add().Field(f => f.HasWarehouseManagement).Editor(e => { e.Hidden(); });//.Editor(e => { e.Switch().Messages(c => c.Checked("بله").Unchecked("خیر")); });
    //
    //         }); 
          //   items.AddGroup().Label(" ")
            // .Items(i =>
        //     {
 
-                i.Add().Field(f => f.MainCurrencyId).Editor(e => { e.ComboBox().Filter(FilterType.Contains).MinLength(3).Placeholder("انتخاب کنید...").DataTextField("Name").DataValueField("Id").HtmlAttributes(new { style = "width:100%" }).Height(520).DataSource(source => { source.Read(read => { read.Action("Items_GetCurrency", "Basic").Data("filterCurrency"); }).ServerFiltering(true); }); });
-                    i.Add().Field(f => f.CurrenciesIds).Label(l => l.Optional(true)).Editor(e => { e.Hidden(); });//.Editor(e => { e.MultiSelect().AutoClose(false).Placeholder("Please select your favourite sport...").DownArrow(true).NoDataTemplateId("noDataTemplate").DataTextField("Text").Height(520).DataValueField("Value").Filter("contains").DataSource(source => { source.Read(read => { read.Action("Items_GetCurrencies", "Basic").Data("filterCurrencies"); }); }); });
-                i.Add().Field(f => f.InventoryAccountingSystem).Editor(e => { e.Hidden(); });//.Editor(e => { e.ComboBox().Filter(FilterType.Contains).MinLength(3).Placeholder("انتخاب کنید...").DataTextField("Text").DataValueField("Value").HtmlAttributes(new { style = "width:100%" }).Height(520).DataSource(source => { source.Read(read => { read.Action("Items_GetInventoryAccountingSystemTypes", "Basic").Data("filterInventoryAccountingSystems"); }).ServerFiltering(true); }); });
-                i.Add().Field(f => f.ValueAddedTaxRate).Editor(e => { e.TextBox().Placeholder("TextBox"); });
+    //            i.Add().Field(f => f.MainCurrencyId).Editor(e => { e.ComboBox().Filter(FilterType.Contains).MinLength(3).Placeholder("انتخاب کنید...").DataTextField("Name").DataValueField("Id").HtmlAttributes(new { style = "width:100%" }).Height(520).DataSource(source => { source.Read(read => { read.Action("Items_GetCurrency", "Basic").Data("filterCurrency"); }).ServerFiltering(true); }); });
+    //                i.Add().Field(f => f.CurrenciesIds).Label(l => l.Optional(true)).Editor(e => { e.Hidden(); });//.Editor(e => { e.MultiSelect().AutoClose(false).Placeholder("Please select your favourite sport...").DownArrow(true).NoDataTemplateId("noDataTemplate").DataTextField("Text").Height(520).DataValueField("Value").Filter("contains").DataSource(source => { source.Read(read => { read.Action("Items_GetCurrencies", "Basic").Data("filterCurrencies"); }); }); });
+    //            i.Add().Field(f => f.InventoryAccountingSystem).Editor(e => { e.Hidden(); });//.Editor(e => { e.ComboBox().Filter(FilterType.Contains).MinLength(3).Placeholder("انتخاب کنید...").DataTextField("Text").DataValueField("Value").HtmlAttributes(new { style = "width:100%" }).Height(520).DataSource(source => { source.Read(read => { read.Action("Items_GetInventoryAccountingSystemTypes", "Basic").Data("filterInventoryAccountingSystems"); }).ServerFiltering(true); }); });
+    //            i.Add().Field(f => f.ValueAddedTaxRate).Editor(e => { e.TextBox().Placeholder("TextBox"); });
         //    });
          //  items.AddGroup().Label(" ")
          //  .Items(i =>
          //  {
-               i.Add().Field(f => f.CalendarId).Editor(e => { e.Hidden(); });//.Editor(e => { e.ComboBox().Filter(FilterType.Contains).MinLength(3).Placeholder("انتخاب کنید...").DataTextField("Text").DataValueField("Value").HtmlAttributes(new { style = "width:100%" }).Height(520).DataSource(source => { source.Read(read => { read.Action("Items_GetCalendars", "Basic").Data("filterCalendarsTypes"); }).ServerFiltering(true); }); });
+    //           i.Add().Field(f => f.CalendarId).Editor(e => { e.Hidden(); });//.Editor(e => { e.ComboBox().Filter(FilterType.Contains).MinLength(3).Placeholder("انتخاب کنید...").DataTextField("Text").DataValueField("Value").HtmlAttributes(new { style = "width:100%" }).Height(520).DataSource(source => { source.Read(read => { read.Action("Items_GetCalendars", "Basic").Data("filterCalendarsTypes"); }).ServerFiltering(true); }); });
           // });
-        })//.HtmlAttributes(new {@class="k-columns-2"})
-          //  .Events(ev => ev.ValidateField("onFormValidateField").Clear("onFormClear"))
-        )
+   //     })//.HtmlAttributes(new {@class="k-columns-2"})
+          //  .Events(ev => ev.ValidateField("onFormValidateField").Clear("onFormClear")) *@
+    @*     ) *@
 </div>
 
 
@@ -116,6 +183,11 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+        <script>
+            let tempppp = getImageEditor(`files`, `s`)
+            $(document.getElementById(`filesbox`)).html(tempppp)
+         
+        </script>
 }
 
 

@@ -15,6 +15,7 @@ public partial class AccountingJournal
 
     public int? SubAccountId { get; set; }
 
+    public int? ContactId { get; set; }
     public string SubAccount { get; set; }
 
     public string Description { get; set; }

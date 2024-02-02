@@ -1,0 +1,91 @@
+﻿@model Businesses_Accounting.Models.ViewModels.CreateBusinessViewModel
+
+@{
+    ViewData["Title"] = "Creatae";
+}
+
+
+<div class="g-col-4 g-col-sm-4">
+    <form asp-action="Create">
+
+        @Html.HiddenFor(x => x.Id)
+        @Html.HiddenFor(x => x.LanguageId)
+        @Html.HiddenFor(x => x.LegalName)
+        @Html.HiddenFor(x => x.InventoryAccountingSystem)
+        @Html.HiddenFor(x => x.HasMultiCurrency)
+        @Html.HiddenFor(x => x.HasWarehouseManagement)
+        @Html.HiddenFor(x => x.CalendarId)
+        @Html.HiddenFor(x => x.Id)
+        @Html.HiddenFor(x => x.Id)
+
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class=" g-grid-2 g-grid-sm-1">
+            <div id="filesbox" class="form-group pt-2">
+                <input asp-for="files" class="form-control" />
+            </div>
+            <div class="group pt-3">
+                <div class="form-group mb-1">
+                    <label asp-for="Name" class="control-label"></label>
+                    @(Html.Kendo().TextBoxFor(m => m.Name)
+                        .HtmlAttributes(new { style = "width:100%", onchange = "autoOtherFild(this,`LegalName`)" })
+                        )
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-1">
+                    <label asp-for="TypeId" class="control-label"></label>
+                    @(Html.Kendo().ComboBoxFor(x => x.TypeId).Filter(FilterType.Contains).MinLength(3).Placeholder("انتخاب کنید...").DataTextField("Name").DataValueField("Id").HtmlAttributes(new { style = "width:100%" }).Height(520).DataSource(source => { source.Read(read => { read.Action("Items_GetBusinessTypes", "Basic").Data("filterBusinessTypes"); }).ServerFiltering(true); })
+                        )
+                    <span asp-validation-for="TypeId" class="text-danger"></span>
+                </div>
+
+
+
+
+                <div class="form-group mb-1">
+                    <label asp-for="MainCurrencyId" class="control-label"></label>
+                    @(Html.Kendo().ComboBoxFor(x => x.MainCurrencyId).Filter(FilterType.Contains).MinLength(3).Placeholder("انتخاب کنید...").DataTextField("Name").DataValueField("Id").HtmlAttributes(new { style = "width:100%" }).Height(520).DataSource(source => { source.Read(read => { read.Action("Items_GetCurrency", "Basic").Data("filterCurrency"); }).ServerFiltering(true); })
+                        )
+                    <span asp-validation-for="MainCurrencyId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ValueAddedTaxRate" class="control-label"></label>
+                    @(Html.Kendo().TextBoxFor(m => m.ValueAddedTaxRate)
+                        .HtmlAttributes(new { style = "width:100%", onkeypress = "return isNumberkendo(event,'Number')" })
+                        )
+                    <span asp-validation-for="ValueAddedTaxRate" class="text-danger"></span>
+                </div>
+
+
+            </div>
+
+
+
+        </div>
+
+        <div class="form-group mt-2">
+            <input type="submit" value="ذخیره"  class="btn btn-primary" />
+        </div>
+    </form>
+</div>
+
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        let tempppp = getImageEditor(`files`, `s`)
+        $(document.getElementById(`filesbox`)).html(tempppp)
+        function filterBusinessTypes(e) {
+            return kendo.ui.ComboBox.requestData($("#TypeId"));
+        }
+        function filterCurrency(e) {
+            return kendo.ui.ComboBox.requestData($("#MainCurrencyId"));
+        }
+    </script>
+}

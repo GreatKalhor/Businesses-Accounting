@@ -119,7 +119,30 @@ function processTable(data, idField, foreignKey, rootLevel, val) {
 
     return hash[rootLevel];
 }
+function processTable(data, idField, foreignKey, rootLevel, val) {
+    var hash = {};
 
+    for (var i = 0; i < data.length; i++) {
+        var item = data[i];
+        var id = item[idField];
+        item.selected = false;
+        if (val) {
+            if (val == id) {
+                item.selected = true;
+            }
+        }
+        item.expanded = true;
+        var parentId = item[foreignKey];
+
+        hash[id] = hash[id] || [];
+        hash[parentId] = hash[parentId] || [];
+
+        item.items = hash[id];
+        hash[parentId].push(item);
+    }
+
+    return hash[rootLevel];
+}
 function isNumberkendo(evt, el, sidel) {
 
     evt = (evt) ? evt : window.event;
@@ -141,4 +164,7 @@ function isNumberkendo(evt, el, sidel) {
         }
     }
     return true;
+}
+function autoOtherFild(el, otherfildid) {
+    document.getElementById(otherfildid).value = el.value;
 }

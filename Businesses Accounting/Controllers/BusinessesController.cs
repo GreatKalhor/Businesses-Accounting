@@ -49,7 +49,10 @@ namespace Businesses_Accounting.Controllers
                 return Json(dsResult);
             }
         }
-
+        public IActionResult Creatae()
+        {
+            return View(new CreateBusinessViewModel() { LanguageId = (DefaultValues.LanguageId != 0 ? DefaultValues.LanguageId : 1), MainCurrencyId = (DefaultValues.CurrencyId != 0 ? DefaultValues.CurrencyId : 1) });
+        }
         public IActionResult Create()
         {
             return View(new CreateBusinessViewModel() { LanguageId = (DefaultValues.LanguageId != 0 ? DefaultValues.LanguageId : 1), MainCurrencyId = (DefaultValues.CurrencyId != 0 ? DefaultValues.CurrencyId : 1) });

@@ -38,6 +38,7 @@ public partial class CreateAccountingJournalViewModel
     public string Accounttxt { get; set; }
 
     public int? SubAccountId { get; set; }
+    public int? ContactId { get; set; }
 
     public string? SubAccount { get; set; }
 

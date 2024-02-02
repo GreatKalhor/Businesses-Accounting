@@ -1,4 +1,5 @@
-﻿@model Businesses_Accounting.Models.Document
+﻿@using Newtonsoft.Json
+@model Businesses_Accounting.Models.Document
 
 @{
     ViewData["Title"] = "سند جدید";
@@ -62,6 +63,7 @@
             )
             </div> *@
         </div>
+     
         <div class="g-col-4 g-col-sm-4">
             <div class="mt-2"><button type="button" class="btn btn-secondary" id="addRow">تراکنش جدید</button></div>
             <div class="">
@@ -75,6 +77,7 @@
                                 <th><div class="text-end gw-200">حساب</div></th>
                                 <th><div class="text-end gw-200">تفصیل</div></th>
                                 <th><div class="text-end gw-200">شرح</div></th>
+                                <th><div class="text-end gw-200">شخص</div></th>
                                 @* <th><div class="text-end">واحد پول</div></th>
                                 <th><div class="text-end gw-18">بدهکار</div></th>
                                 <th><div class="text-end gw-18">بستانکار</div></th>*@
@@ -205,6 +208,12 @@
 
     <span class="#: item.HasChildren ? 'k-disabled': ''#">#: item.Text #</span>
 </script>
+<script id="templateContact" type="text/x-kendo-template">
+<script> console.log(data)<\/script>
+
+        <span class="k-state-default" style="background-image: url(\'#:data.ImageUrl #\')"></span>
+        <span class="k-state-default"><h3>#:data.DisplayName #</h3><p>#:data.DisplayName #</p></span>
+</script>
 <script>
     const journals = @(Html.Raw(ajsmodel));
     let flatData;
@@ -219,7 +228,19 @@
         flatData = await myresp.json();
     }
     getdata();
+    
+    let contactData;
+    async function getcontactData() {
 
+        let myresp = await fetch("@(Url.Action("Items_GetContacts", "Basic"))", {
+            "headers": {
+                "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7"
+            },
+            "method": "GET"
+        });
+        contactData = await myresp.json();
+    }
+    getcontactData();
 
     function delRow(e) {
         table.row($(e).parents('tr')).remove().draw(false);
@@ -259,6 +280,7 @@
         let journalId = 0;
         let journalDocumentId = 0;
         let journalCurrencyId = 0;
+        let journalContactId = 0;
         let journalSubAccountId = 0;
         let journalSubAccount = '';
         if (journal.AccountId) {
@@ -267,6 +289,8 @@
                 journalDescription = journal.Description;
             if (journal.Debit != null)
                 journalDebit = journal.Debit;
+            if (journal.ContactId != null)
+                journalContactId = journal.ContactId;
             if (journal.CurrencyId != null)
                 journalCurrencyId = journal.CurrencyId;
             if (journal.Credit != null)
@@ -293,6 +317,7 @@
                 `<div class='gw-200'><input data-val='true' id='${filedname}.AccountIdShow' name='${filedname}.AccountIdShow' type='hidden'  value=''></div>`,
                 `<div class='gw-200'><span id="${filedname}.AccounttxtShow"></span></div>`,
                 `<div class='gw-200'><input data-val='true' id='${filedname}.Description' name='${filedname}.Description'   value='${journalDescription}'></div>`,
+                `<div class='gw-200'><input data-val='true' id='${filedname}.ContactId' name='${filedname}.ContactId'   value='${journalContactId}'></div>`,
                 // counter + '.4',
                 //`<div class='gw-180'><input data-val='true' id='${filedname}.Debit' name='${filedname}.Debit'  maxlength="15"  onkeypress="return isNumberkendo(event,'${filedname}.Debit','${filedname}.Credit')" value='${journalDebit}'></div>`,
                 //`<div class='gw-180'><input data-val='true' id='${filedname}.Credit' name='${filedname}.Credit'  maxlength="15"  onkeypress="return isNumberkendo(event,'${filedname}.Credit','${filedname}.Debit')" value='${journalCredit}'></div>`,
@@ -329,6 +354,22 @@
         var dropowntree = $(document.getElementById(filedname + ".AccountIdShow")).data("kendoDropDownTree");
         setTimeout(() => { dropowntree.trigger("change"); }, 10)
 
+        $(document.getElementById(filedname + ".ContactId")).kendoComboBox({
+            filter: "startswith",
+            dataTextField: "DisplayName",
+            dataValueField: "Id",
+            template: '<span class="k-state-default" style="background-image: url(\'~#:data.ImageUrl#\')">  <img src="#:data.ImageUrl#"/></span>' +
+                '<span class="k-state-default"><h3>#: data.DisplayName #</h3><p>#: data.DisplayName #</p></span>',
+           // template: kendo.template($("#templateContact").html()),
+            dataSource: contactData,
+            schema: {
+                data: function (data) {
+                    alert(JSON.stringify(data));
+                    return eval(data);
+                }
+            },
+            height: 400
+        });
         $(document.getElementById(filedname + ".Description")).kendoTextBox({ placeholder: "" });
         //    $(document.getElementById(filedname + ".Debit")).kendoTextBox({ placeholder: "" });
         //  $(document.getElementById(filedname + ".Credit")).kendoTextBox({ placeholder: "" });
