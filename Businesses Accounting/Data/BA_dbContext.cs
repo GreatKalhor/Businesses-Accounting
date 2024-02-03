@@ -565,6 +565,9 @@ namespace Businesses_Accounting.Data
                 entity.HasOne(d => d.Project).WithMany(p => p.Documents)
                     .HasForeignKey(d => d.ProjectId)
                     .HasConstraintName("FK_Documents_BusinessProjects");
+                entity.HasOne(d => d.Contact).WithMany(p => p.Documents)
+                    .HasForeignKey(d => d.ContactId)
+                    .HasConstraintName("FK_Documents_Contacts");
             });
 
             modelBuilder.Entity<Language>(entity =>

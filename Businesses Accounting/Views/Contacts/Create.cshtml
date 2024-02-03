@@ -4,69 +4,132 @@
     ViewData["Title"] = "شخص جدید";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<div class="g-col-4 g-col-sm-4">
+    <form asp-action="Create">
+        @Html.HiddenFor(x => x.Id)
+        @Html.HiddenFor(x => x.ImageUrl)
+        @Html.HiddenFor(x => x.IsCustomer)
+        @Html.HiddenFor(x => x.IsStockholder)
+        @Html.HiddenFor(x => x.Employee)
+        @Html.HiddenFor(x => x.IsVendor)
+        @Html.HiddenFor(x => x.BusinessId)
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class=" g-grid-2 g-grid-sm-1">
+            <div id="filesbox" class="form-group pt-5">
+                <input asp-for="files" class="form-control" />
+            </div>
+            <div class="group pt-3">
 
-<div class="g-col-3 g-col-sm-4">
-<div class="demo-section">
-    <div id="validation-success"></div>
-    @(
-        Html.Kendo().Form<Businesses_Accounting.Models.ViewModels.CreateContactViewModel>()
-        .Name("formExample")
-        .HtmlAttributes(new { action = "Create", method = "POST" })
-        .Validatable(v =>
-        {
-            v.ValidateOnBlur(false);
-            v.ValidationSummary(vs => vs.Enable(false));
-        })
-        .Items(items =>
-        {
-            items.AddGroup()
-            .Label("شخص جدید")//.Layout("<div class'k-columns-2'>")
-            .Items(i =>
+                <div class="form-group mb-1">
+                    <label asp-for="Company" class="control-label"></label>
+                    @(Html.Kendo().TextBoxFor(m => m.Company)
+                        .HtmlAttributes(new { style = "width:100%", onchange = "autoOtherFild(this,`LegalName`)" })
+                        )
+                    <span asp-validation-for="Company" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-1">
+                    <label asp-for="FirstName" class="control-label"></label>
+                    @(Html.Kendo().TextBoxFor(m => m.FirstName)
+                        .HtmlAttributes(new { style = "width:100%", onchange = "fillDisplayName()" })
+                        )
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-1">
+                    <label asp-for="LastName" class="control-label"></label>
+                    @(Html.Kendo().TextBoxFor(m => m.LastName)
+                        .HtmlAttributes(new { style = "width:100%", onchange = "fillDisplayName()" })
+                        )
+                    <span asp-validation-for="LastName" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-1">
+                    <label asp-for="DisplayName" class="control-label"></label>
+                    @(Html.Kendo().TextBoxFor(m => m.DisplayName)
+                        .HtmlAttributes(new { style = "width:100%" })
+                        )
+                    <span asp-validation-for="DisplayName" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-1">
+                    <label asp-for="CategoryId" class="control-label"></label>
+                    @(Html.Kendo().ComboBoxFor(m => m.CategoryId).Filter(FilterType.Contains).MinLength(3).Placeholder("انتخاب کنید...")
+                        .DataTextField("Title").DataValueField("Id").HtmlAttributes(new { style = "width:100%" }).Height(520)
+                        .DataSource(source =>
+                        {
+                            source.Read(read => { read.Action("Items_BusinessCategories", "Basic").Data("filterBusinessCategories"); }).ServerFiltering(true);
+                        })
+
+                        )
+                </div>
+                <div class="form-group">
+                    @(Html.Kendo().CheckBoxGroup().Name("checkboxgroup-second").Layout("horizontal").BindTo(Model.Type.Items).Value(Model.Type.CheckBoxGroupValue).Events(e => e.Select("onCheckBoxGroupSelect"))
+                        )
+
+                </div>
+
+            </div>
+        </div>
+        <div class="form-group mt-2">
+            <input type="submit" value="ذخیره" class="btn btn-primary" />
+        </div>
+    </form>
+</div>
+
+
+@* <div class="g-col-3 g-col-sm-4">
+    <div class="demo-section">
+        <div id="validation-success"></div> *@
+        @* @( *@
+      @*       Html.Kendo().Form<Businesses_Accounting.Models.ViewModels.CreateContactViewModel>()
+            .Name("formExample")
+            .HtmlAttributes(new { action = "Create", method = "POST" })
+            .Validatable(v =>
             {
-                i.AddAntiForgeryToken(Html.AntiForgeryToken());
-                i.Add().Field(f => f.Id).Label(l => l.Text("Id:")).Editor(e => { e.Hidden(); });
-                i.Add().Field(f => f.ImageUrl).Editor(e => { e.Hidden(); });
-                i.Add().Field(f => f.IsCustomer).Editor(e => { e.Hidden(); });
-                i.Add().Field(f => f.IsStockholder).Editor(e => { e.Hidden(); });
-                i.Add().Field(f => f.Employee).Editor(e => { e.Hidden(); });
-                i.Add().Field(f => f.IsVendor).Editor(e => { e.Hidden(); });
-                i.Add().Field(f => f.BusinessId).Label(l => l.Text("BusinessId:")).Editor(e => { e.Hidden(); });
-                i.Add().Field(f => f.files).Label(l => l.Text(" ")).EditorTemplateHandler("uploadEditor");
-                i.Add().Field(f => f.Company).Editor(e => { e.TextBox().HtmlAttributes(new { required = "required" }); });
-                i.Add().Field(f => f.TitleC).Editor(e => { e.TextBox(); });
-                i.Add().Field(f => f.FirstName).Editor(e => { e.TextBox(); });
-                i.Add().Field(f => f.LastName).Editor(e => { e.TextBox(); });
-                i.Add().Field(f => f.DisplayName).Editor(e => { e.TextBox(); });
-                i.Add().Field(f => f.CategoryId).Editor(e => { e.ComboBox().Filter(FilterType.Contains).MinLength(3).Placeholder("انتخاب کنید...").DataTextField("Title").DataValueField("Id").HtmlAttributes(new { style = "width:100%" }).Height(520).DataSource(source => { source.Read(read => { read.Action("Items_BusinessCategories", "Basic").Data("filterBusinessCategories"); }).ServerFiltering(true); }); });
-                i.Add().Field(f => f.Type).Editor(e =>
+                v.ValidateOnBlur(false);
+                v.ValidationSummary(vs => vs.Enable(false));
+            })
+            .Items(items =>
+            {
+                items.AddGroup()
+                //.Label("شخص جدید")
+                .Layout("<div class=\" g-grid-2 g-grid-sm-1\">")
+                .Items(i =>
                 {
-                    e.CheckBoxGroup().Name("checkboxgroup-second")
-            .Layout("horizontal")
-            .BindTo(Model.Type.Items)
-            .Value(Model.Type.CheckBoxGroupValue)
-            .Events(e => e.Select("onCheckBoxGroupSelect"));
+                    i.AddAntiForgeryToken(Html.AntiForgeryToken());
+                    i.Add().Field(f => f.Id).Label(l => l.Text("Id:")).Editor(e => { e.Hidden(); });
+                    i.Add().Field(f => f.ImageUrl).Editor(e => { e.Hidden(); });
+                    i.Add().Field(f => f.IsCustomer).Editor(e => { e.Hidden(); });
+                    i.Add().Field(f => f.IsStockholder).Editor(e => { e.Hidden(); });
+                    i.Add().Field(f => f.Employee).Editor(e => { e.Hidden(); });
+                    i.Add().Field(f => f.IsVendor).Editor(e => { e.Hidden(); });
+                    i.Add().Field(f => f.BusinessId).Label(l => l.Text("BusinessId:")).Editor(e => { e.Hidden(); });
+                    i.Add().Field(f => f.files).Label(l => l.Text(" ")).EditorTemplateHandler("uploadEditor");
+                    i.Add().Field(f => f.Company).Editor(e => { e.TextBox().HtmlAttributes(new { required = "required" }); });
+                    i.Add().Field(f => f.TitleC).Editor(e => { e.TextBox(); });
+                    i.Add().Field(f => f.FirstName).Editor(e => { e.TextBox().Events(d => d.Change("fillDisplayName")); });
+                    i.Add().Field(f => f.LastName).Editor(e => { e.TextBox().Events(d => d.Change("fillDisplayName")); });
+                    i.Add().Field(f => f.DisplayName).Editor(e => { e.TextBox(); });
+                    i.Add().Field(f => f.CategoryId).Editor(e => { e.ComboBox().Filter(FilterType.Contains).MinLength(3).Placeholder("انتخاب کنید...").DataTextField("Title").DataValueField("Id").HtmlAttributes(new { style = "width:100%" }).Height(520).DataSource(source => { source.Read(read => { read.Action("Items_BusinessCategories", "Basic").Data("filterBusinessCategories"); }).ServerFiltering(true); }); });
+                    i.Add().Field(f => f.Type).Editor(e => { e.CheckBoxGroup().Name("checkboxgroup-second").Layout("horizontal").BindTo(Model.Type.Items).Value(Model.Type.CheckBoxGroupValue).Events(e => e.Select("onCheckBoxGroupSelect")); });
                 });
-            });
-           @*  items.AddGroup()
-            //.Label(" مالی")//.Layout("<div class'k-columns-2'>")
-            .Items(i =>
-            {
-
-                i.Add().Field(f => f.IsActive).Editor(e => { e.Switch().Messages(c => c.Checked("فعال").Unchecked("غیر فعال")); });
-
-            }); *@
-        })//.HtmlAttributes(new {@class="k-columns-2"})
-          //  .Events(ev => ev.ValidateField("onFormValidateField").Clear("onFormClear"))
-        )
-</div>
-</div>
+         
+            })//.HtmlAttributes(new {@class="k-columns-2"})
+              //  .Events(ev => ev.ValidateField("onFormValidateField").Clear("onFormClear"))
+            ) *@
+ @*    </div>
+</div> *@
 <script>
     function uploadEditor(container, options) {
         let ofield = options.field;
         $(getImageEditor(ofield)).appendTo(container)
 
     }
-
+    function fillDisplayName() {
+        let fname = document.getElementById("FirstName").value;
+        let lname = document.getElementById("LastName").value;
+        document.getElementById("DisplayName").value = `${fname} ${lname}`;
+    }
+    let tempppp = getImageEditor(`files`, `s`)
+    $(document.getElementById(`filesbox`)).html(tempppp)
 
     function filterBusinessCategories(e) {
         return kendo.ui.ComboBox.requestData($("#CategoryId"));
@@ -90,9 +153,9 @@
         let hItemid = ``;
         let selected = $(e.target[0]).is(":checked");
         let itemval = $(e.target[0]).val();
-            switch (itemval) {
+        switch (itemval) {
             case "1":
-                    hItemid = `IsCustomer`;
+                hItemid = `IsCustomer`;
                 break;
             case "2":
                 hItemid = `IsVendor`;
@@ -109,7 +172,7 @@
         let el = document.getElementById(hItemid);
         el.value = selected;
     }
-    function settypevalue(){
+    function settypevalue() {
         var newValue = []
     @{
         var txt = "";
@@ -119,7 +182,7 @@
         }
     }
     @Html.Raw(txt)
-            var checkBoxGroup = $("#Type").data("kendoCheckBoxGroup");
+                    var checkBoxGroup = $("#Type").data("kendoCheckBoxGroup");
         checkBoxGroup.value(newValue);
     }
     function onFormSubmit(e) {
@@ -140,5 +203,7 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

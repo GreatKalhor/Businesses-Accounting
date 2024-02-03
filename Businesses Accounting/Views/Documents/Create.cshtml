@@ -52,6 +52,9 @@
                     .HtmlAttributes(new { style = "width:100%" })
                     )
             </div>
+            <div class="form-group">
+                <input data-val='true' id='ContactId' name='ContactId' value='@Model.ContactId'>
+            </div>
 
             @Html.HiddenFor(x => x.DocumentDate)
             @*     <div class="form-group">
@@ -77,8 +80,8 @@
                                 <th><div class="text-end gw-200">حساب</div></th>
                                 <th><div class="text-end gw-200">تفصیل</div></th>
                                 <th><div class="text-end gw-200">شرح</div></th>
-                                <th><div class="text-end gw-200">شخص</div></th>
-                                @* <th><div class="text-end">واحد پول</div></th>
+                                @* <th><div class="text-end gw-200">شخص</div></th>
+                                <th><div class="text-end">واحد پول</div></th>
                                 <th><div class="text-end gw-18">بدهکار</div></th>
                                 <th><div class="text-end gw-18">بستانکار</div></th>*@
                                 <th><div class="text-end gw-18">مبلغ</div></th>
@@ -317,7 +320,7 @@
                 `<div class='gw-200'><input data-val='true' id='${filedname}.AccountIdShow' name='${filedname}.AccountIdShow' type='hidden'  value=''></div>`,
                 `<div class='gw-200'><span id="${filedname}.AccounttxtShow"></span></div>`,
                 `<div class='gw-200'><input data-val='true' id='${filedname}.Description' name='${filedname}.Description'   value='${journalDescription}'></div>`,
-                `<div class='gw-200'><input data-val='true' id='${filedname}.ContactId' name='${filedname}.ContactId'   value='${journalContactId}'></div>`,
+               // `<div class='gw-200'><input data-val='true' id='${filedname}.ContactId' name='${filedname}.ContactId'   value='${journalContactId}'></div>`,
                 // counter + '.4',
                 //`<div class='gw-180'><input data-val='true' id='${filedname}.Debit' name='${filedname}.Debit'  maxlength="15"  onkeypress="return isNumberkendo(event,'${filedname}.Debit','${filedname}.Credit')" value='${journalDebit}'></div>`,
                 //`<div class='gw-180'><input data-val='true' id='${filedname}.Credit' name='${filedname}.Credit'  maxlength="15"  onkeypress="return isNumberkendo(event,'${filedname}.Credit','${filedname}.Debit')" value='${journalCredit}'></div>`,
@@ -394,6 +397,22 @@
                 for (var i = 0; i < journals.length; i++) {
                     addNewRow(journals[i])
                 }
+                $(document.getElementById("ContactId")).kendoComboBox({
+                    filter: "startswith",
+                    dataTextField: "DisplayName",
+                    dataValueField: "Id",
+                    template: '<span class="k-state-default" style="background-image: url(\'~#:data.ImageUrl#\')">  <img src="#:data.ImageUrl#"/></span>' +
+                        '<span class="k-state-default"><h3>#: data.DisplayName #</h3><p>#: data.DisplayName #</p></span>',
+                    // template: kendo.template($("#templateContact").html()),
+                    dataSource: contactData,
+                    schema: {
+                        data: function (data) {
+                            alert(JSON.stringify(data));
+                            return eval(data);
+                        }
+                    },
+                    height: 400
+                });
             } else {
                 loaded()
             }

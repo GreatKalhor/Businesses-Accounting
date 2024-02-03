@@ -6,30 +6,31 @@
 }
 <div class="g-col-4 g-col-sm-4">
 
-<p>
-    <a asp-action="Create">سند جدید</a>
-</p>
-@(
-    Html.Kendo().Grid<Businesses_Accounting.Models.Document>()
-                           .Name("grid")
-                           .Columns(columns =>
-                           {
-                               columns.Bound(model => model.DocumentDate);
-                               columns.Bound(model => model.Description);
-                               columns.Bound(model => model.Id).Filterable(false).ClientHeaderTemplate(" ")
+    <p>
+        <a asp-action="Create">سند جدید</a>
+    </p>
+    @(
+        Html.Kendo().Grid<Businesses_Accounting.Models.Document>()
+        .Name("grid")
+        .Columns(columns =>
+        {
+            columns.Bound(model => model.DocumentDate);
+            columns.Bound(model => model.Description);
+            columns.Bound(model => model.ContactId);
+            columns.Bound(model => model.Id).Filterable(false).ClientHeaderTemplate(" ")
             .ClientTemplate(@"<a href='" + @Url.Action("Edit", "Documents", new { Id = "#:data.Id#" }) + @"'>ویرایش</a> |  <a href='javascript:;' onclick='showDialogDelete(`" + @Url.Action("Delete", "Documents", new { Id = "#:data.Id#" }) + "`,`آیا از حذف این سند مطمئن هستی؟`,`با این کار تمام تراکنش های این سند حذف میشود`)'>حذف</a>   ").Width(430);
-                           })
+        })
 
-                           .Pageable()
-                           .Sortable()
-                           .Scrollable()
-                           //.Groupable()
-                           .Filterable()
-                           .HtmlAttributes(new { style = "height:550px;" })
-                           .DataSource(dataSource => dataSource
-                               .Ajax()
-                               .PageSize(20)
-                               .Read("List", "Documents")
-                            )
-       )
+        .Pageable()
+        .Sortable()
+        .Scrollable()
+        //.Groupable()
+        .Filterable()
+        .HtmlAttributes(new { style = "height:550px;" })
+        .DataSource(dataSource => dataSource
+        .Ajax()
+        .PageSize(20)
+        .Read("List", "Documents")
+        )
+        )
 </div>

@@ -30,6 +30,7 @@ namespace Businesses_Accounting.Controllers
         {
             var bA_dbContext = _context.Documents.Include(d => d.BusinessFiscalYear).Include(d => d.Project);
             return View(await bA_dbContext.ToListAsync());
+
         }
         [AcceptVerbs("Post")]
         public ActionResult List(DataSourceRequest request)
@@ -234,18 +235,18 @@ namespace Businesses_Accounting.Controllers
                                 {
                                     item.CurrencyId = minacurrencyId;
                                 }
-                                if (item.SubAccountId==0)
+                                if (item.SubAccountId == 0)
                                 {
                                     item.SubAccountId = null;
                                 }
-                                if (item.Debit==0 &&item.Credit==0)
+                                if (item.Debit == 0 && item.Credit == 0)
                                 {
                                     fordel.Add(item);
                                 }
                                 else
                                 {
 
-                                forup.Add(item);
+                                    forup.Add(item);
                                 }
                             }
                             if (fordel.Count > 0)
@@ -278,7 +279,7 @@ namespace Businesses_Accounting.Controllers
                             _context.RemoveRange(accountingJournals);
                         }
                     }
-                    
+
                     _context.Documents.Update(document);
 
                     await _context.SaveChangesAsync();

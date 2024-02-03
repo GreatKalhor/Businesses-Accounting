@@ -48,4 +48,5 @@ public partial class Contact
     public virtual ICollection<ContactPhoneInfo> ContactPhoneInfos { get; set; } = new List<ContactPhoneInfo>();
 
     public virtual ICollection<Stockholder> Stockholders { get; set; } = new List<Stockholder>();
+    public virtual ICollection<Document> Documents { get; set; } = new List<Document>();
 }

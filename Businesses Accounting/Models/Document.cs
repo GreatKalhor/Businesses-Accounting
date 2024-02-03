@@ -25,10 +25,12 @@ public partial class Document
     public DateTime DocumentDate { get; set; }
 
     public int Amount { get; set; }
+    public int? ContactId { get; set; }
 
     public virtual ICollection<AccountingJournal> AccountingJournals { get; set; } = new List<AccountingJournal>();
 
     public virtual BusinessFiscalYear BusinessFiscalYear { get; set; }
 
     public virtual BusinessProject Project { get; set; }
+    public virtual Contact Contact { get; set; }
 }
