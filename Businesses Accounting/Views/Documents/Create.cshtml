@@ -17,6 +17,8 @@
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="g-col-4 g-col-sm-4 g-grid-4">
             @Html.HiddenFor(x => x.BusinessFiscalYearId)
+
+            @Html.HiddenFor(x => x.InsertDate)
             <div class="form-group g-col-1">
                 @(Html.Kendo().TextBoxFor(m => m.Number).Label(l =>
                     {
@@ -43,17 +45,18 @@
             </div>
             
         </div>
-        <div class="g-col-4 g-col-sm-4">
-            <div class="form-group">
+        <div class="g-col-4 g-col-sm-4 g-grid-4">
+            <div class="form-group  g-col-2 g-col-sm-2">
+
+                <input data-val='true' id='ContactId' name='ContactId' value='@Model.ContactId'>
+            </div>
+            <div class="form-group  g-col-2 g-col-sm-2">
                 @(Html.Kendo().TextAreaFor(m => m.Description).Label(l =>
                     {
                         l.Content("شرح");
                     })//.Placeholder("sd")
                     .HtmlAttributes(new { style = "width:100%" })
                     )
-            </div>
-            <div class="form-group">
-                <input data-val='true' id='ContactId' name='ContactId' value='@Model.ContactId'>
             </div>
 
             @Html.HiddenFor(x => x.DocumentDate)
@@ -94,79 +97,12 @@
                 </div>
 
             </div>
-            <script type="text/javascript">
-                function error_handler(e) {
-                    if (e.errors) {
-                        var message = "Errors:\n";
-                        $.each(e.errors, function (key, value) {
-                            if ('errors' in value) {
-                                $.each(value.errors, function () {
-                                    message += this + "\n";
-                                });
-                            }
-                        });
-                        alert(message);
-                    }
-                }
-
-                // Prevent sorting when new record without Product Name is added
-                function onSort(e) {
-                    var gridData = e.sender.dataSource.data()
-                    gridData.forEach(function (element) {
-                        if (!element.ProductName) {
-                            e.preventDefault()
-                        }
-                    });
-                }
-            </script>
-
-            <script>
-                var selectedItem;
-                var myselectedItem;
-
-                function onMySave(e) {
-                    var displayedData = $(document.getElementById(e)).data().kendoGrid.dataSource.view();
-                    console.log(displayedData)
-                    fetch("@(Url.Action("Editing_Save", "Documents"))", {
-                        "body": JSON.stringify(displayedData),
-                        "method": "POST",
-                    }).then(console.log("ok"))
-                }
-                function onch(e) {
-                    if (myselectedItem == undefined) {
-                        setTimeout(function () {
-                            e.sender.trigger('click')
-                        });
-                    }
-                }
-                function onEdit(e) {
-                    selectedItem = e.model.AccountId;
-                }
-                function onsel(e) {
-                    if (myselectedItem == undefined) {
-                        setTimeout(function () {
-                            e.sender.trigger('click')
-                            e.sender.trigger('change')
-                        });
-                    }
-                }
-                function onOpen(e) {
-                    selectedItem = null;
-                }
-                function onDataBound(e) {
-                    if (selectedItem) {
-                        setTimeout(function () {
-                            e.sender.value(selectedItem);
-                            e.sender.trigger('change')
-                        }, 100);
-                    }
-                }
-            </script>
+           
 
             <div id="ajdata"></div>
             <div id="ajsdata"></div>
             <div class="form-group">
-                <button type="submit" class="btn btn-primary" onclick="mysub('myform')">Create</button>
+                <button type="submit" class="btn btn-primary" onclick="mysub('myform')">ذخیره</button>
 
             </div>
         </div>
@@ -175,252 +111,324 @@
         <a asp-action="Index">Back to List</a>
     </div>
 </div>
-<script>
-    function mysub(e) {
 
-        var mdiv = document.getElementById('ajdata');
-        var displayedData = $(document.getElementById('Grid')).data().kendoGrid.dataSource.view();
-        let ss = "";
-        for (let i = 0; i < displayedData.length; i++) {
-            displayedData[i].Id = i;
-            ss += myAccountingJournals(displayedData[i]);
-        }
-        mdiv.innerHTML = ss;
-        document.getElementById(e).submit();
-    }
-    function myAccountingJournals(j) {
-
-
-        if (j) {
-            var html = "<input data-val='true' name='AccountingJournals[" + j.Id + "].Id' type='hidden' value='" + j.Id + "'>" + "<input data-val='true' name='AccountingJournals[" + j.Id + "].DocumentId' type='hidden' value='" + j.DocumentId + "'>" + "<input data-val='true' name='AccountingJournals[" + j.Id + "].AccountId' type='hidden' value='" + j.AccountId + "'>" + "<input data-val='true' name='AccountingJournals[" + j.Id + "].SubAccountId' type='hidden' value='" + j.SubAccountId + "'>" + "<input data-val='true' name='AccountingJournals[" + j.Id + "].SubAccount' type='hidden' value='" + j.SubAccount + "'>" + "<input data-val='true' name='AccountingJournals[" + j.Id + "].Description' type='hidden' value='" + j.Description + "'>" + "<input data-val='true' name='AccountingJournals[" + j.Id + "].Debit' type='hidden' value='" + j.Debit + "'>" + "<input data-val='true' name='AccountingJournals[" + j.Id + "].Credit' type='hidden' value='" + j.Credit + "'>" + "<input data-val='true' name='AccountingJournals[" + j.Id + "].CurrencyId' type='hidden' value='" + j.CurrencyId + "'>" + "<input data-val='true' name='AccountingJournals[" + j.Id + "].Amount' type='hidden' value='" + j.Amount + "'>";
-
-            return html;
-        }
-        else {
-            return " ";
-        }
-    }
-</script>
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
-}
+    <script type="text/javascript">
+        function error_handler(e) {
+            if (e.errors) {
+                var message = "Errors:\n";
+                $.each(e.errors, function (key, value) {
+                    if ('errors' in value) {
+                        $.each(value.errors, function () {
+                            message += this + "\n";
+                        });
+                    }
+                });
+                alert(message);
+            }
+        }
 
-<script id="templatetree" type="text/x-kendo-template">
+        // Prevent sorting when new record without Product Name is added
+        function onSort(e) {
+            var gridData = e.sender.dataSource.data()
+            gridData.forEach(function (element) {
+                if (!element.ProductName) {
+                    e.preventDefault()
+                }
+            });
+        }
+    </script>
 
-    <span class="#: item.HasChildren ? 'k-disabled': ''#">#: item.Text #</span>
-</script>
-<script id="templateContact" type="text/x-kendo-template">
-<script> console.log(data)<\/script>
+    <script>
+        var selectedItem;
+        var myselectedItem;
 
-        <span class="k-state-default" style="background-image: url(\'#:data.ImageUrl #\')"></span>
-        <span class="k-state-default"><h3>#:data.DisplayName #</h3><p>#:data.DisplayName #</p></span>
-</script>
-<script>
-    const journals = @(Html.Raw(ajsmodel));
-    let flatData;
-    async function getdata() {
+        function onMySave(e) {
+            var displayedData = $(document.getElementById(e)).data().kendoGrid.dataSource.view();
+            console.log(displayedData)
+            fetch("@(Url.Action("Editing_Save", "Documents"))", {
+                "body": JSON.stringify(displayedData),
+                "method": "POST",
+            }).then(console.log("ok"))
+        }
+        function onch(e) {
+            if (myselectedItem == undefined) {
+                setTimeout(function () {
+                    e.sender.trigger('click')
+                });
+            }
+        }
+        function onEdit(e) {
+            selectedItem = e.model.AccountId;
+        }
+        function onsel(e) {
+            if (myselectedItem == undefined) {
+                setTimeout(function () {
+                    e.sender.trigger('click')
+                    e.sender.trigger('change')
+                });
+            }
+        }
+        function onOpen(e) {
+            selectedItem = null;
+        }
+        function onDataBound(e) {
+            if (selectedItem) {
+                setTimeout(function () {
+                    e.sender.value(selectedItem);
+                    e.sender.trigger('change')
+                }, 100);
+            }
+        }
+    </script>
+    <script>
+        function mysub(e) {
 
-        let myresp = await fetch("@(Url.Action("AccountsDropDownTree", "Basic"))", {
-            "headers": {
-                "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7"
-            },
-            "method": "GET"
-        });
-        flatData = await myresp.json();
-    }
-    getdata();
-    
-    let contactData;
-    async function getcontactData() {
-
-        let myresp = await fetch("@(Url.Action("Items_GetContacts", "Basic"))", {
-            "headers": {
-                "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7"
-            },
-            "method": "GET"
-        });
-        contactData = await myresp.json();
-    }
-    getcontactData();
-
-    function delRow(e) {
-        table.row($(e).parents('tr')).remove().draw(false);
-    }
-
-
-
-
-    function mymet(e) {
-        let mv = this.value().Value;
-        let elid = this.element[0].id.replace("Show", "");
-        let selid = this.element[0].id.replace("AccountId", "Accounttxt");
-
-        fetch("@(Url.Action("AccountsText", "Basic"))/" + mv, {
-            "headers": {
-                "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7"
-            },
-            "method": "GET"
-        }).then(response => response.json()).then(data => {
-
-            document.getElementById(selid).innerText = data;
-            let selids = selid.replace("Show", "");
-            document.getElementById(selids).value = data;
-            document.getElementById(elid).value = mv;
-        })
+            var mdiv = document.getElementById('ajdata');
+            var displayedData = $(document.getElementById('Grid')).data().kendoGrid.dataSource.view();
+            let ss = "";
+            for (let i = 0; i < displayedData.length; i++) {
+                displayedData[i].Id = i;
+                ss += myAccountingJournals(displayedData[i]);
+            }
+            mdiv.innerHTML = ss;
+            document.getElementById(e).submit();
+        }
+        function myAccountingJournals(j) {
 
 
-    }
+            if (j) {
+                var html = "<input data-val='true' name='AccountingJournals[" + j.Id + "].Id' type='hidden' value='" + j.Id + "'>" + "<input data-val='true' name='AccountingJournals[" + j.Id + "].DocumentId' type='hidden' value='" + j.DocumentId + "'>" + "<input data-val='true' name='AccountingJournals[" + j.Id + "].AccountId' type='hidden' value='" + j.AccountId + "'>" + "<input data-val='true' name='AccountingJournals[" + j.Id + "].SubAccountId' type='hidden' value='" + j.SubAccountId + "'>" + "<input data-val='true' name='AccountingJournals[" + j.Id + "].SubAccount' type='hidden' value='" + j.SubAccount + "'>" + "<input data-val='true' name='AccountingJournals[" + j.Id + "].Description' type='hidden' value='" + j.Description + "'>" + "<input data-val='true' name='AccountingJournals[" + j.Id + "].Debit' type='hidden' value='" + j.Debit + "'>" + "<input data-val='true' name='AccountingJournals[" + j.Id + "].Credit' type='hidden' value='" + j.Credit + "'>" + "<input data-val='true' name='AccountingJournals[" + j.Id + "].CurrencyId' type='hidden' value='" + j.CurrencyId + "'>" + "<input data-val='true' name='AccountingJournals[" + j.Id + "].Amount' type='hidden' value='" + j.Amount + "'>";
 
+                return html;
+            }
+            else {
+                return " ";
+            }
+        }
+    </script>
+    <script id="templatetree" type="text/x-kendo-template">
 
+        <span class="#: item.HasChildren ? 'k-disabled': ''#">#: item.Text #</span>
+    </script>
+    <script id="templateContact" type="text/x-kendo-template">
+        <script> console.log(data)<\/script>
 
-    function addNewRow(journal) {
-        let journalAccountId = 0;
-        let journalDescription = '';
-        let journalDebit = 0;
-        let journalCredit = 0;
-        let journalId = 0;
-        let journalDocumentId = 0;
-        let journalCurrencyId = 0;
-        let journalContactId = 0;
-        let journalSubAccountId = 0;
-        let journalSubAccount = '';
-        if (journal.AccountId) {
-            journalAccountId = journal.AccountId;
-            if (journal.Description != null)
-                journalDescription = journal.Description;
-            if (journal.Debit != null)
-                journalDebit = journal.Debit;
-            if (journal.ContactId != null)
-                journalContactId = journal.ContactId;
-            if (journal.CurrencyId != null)
-                journalCurrencyId = journal.CurrencyId;
-            if (journal.Credit != null)
-                journalCredit = journal.Credit;
-            if (journal.Id != null)
-                journalId = journal.Id;
-            if (journal.DocumentId != null)
-                journalDocumentId = journal.DocumentId;
-            if (journal.SubAccountId != null)
-                journalSubAccountId = journal.SubAccountId;
-            if (journal.SubAccount != null)
-                journalSubAccount = journal.SubAccount;
+                <span class="k-state-default" style="background-image: url(\'#:data.ImageUrl #\')"></span>
+                <span class="k-state-default"><h3>#:data.DisplayName #</h3><p>#:data.DisplayName #</p></span>
+    </script>
+    <script>
+        const journals = @(Html.Raw(ajsmodel));
+        let flatData;
+        async function getdata() {
 
+            let myresp = await fetch("@(Url.Action("AccountsDropDownTree", "Basic"))", {
+                "headers": {
+                    "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7"
+                },
+                "method": "GET"
+            });
+            flatData = await myresp.json();
+        }
+        getdata();
+
+        let contactData;
+        async function getcontactData() {
+
+            let myresp = await fetch("@(Url.Action("Items_GetContacts", "Basic"))", {
+                "headers": {
+                    "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7"
+                },
+                "method": "GET"
+            });
+            contactData = await myresp.json();
+        }
+        getcontactData();
+
+        function delRow(e) {
+            table.row($(e).parents('tr')).remove().draw(false);
         }
 
 
 
 
-        let filedname = "AccountingJournals[" + (counter - 1) + "]";
-        var mdiv = document.getElementById('ajsdata');
-        table.row
-            .add([
-                counter,
-                `<div class='gw-200'><input data-val='true' id='${filedname}.AccountIdShow' name='${filedname}.AccountIdShow' type='hidden'  value=''></div>`,
-                `<div class='gw-200'><span id="${filedname}.AccounttxtShow"></span></div>`,
-                `<div class='gw-200'><input data-val='true' id='${filedname}.Description' name='${filedname}.Description'   value='${journalDescription}'></div>`,
-               // `<div class='gw-200'><input data-val='true' id='${filedname}.ContactId' name='${filedname}.ContactId'   value='${journalContactId}'></div>`,
-                // counter + '.4',
-                //`<div class='gw-180'><input data-val='true' id='${filedname}.Debit' name='${filedname}.Debit'  maxlength="15"  onkeypress="return isNumberkendo(event,'${filedname}.Debit','${filedname}.Credit')" value='${journalDebit}'></div>`,
-                //`<div class='gw-180'><input data-val='true' id='${filedname}.Credit' name='${filedname}.Credit'  maxlength="15"  onkeypress="return isNumberkendo(event,'${filedname}.Credit','${filedname}.Debit')" value='${journalCredit}'></div>`,
-                `<div class='gw-180'><input data-val='true' id='${filedname}.Amount' name='${filedname}.Amount'  maxlength="15"  onkeypress="return isNumberkendo(event,'${filedname}.Amount')" value='0'></div>`,
-                '<button onclick="delRow(this)" class="btn btn-danger">حذف</button>'
-            ])
-            .draw(false);
+        function mymet(e) {
+            let mv = this.value().Value;
+            let elid = this.element[0].id.replace("Show", "");
+            let selid = this.element[0].id.replace("AccountId", "Accounttxt");
 
-        let ss = `<div class='gw-200'><input data-val='true' id='${filedname}.Id' name='${filedname}.Id' type='hidden'  value='${journalId}'>
-                                                                    <input data-val='true' id='${filedname}.Accounttxt' name='${filedname}.Accounttxt' type='hidden' value=''>
-                                                                                         <input data-val='true' id='${filedname}.CurrencyId' name='${filedname}.CurrencyId' type='hidden'  value='${journalCurrencyId}'>
-                                                                <input data-val='true' id='${filedname}.AccountId' name='${filedname}.AccountId' type='hidden'  value='${journalAccountId}'>
-                                                                    <input data-val='true' id='${filedname}.DocumentId' name='${filedname}.DocumentId' type='hidden'  value='${journalDocumentId}'>
-                                                                    <input data-val='true' id='${filedname}.SubAccountId' name='${filedname}.SubAccountId' type='hidden'  value='${journalSubAccountId}'>
-                                                                    <input data-val='true' id='${filedname}.SubAccount' name='${filedname}.SubAccount' type='hidden'  value='${journalSubAccount}'></div>`;
-        mdiv.innerHTML = mdiv.innerHTML + ss;
-        let sdata = processTable(flatData, "Value", "ParentId", 0, journalAccountId)
-        console.log(sdata)
-        $(document.getElementById(filedname + ".AccountIdShow")).kendoDropDownTree({
-            placeholder: "انتخاب کنید",
-            dataSource: sdata,
-            //height: "auto",
-            // loadOnDemand: false,
-            dataTextField: "Text",
-            autoWidth: true,
-            filter: 'contains',
-            minLength: 2,
-            change: mymet,
-            dataBound: function (e) {
-                $(".k-disabled").parent().click(false);
-            },
-            template: kendo.template($("#templatetree").html())
-        });
-        var dropowntree = $(document.getElementById(filedname + ".AccountIdShow")).data("kendoDropDownTree");
-        setTimeout(() => { dropowntree.trigger("change"); }, 10)
+            fetch("@(Url.Action("AccountsText", "Basic"))/" + mv, {
+                "headers": {
+                    "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7"
+                },
+                "method": "GET"
+            }).then(response => response.json()).then(data => {
 
-        $(document.getElementById(filedname + ".ContactId")).kendoComboBox({
-            filter: "startswith",
-            dataTextField: "DisplayName",
-            dataValueField: "Id",
-            template: '<span class="k-state-default" style="background-image: url(\'~#:data.ImageUrl#\')">  <img src="#:data.ImageUrl#"/></span>' +
-                '<span class="k-state-default"><h3>#: data.DisplayName #</h3><p>#: data.DisplayName #</p></span>',
-           // template: kendo.template($("#templateContact").html()),
-            dataSource: contactData,
-            schema: {
-                data: function (data) {
-                    alert(JSON.stringify(data));
-                    return eval(data);
-                }
-            },
-            height: 400
-        });
-        $(document.getElementById(filedname + ".Description")).kendoTextBox({ placeholder: "" });
-        //    $(document.getElementById(filedname + ".Debit")).kendoTextBox({ placeholder: "" });
-        //  $(document.getElementById(filedname + ".Credit")).kendoTextBox({ placeholder: "" });
-        $(document.getElementById(filedname + ".Amount")).kendoTextBox({ placeholder: "" });
-        counter++;
-    }
+                document.getElementById(selid).innerText = data;
+                let selids = selid.replace("Show", "");
+                document.getElementById(selids).value = data;
+                document.getElementById(elid).value = mv;
+            })
 
-    const table = new DataTable('#example', {
-        searching: false,
-        ordering: false,
-        paging: false,
-        scrollX: true,
-        dom: "<'col-sm-12'<'table-responsive '<''<''tr>>>>"
-    });
 
-    let counter = 1;
+        }
 
-    document.querySelector('#addRow').addEventListener('click', addNewRow);
-    function loaded() {
-        setTimeout(() => {
-            if (flatData) {
-                for (var i = 0; i < journals.length; i++) {
-                    addNewRow(journals[i])
-                }
-                $(document.getElementById("ContactId")).kendoComboBox({
-                    filter: "startswith",
-                    dataTextField: "DisplayName",
-                    dataValueField: "Id",
-                    template: '<span class="k-state-default" style="background-image: url(\'~#:data.ImageUrl#\')">  <img src="#:data.ImageUrl#"/></span>' +
-                        '<span class="k-state-default"><h3>#: data.DisplayName #</h3><p>#: data.DisplayName #</p></span>',
-                    // template: kendo.template($("#templateContact").html()),
-                    dataSource: contactData,
-                    schema: {
-                        data: function (data) {
-                            alert(JSON.stringify(data));
-                            return eval(data);
-                        }
-                    },
-                    height: 400
-                });
-            } else {
-                loaded()
+
+
+        function addNewRow(journal) {
+            let journalAccountId = 0;
+            let journalDescription = '';
+            let journalDebit = 0;
+            let journalCredit = 0;
+            let journalAmount = 0;
+            let journalId = 0;
+            let journalDocumentId = 0;
+            let journalCurrencyId = 0;
+            let journalSubAccountId = 0;
+            let journalSubAccount = '';
+            if (journal.AccountId) {
+                journalAccountId = journal.AccountId;
+                if (journal.Description != null)
+                    journalDescription = journal.Description;
+                if (journal.Debit != null)
+                    journalDebit = journal.Debit;
+                if (journal.CurrencyId != null)
+                    journalCurrencyId = journal.CurrencyId;
+                if (journal.Credit != null)
+                    journalCredit = journal.Credit;
+                if (journal.Amount != null)
+                    journalAmount = journal.Amount;
+                if (journal.Id != null)
+                    journalId = journal.Id;
+                if (journal.DocumentId != null)
+                    journalDocumentId = journal.DocumentId;
+                if (journal.SubAccountId != null)
+                    journalSubAccountId = journal.SubAccountId;
+                if (journal.SubAccount != null)
+                    journalSubAccount = journal.SubAccount;
+
             }
-        }, 100)
 
-    }
-    $(document).ready(function () {
-        loaded();
-    });
 
-</script>
+
+
+            let filedname = "AccountingJournals[" + (counter - 1) + "]";
+            var mdiv = document.getElementById('ajsdata');
+            table.row
+                .add([
+                    counter,
+                    `<div class='gw-200'><input data-val='true' id='${filedname}.AccountIdShow' name='${filedname}.AccountIdShow' type='hidden'  value=''></div>`,
+                    `<div class='gw-200'><span id="${filedname}.AccounttxtShow"></span></div>`,
+                    `<div class='gw-200'><input data-val='true' id='${filedname}.Description' name='${filedname}.Description'   value='${journalDescription}'></div>`,
+                    // `<div class='gw-200'><input data-val='true' id='${filedname}.ContactId' name='${filedname}.ContactId'   value='${journalContactId}'></div>`,
+                    // counter + '.4',
+                    //`<div class='gw-180'><input data-val='true' id='${filedname}.Debit' name='${filedname}.Debit'  maxlength="15"  onkeypress="return isNumberkendo(event,'${filedname}.Debit','${filedname}.Credit')" value='${journalDebit}'></div>`,
+                    //`<div class='gw-180'><input data-val='true' id='${filedname}.Credit' name='${filedname}.Credit'  maxlength="15"  onkeypress="return isNumberkendo(event,'${filedname}.Credit','${filedname}.Debit')" value='${journalCredit}'></div>`,
+                    `<div class='gw-180'><input data-val='true' id='${filedname}.Amount'  name='${filedname}.Amount'   style="direction: ltr;"></div>`,
+                    '<button onclick="delRow(this)" class="btn btn-danger">حذف</button>'
+                ])
+                .draw(false);
+
+            let ss = `<div class='gw-200'><input data-val='true' id='${filedname}.Id' name='${filedname}.Id' type='hidden'  value='${journalId}'>
+                                                                            <input data-val='true' id='${filedname}.Accounttxt' name='${filedname}.Accounttxt' type='hidden' value=''>
+                                                                                                 <input data-val='true' id='${filedname}.CurrencyId' name='${filedname}.CurrencyId' type='hidden'  value='${journalCurrencyId}'>
+                                                                        <input data-val='true' id='${filedname}.AccountId' name='${filedname}.AccountId' type='hidden'  value='${journalAccountId}'>
+                                                                            <input data-val='true' id='${filedname}.DocumentId' name='${filedname}.DocumentId' type='hidden'  value='${journalDocumentId}'>
+                                                                            <input data-val='true' id='${filedname}.SubAccountId' name='${filedname}.SubAccountId' type='hidden'  value='${journalSubAccountId}'>
+                                                                            <input data-val='true' id='${filedname}.SubAccount' name='${filedname}.SubAccount' type='hidden'  value='${journalSubAccount}'></div>`;
+            mdiv.innerHTML = mdiv.innerHTML + ss;
+            let sdata = processTable(flatData, "Value", "ParentId", 0, journalAccountId)
+            console.log(sdata)
+            $(document.getElementById(filedname + ".AccountIdShow")).kendoDropDownTree({
+                placeholder: "انتخاب کنید",
+                dataSource: sdata,
+                //height: "auto",
+                // loadOnDemand: false,
+                dataTextField: "Text",
+                autoWidth: true,
+                filter: 'contains',
+                minLength: 2,
+                change: mymet,
+                dataBound: function (e) {
+                    $(".k-disabled").parent().click(false);
+                },
+                template: kendo.template($("#templatetree").html())
+            });
+            var dropowntree = $(document.getElementById(filedname + ".AccountIdShow")).data("kendoDropDownTree");
+            setTimeout(() => { dropowntree.trigger("change"); }, 10)
+
+            $(document.getElementById(filedname + ".ContactId")).kendoComboBox({
+                filter: "startswith",
+                dataTextField: "DisplayName",
+                dataValueField: "Id",
+                template: '<span class="k-state-default" style="background-image: url(\'~#:data.ImageUrl#\')">  <img src="#:data.ImageUrl#"/></span>' +
+                    '<span class="k-state-default"><h3>#: data.DisplayName #</h3><p>#: data.Title #</p></span>',
+                // template: kendo.template($("#templateContact").html()),
+                dataSource: contactData,
+                schema: {
+                    data: function (data) {
+                        alert(JSON.stringify(data));
+                        return eval(data);
+                    }
+                },
+                height: 400
+            });
+            $(document.getElementById(filedname + ".Description")).kendoTextBox({ placeholder: "" });
+            //    $(document.getElementById(filedname + ".Debit")).kendoTextBox({ placeholder: "" });
+            //  $(document.getElementById(filedname + ".Credit")).kendoTextBox({ placeholder: "" });
+            $(document.getElementById(filedname + ".Amount")).kendoNumericTextBox({ spinners: false, decimals: 0, format: "###,###" });
+            counter++;
+        }
+
+        const table = new DataTable('#example', {
+            searching: false,
+            ordering: false,
+            paging: false,
+            scrollX: true,
+            dom: "<'col-sm-12'<'table-responsive '<''<''tr>>>>"
+        });
+
+        let counter = 1;
+
+        document.querySelector('#addRow').addEventListener('click', addNewRow);
+        function loaded() {
+            setTimeout(() => {
+                if (flatData) {
+                    for (var i = 0; i < journals.length; i++) {
+                        addNewRow(journals[i])
+                    }
+                    $(document.getElementById("ContactId")).kendoComboBox({
+                        filter: "startswith",
+                        dataTextField: "DisplayName",
+                        dataValueField: "Id",
+                        label: "پرداخت کننده",
+                        template: '<span class="k-state-default" style="background-image: url(\'#:data.ImageUrl#\');">  </span>' +
+                            '<span class="k-state-default"><h3>#: data.DisplayName #</h3><p>#: data.Title #</p></span>',
+                        // template: '<span class="image-min-logo">  <img class="image-logo-img" src="#:data.ImageUrl#"/></span>' +
+                        //     '<span class="k-state-default"><h3>#: data.DisplayName #</h3><p>#: data.Title #</p></div>',
+                        // template: kendo.template($("#templateContact").html()),
+                        dataSource: contactData,
+                        schema: {
+                            data: function (data) {
+                                alert(JSON.stringify(data));
+                                return eval(data);
+                            }
+                        },
+                        height: 400
+                    });
+                } else {
+                    loaded()
+                }
+            }, 100)
+
+        }
+        $(document).ready(function () {
+            loaded();
+        });
+
+    </script>
+}
+

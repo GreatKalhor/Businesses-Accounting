@@ -155,7 +155,8 @@ namespace Businesses_Accounting.Controllers
                     Amount = document.AccountingJournals.Sum(s => s.Credit),
                     Description = document.Description,
                     Number = document.Number,
-                    Reference = document.Reference
+                    Reference = document.Reference,
+                    ContactId = document.ContactId
                 };
                 _context.Add(d);
                 await _context.SaveChangesAsync();
@@ -164,6 +165,14 @@ namespace Businesses_Accounting.Controllers
                     int minacurrencyId = cs.GetMainCurrencyId(PanelUser.BusinessId);
                     foreach (var item in document.AccountingJournals)
                     {
+                        if (item.Amount < 0)
+                        {
+                            item.Debit = -item.Amount;
+                        }
+                        else
+                        {
+                            item.Credit = item.Amount;
+                        }
                         if (item.AccountId > 0 && (item.Debit > 0 || item.Credit > 0))
                         {
                             item.DocumentId = d.Id;
@@ -239,6 +248,16 @@ namespace Businesses_Accounting.Controllers
                                 {
                                     item.SubAccountId = null;
                                 }
+                                if (item.Amount < 0)
+                                {
+                                    item.Debit = -item.Amount;
+                                }
+                                else
+                                {
+                                    item.Credit = item.Amount;
+                                }
+
+
                                 if (item.Debit == 0 && item.Credit == 0)
                                 {
                                     fordel.Add(item);
@@ -259,6 +278,15 @@ namespace Businesses_Accounting.Controllers
                             }
                             foreach (var item in foradd)
                             {
+                                if (item.Amount < 0)
+                                {
+                                    item.Debit = -item.Amount;
+                                }
+                                else
+                                {
+                                    item.Credit = item.Amount;
+                                }
+
                                 if (item.AccountId > 0 && (item.Debit > 0 || item.Credit > 0))
                                 {
                                     item.DocumentId = document.Id;

@@ -19,13 +19,13 @@ public partial class AccountingJournal
 
     public string Description { get; set; }
 
-    public int Debit { get; set; }
+    public long Debit { get; set; }
 
-    public int Credit { get; set; }
+    public long Credit { get; set; }
 
     public int CurrencyId { get; set; }
 
-    public int Amount { get; set; }
+    public long Amount { get; set; }
 
     public virtual Account Account { get; set; }
 

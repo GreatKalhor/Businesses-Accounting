@@ -24,7 +24,7 @@ public partial class Document
     [Display(Name = "تاریخ سند")]
     public DateTime DocumentDate { get; set; }
 
-    public int Amount { get; set; }
+    public long Amount { get; set; }
     public int? ContactId { get; set; }
 
     public virtual ICollection<AccountingJournal> AccountingJournals { get; set; } = new List<AccountingJournal>();

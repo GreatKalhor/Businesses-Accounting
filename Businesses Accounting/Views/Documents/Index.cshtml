@@ -14,7 +14,7 @@
         .Name("grid")
         .Columns(columns =>
         {
-            columns.Bound(model => model.DocumentDate);
+            columns.Bound(model => model.DocumentDate).Format("{0:MM/dd/yyyy}");
             columns.Bound(model => model.Description);
             columns.Bound(model => model.ContactId);
             columns.Bound(model => model.Id).Filterable(false).ClientHeaderTemplate(" ")

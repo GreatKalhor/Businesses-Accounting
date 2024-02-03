@@ -50,6 +50,13 @@
                     <span asp-validation-for="DisplayName" class="text-danger"></span>
                 </div>
                 <div class="form-group mb-1">
+                    <label asp-for="TitleC" class="control-label"></label>
+                    @(Html.Kendo().TextBoxFor(m => m.TitleC)
+                        .HtmlAttributes(new { style = "width:100%" })
+                        )
+                    <span asp-validation-for="TitleC" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-1">
                     <label asp-for="CategoryId" class="control-label"></label>
                     @(Html.Kendo().ComboBoxFor(m => m.CategoryId).Filter(FilterType.Contains).MinLength(3).Placeholder("انتخاب کنید...")
                         .DataTextField("Title").DataValueField("Id").HtmlAttributes(new { style = "width:100%" }).Height(520)

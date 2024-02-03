@@ -12,7 +12,7 @@ function appAlert(content, title = ' ', btntext = 'تایید') {
     }).data("kendoAlert").open();
 }
 
-function appConfirm(content, title, btnok,btncancel) {
+function appConfirm(content, title, btnok, btncancel) {
     return $("<div></div>").kendoConfirm({
         title: title,
         content: content,
@@ -23,7 +23,7 @@ function appConfirm(content, title, btnok,btncancel) {
     }).data("kendoConfirm").open().result;
 }
 
-function showDialogDelete(id,msg,title) {
+function showDialogDelete(id, msg, title) {
     appConfirm(msg, title, "تایید", "خیر").then(function () {
         $.ajax({
             url: id,
@@ -147,9 +147,29 @@ function isNumberkendo(evt, el, sidel) {
 
     evt = (evt) ? evt : window.event;
     var charCode = (evt.which) ? evt.which : evt.keyCode;
-    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
-        return false;
+    if (charCode != 45) {
+
+        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+            return false;
+        }
+        if (sidel) {
+            let sel = document.getElementById(sidel);
+            var textbox = $(sel).data("kendoTextBox");
+            textbox.value("0");
+        }
+        if (el) {
+            let eel = document.getElementById(el);
+            var textboxel = $(eel).data("kendoTextBox");
+            let val = textboxel.value();
+            if (val == "0") {
+                textboxel.value("");
+            }
+            
+        }
     }
+    return true;
+}
+function isNumberkendoOnChange(el, sidel) {
     if (sidel) {
         let sel = document.getElementById(sidel);
         var textbox = $(sel).data("kendoTextBox");
@@ -158,13 +178,21 @@ function isNumberkendo(evt, el, sidel) {
     if (el) {
         let eel = document.getElementById(el);
         var textboxel = $(eel).data("kendoTextBox");
-        let val = textboxel.value();
-        if (val == "0") {
-            textboxel.value("");
+        let val = eel.value;
+        if (val.includes("-")) {
+            let nval = "-" + val.replaceAll("-", "");
+            if (BigInt(nval) > 9223372036854775807) {
+                nval = "9223372036854775807";
+            }
+            if (BigInt(nval) < -9223372036854775807) {
+                nval = "-9223372036854775807";
+            }
+            eel.value = nval;
+            textboxel.value(nval);
         }
     }
-    return true;
 }
+
 function autoOtherFild(el, otherfildid) {
     document.getElementById(otherfildid).value = el.value;
 }
